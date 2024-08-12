@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Asegúrate de que esta ruta coincida con tu layout
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <!-- Aquí podrías agregar texto o imágenes a la izquierda -->
+        <h2>La tienda donde encontrarás los mejores precios</h2>
+        <p>La tienda online donde encontrarás los mejores productos tecnológicos a precios 
+        increíbles del mercado. Aquí encontrarás entre desktop, laptos, tablets, discos, teléfonos, 
+        distintos dispositivos electrónicos de distinta índole y mucho más...</p>
+    </div>
+    <div class="col-md-6">
+        <div class="login-container">
+            <h1>Bienvenido!</h1>
+            <hr class="custom-hr" />
+            <h3>Ingreso</h3>
+            <a href="/Account/ForgotPassword" class="btn btn-secondary btn-block custom-btn">
+                No recuerda sus datos, ingrese aquí!
+            </a>
+            <br />
+            <p>Ingrese sus datos para continuar</p>
+            <br />
+            <form method="post" action="/Account/Login">
+                <div class="form-group">
+                    <label for="Email">Correo electrónico</label>
+                    <input type="email" class="form-control" id="Email" name="Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="Password">Constraseña</label>
+                    <input type="password" class="form-control" id="Password" name="Password" required>
+                </div>
+                <br />
+                <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #93C47D; /* Fondo verde para todo el cuerpo */
+    }
+
+    .login-container {
+        background-color: #f7f7f7; /* Fondo blanco para el login */
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto; /* Centrar la caja de login */
+    }
+
+    .custom-hr {
+        border: none;
+        border-top: 3px solid #085394; /* Personaliza el color y el grosor */
+        width: 80%; /* Ajusta el ancho del hr */
+        margin: 20px 0; /* Espacio alrededor del hr */
+    }
+
+    .login-form {
+        width: 100%;
+        max-width: 400px; /* Limitar el ancho máximo del formulario */
+    }
+
+        .login-form .form-group {
+            width: 100%;
+        }
+
+    .form-control,
+    .btn-block {
+        width: 100%; /* Asegura que los campos y el botón ocupen el 100% del ancho del formulario */
+        text-align: center; /* Centrar el texto dentro del input y el botón */
+    }
+
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+
+    .custom-btn {
+        width: 70%; /* Hacer que el botón ocupe el 100% del ancho */
+        margin: 0 auto; /* Centra el botón */
+        font-size: 14px;
+    }
+
+</style>

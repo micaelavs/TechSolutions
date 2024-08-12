@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TechSolutions.Controllers.CalificacionProductoController">
+    <Position X="26.75" Y="5.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\CalificacionProductoController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.CategoriaProductoController">
+    <Position X="22" Y="3.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\CategoriaProductoController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.DetalleDevoluionController" Collapsed="true">
+    <Position X="28.5" Y="4.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\DetalleDevoluionController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.DetalleFacturaController">
+    <Position X="31" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\DetalleFacturaController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.DetallePedidoController">
+    <Position X="22" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\DetallePedidoController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.EncabezadoFacturaController">
+    <Position X="28.5" Y="3" Width="2.25" />
+    <InheritanceLine Type="System.Web.Mvc.Controller" FixedToPoint="true">
+      <Path>
+        <Point X="27.25" Y="2.441" />
+        <Point X="27.25" Y="2.625" />
+        <Point X="29.625" Y="2.625" />
+        <Point X="29.625" Y="3" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\EncabezadoFacturaController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.HistorialPedidoController">
+    <Position X="24.5" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\HistorialPedidoController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.PedidoController">
+    <Position X="26.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\PedidoController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.ProductoController">
+    <Position X="31.25" Y="3" Width="1.75" />
+    <InheritanceLine Type="System.Web.Mvc.Controller" FixedToPoint="true">
+      <Path>
+        <Point X="27.25" Y="2.441" />
+        <Point X="27.25" Y="2.625" />
+        <Point X="33.375" Y="2.625" />
+        <Point X="33.375" Y="3.616" />
+        <Point X="33" Y="3.616" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\ProductoController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.SolictudDevolucionController">
+    <Position X="23.75" Y="1.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\SolicitudDevolucionController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.UsuarioController">
+    <Position X="24.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\UsuarioController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Data.ApiDbContext">
+    <Position X="9" Y="5.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAEAAAAAAQAAQAAACAACEAEAEAAACAEAAAAAAgA=</HashCode>
+      <FileName>Data\ApiDbContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Data.CalificacionProductoData" BaseTypeListCollapsed="true">
+    <Position X="15.75" Y="2.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>Data\CalificacionProductoData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TechSolutions.Data.CategoriaProductoData" BaseTypeListCollapsed="true">
+    <Position X="16.25" Y="5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>Data\CategoriaProductoData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TechSolutions.Data.DetalleDevolucionData" BaseTypeListCollapsed="true">
+    <Position X="12" Y="7.25" Width="2" />
+    <Members>
+      <Method Name="IRepository&lt;DetalleDevolucion&gt;.Delete" Hidden="true" />
+      <Method Name="IRepository&lt;DetalleDevolucion&gt;.GetById" Hidden="true" />
+      <Method Name="IRepository&lt;DetalleDevolucion&gt;.GetById1" Hidden="true" />
+      <Method Name="IRepository&lt;DetalleDevolucion&gt;.Insert" Hidden="true" />
+      <Method Name="IRepository&lt;DetalleDevolucion&gt;.List" Hidden="true" />
+      <Method Name="IRepository&lt;DetalleDevolucion&gt;.Update" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAQBAEAgAAAAAAAAAAAAgAAAAAEAAAAAAQAAAAAAQII=</HashCode>
+      <FileName>Data\DetalleDevolucionData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.175" />
+  </Class>
+  <Class Name="TechSolutions.Data.DetallePedidoData" BaseTypeListCollapsed="true">
+    <Position X="12" Y="5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>Data\DetallePedidoData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TechSolutions.Data.HistorialPedidoData" BaseTypeListCollapsed="true">
+    <Position X="13.75" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>Data\HistorialPedidoData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TechSolutions.Data.PedidoData" BaseTypeListCollapsed="true">
+    <Position X="12" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>Data\PedidoData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TechSolutions.Data.ProductoData" BaseTypeListCollapsed="true">
+    <Position X="14.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>Data\ProductoData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TechSolutions.Data.SolicitudDevolucionData" BaseTypeListCollapsed="true">
+    <Position X="12" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>Data\SolicitudDevolucionData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TechSolutions.Data.UsuarioData" BaseTypeListCollapsed="true">
+    <Position X="16" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>Data\UsuarioData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TechSolutions.Servicios.EmailService" Collapsed="true">
+    <Position X="34.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAEgAAEAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Servicios\EmailService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.Data.Entity.DbContext">
+    <Position X="9" Y="0.5" Width="2.75" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TechSolutions.Data.DetalleFacturaData" BaseTypeListCollapsed="true">
+    <Position X="16.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>Data\DetalleFacturaData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TechSolutions.Data.EncabezadoFacturaData" BaseTypeListCollapsed="true">
+    <Position X="14" Y="5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>Data\EncabezadoFacturaData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Web.Mvc.Controller" Collapsed="true">
+    <Position X="26.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="TechSolutions.Interfaces.IRepository&lt;TEntity&gt;">
+    <Position X="14.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>Interfaces\IRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

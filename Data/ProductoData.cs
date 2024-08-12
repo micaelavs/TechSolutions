@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TechSolutions.Interfaces;
+using TechSolutions.Models;
+
+namespace TechSolutions.Data
+{
+    public class ProductoData: IRepository<Producto>
+    {
+        public void Delete(int id)
+        {
+            var db = new ApiDbContext();
+            Producto producto = db.Productos.Find(id);
+            db.Productos.Remove(producto);
+            db.SaveChanges();
+
+        }
+
+        public Producto GetById(int id)
+        {
+            var db = new ApiDbContext();
+            return db.Productos.Find(id);
+
+        }
+
+        public void Insert(Producto entity)
+        {
+            var db = new ApiDbContext();
+            db.Productos.Add(entity);
+            db.SaveChanges();
+        }
+
+        public IEnumerable<Producto> List()
+        {
+
+            var db = new ApiDbContext();
+            var productos = db.Productos.ToList();
+            return productos;
+
+
+        }
+
+        public void Update(Producto entity)
+        {
+            var db = new ApiDbContext();
+            db.Entry(entity).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+    }
+}

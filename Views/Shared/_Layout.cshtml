@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Tech Solutions</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        /* Cambia el color de fondo del navbar a verde */
+        .navbar-custom {
+            background-color: #206329; /* Verde oscuro personalizado */
+        }
+
+            .navbar-custom .nav-link,
+            .navbar-custom .navbar-brand,
+            .navbar-custom .navbar-toggler-icon {
+                color: white; /* Cambia el color del texto a blanco */
+            }
+
+            .navbar-custom .navbar-toggler {
+                border-color: white; /* Cambia el color del borde del botón toggle a blanco */
+            }
+
+        /* Estilos para el footer fijo */
+        .footer-custom {
+            background-color: #206329; /* Mismo verde oscuro */
+            color: white; /* Texto en blanco */
+            padding: 2px 5px; /* Reducir el padding en la parte superior e inferior */
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
+
+        /* Para asegurar que el contenido no quede oculto debajo del footer */
+        .body-content {
+            margin-bottom: 50px; /* Ajusta según la altura del footer */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark navbar-custom">
+        <div class="container">
+            @Html.ActionLink("Tech Solutions", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar navegación" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li>@Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Acerca de", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Contacto", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+    <footer class="footer-custom">
+        <p>&copy; @DateTime.Now.Year - Tech Solutions todos los derechos reservados</p>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
