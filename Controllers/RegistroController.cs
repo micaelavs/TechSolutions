@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using TechSolutions.Data;
 using TechSolutions.Models;
@@ -58,7 +59,9 @@ namespace TechSolutions.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Email,Password,Nombre,Apellido")] Usuario usuario)
         {
-            //tengo que validar tambien que el mail exista
+
+            var passSinEncriptar = ""; 
+
             if (string.IsNullOrWhiteSpace(usuario.Password))
             {
                 ModelState.AddModelError("Password", "La contraseña es obligatoria.");
@@ -75,6 +78,7 @@ namespace TechSolutions.Controllers
                 else
                 {
                     usuario.Password = PasswordHelper.HashPassword(password);
+                    passSinEncriptar = password;
                 }
             }
 
@@ -85,6 +89,7 @@ namespace TechSolutions.Controllers
             else
             {
                 var email = usuario.Email;
+
                 try
                 {
                     var mailAddress = new System.Net.Mail.MailAddress(email);
@@ -94,13 +99,37 @@ namespace TechSolutions.Controllers
                     ModelState.AddModelError("Email", "El correo electrónico no es válido.");
                 }
             }
+
+            //Verificar si el correo ya está en uso
+            var usuarioExistente = _usuarioData.FindByEmail(usuario.Email);
+            
+            if (usuarioExistente != null)
+            {
+                ModelState.AddModelError("Email", "El correo electrónico ya está en uso.");
+            }
+
             //el registro es siempre para el cliente.
             usuario.Rol = SharedKernel.Rol.Cliente;
 
             if (ModelState.IsValid)
             {
                 _usuarioData.Insert(usuario);
-                return RedirectToAction("Index");
+
+                // Enviar correo de confirmación
+                 var emailService = new EmailService();
+                string subject = "Registro exitoso en Tech Solutions";
+                string body = $"Hola {usuario.Nombre},<br/><br/>" +
+                              "Tu cuenta ha sido creada exitosamente en Tech Solutions.<br/><br/>" +
+                              $"Correo electrónico: {usuario.Email}<br/>" +
+                              $"Contraseña: {passSinEncriptar}<br/><br/>" +
+                              "Gracias por registrarte con nosotros.";
+
+                //emailService.SendEmail(usuario.Email, subject, body);
+                emailService.SendEmail("micaelavs@hotmail.com", subject, body);
+
+
+
+                return RedirectToAction("Index", "Login");
             }
 
             return View(usuario);

@@ -11,112 +11,109 @@ using TechSolutions.Models;
 
 namespace TechSolutions.Controllers
 {
-    public class ProductoesController : Controller
+    public class RecuperoController : Controller
     {
         private ApiDbContext db = new ApiDbContext();
 
-        // GET: Productoes
+        // GET: Recupero
         public ActionResult Index()
         {
-            var productos = db.Productos.Include(p => p.CategoriaProducto);
-            return View(productos.ToList());
+            return View();
         }
 
-        // GET: Productoes/Details/5
-        public ActionResult Details(int? id)
+
+
+        // GET: Recupero/Details/5
+        /*public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Producto producto = db.Productos.Find(id);
-            if (producto == null)
+            Usuario usuario = db.Usuarios.Find(id);
+            if (usuario == null)
             {
                 return HttpNotFound();
             }
-            return View(producto);
+            return View(usuario);
         }
 
-        // GET: Productoes/Create
+        // GET: Recupero/Create
         public ActionResult Create()
         {
-            ViewBag.IdCategoriaProducto = new SelectList(db.Categorias, "Id", "Nombre");
             return View();
         }
 
-        // POST: Productoes/Create
+        // POST: Recupero/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,Descripcion,Precio,IdCategoriaProducto,Stock,Foto,Activo")] Producto producto)
+        public ActionResult Create([Bind(Include = "Id,Email,Password,Rol,Activo,Nombre,Apellido")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
-                db.Productos.Add(producto);
+                db.Usuarios.Add(usuario);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.IdCategoriaProducto = new SelectList(db.Categorias, "Id", "Nombre", producto.IdCategoriaProducto);
-            return View(producto);
+            return View(usuario);
         }
 
-        // GET: Productoes/Edit/5
+        // GET: Recupero/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Producto producto = db.Productos.Find(id);
-            if (producto == null)
+            Usuario usuario = db.Usuarios.Find(id);
+            if (usuario == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.IdCategoriaProducto = new SelectList(db.Categorias, "Id", "Nombre", producto.IdCategoriaProducto);
-            return View(producto);
+            return View(usuario);
         }
 
-        // POST: Productoes/Edit/5
+        // POST: Recupero/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nombre,Descripcion,Precio,IdCategoriaProducto,Stock,Foto,Activo")] Producto producto)
+        public ActionResult Edit([Bind(Include = "Id,Email,Password,Rol,Activo,Nombre,Apellido")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(producto).State = EntityState.Modified;
+                db.Entry(usuario).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.IdCategoriaProducto = new SelectList(db.Categorias, "Id", "Nombre", producto.IdCategoriaProducto);
-            return View(producto);
+            return View(usuario);
         }
 
-        // GET: Productoes/Delete/5
+        // GET: Recupero/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Producto producto = db.Productos.Find(id);
-            if (producto == null)
+            Usuario usuario = db.Usuarios.Find(id);
+            if (usuario == null)
             {
                 return HttpNotFound();
             }
-            return View(producto);
+            return View(usuario);
         }
 
-        // POST: Productoes/Delete/5
+        // POST: Recupero/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Producto producto = db.Productos.Find(id);
-            db.Productos.Remove(producto);
+            Usuario usuario = db.Usuarios.Find(id);
+            db.Usuarios.Remove(usuario);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -128,6 +125,6 @@ namespace TechSolutions.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
+        }*/
     }
 }

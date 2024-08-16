@@ -157,9 +157,10 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
-    <Compile Include="Controllers\ProductoesController.cs" />
+    <Compile Include="Controllers\RecuperoController.cs" />
     <Compile Include="Controllers\RegistroController.cs" />
     <Compile Include="Controllers\SolicitudDevolucionController.cs" />
+    <Compile Include="Controllers\UsuaridddoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Data\ApiDbContext.cs" />
     <Compile Include="Data\CalificacionProductoData.cs" />
@@ -290,11 +291,21 @@
     <Content Include="Views\Registro\Details.cshtml" />
     <Content Include="Views\Registro\Edit.cshtml" />
     <Content Include="Views\Registro\Index.cshtml" />
-    <Content Include="Views\Productoes\Create.cshtml" />
-    <Content Include="Views\Productoes\Delete.cshtml" />
-    <Content Include="Views\Productoes\Details.cshtml" />
-    <Content Include="Views\Productoes\Edit.cshtml" />
-    <Content Include="Views\Productoes\Index.cshtml" />
+    <Content Include="Views\Producto\Create.cshtml" />
+    <Content Include="Views\Producto\Delete.cshtml" />
+    <Content Include="Views\Producto\Details.cshtml" />
+    <Content Include="Views\Producto\Edit.cshtml" />
+    <Content Include="Views\Producto\Index.cshtml" />
+    <Content Include="Views\Recupero\Create.cshtml" />
+    <Content Include="Views\Recupero\Delete.cshtml" />
+    <Content Include="Views\Recupero\Details.cshtml" />
+    <Content Include="Views\Recupero\Edit.cshtml" />
+    <Content Include="Views\Recupero\Index.cshtml" />
+    <Content Include="Views\Usuario\Create.cshtml" />
+    <Content Include="Views\Usuario\Delete.cshtml" />
+    <Content Include="Views\Usuario\Details.cshtml" />
+    <Content Include="Views\Usuario\Edit.cshtml" />
+    <Content Include="Views\Usuario\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

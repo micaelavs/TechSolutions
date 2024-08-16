@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Login";
+    ViewBag.Title = "Recupero Cuenta";
     Layout = "~/Views/Shared/_Layout.cshtml"; // Asegúrate de que esta ruta coincida con tu layout
 }
 
@@ -7,33 +7,36 @@
     <div class="col-md-6">
         <!-- Aquí podrías agregar texto o imágenes a la izquierda -->
         <h2>La tienda donde encontrarás los mejores precios</h2>
-        <p>La tienda online donde encontrarás los mejores productos tecnológicos a precios 
-        increíbles del mercado. Aquí encontrarás entre desktop, laptos, tablets, discos, teléfonos, 
-        distintos dispositivos electrónicos de distinta índole y mucho más...</p>
+        <p>
+            La tienda online donde encontrarás los mejores productos tecnológicos a precios
+            increíbles del mercado. Aquí encontrarás entre desktop, laptos, tablets, discos, teléfonos,
+            distintos dispositivos electrónicos de distinta índole y mucho más...
+        </p>
     </div>
     <div class="col-md-6">
         <div class="login-container">
-            <h1>Bienvenido!</h1>
+            <h1>Recupero de cuenta</h1>
             <hr class="custom-hr" />
-            <h3>Ingreso</h3>
-            <a href="/Recupero/Index" class="btn btn-secondary btn-block custom-btn">
-                No recuerda sus datos, ingrese aquí!
-            </a>
+            <h3>Recupero cuenta</h3>
+            <p>Ingrese su email para recuperar la cuenta</p>
             <br />
-            <p>Ingrese sus datos para continuar</p>
-            <br />
-            <form method="post" action="/Account/Login">
+            <p>En minutos le llegará un correo</p>
+            <form method="post" action="/Account/RecoverAccount">
                 <div class="form-group">
                     <label for="Email">Correo electrónico</label>
                     <input type="email" class="form-control" id="Email" name="Email" required>
                 </div>
-                <div class="form-group">
-                    <label for="Password">Constraseña</label>
-                    <input type="password" class="form-control" id="Password" name="Password" required>
-                </div>
                 <br />
-                <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+                <button type="submit" class="btn btn-secondary btn-block">Enviar</button>
             </form>
+            <br />
+            <a href="/Login/Index" class="btn btn-primary btn-block custom-btn">
+                ¿Ya tiene un usuario? Ingresar
+            </a>
+            <br />
+            <a href="/Registro/Create" class="btn btn-primary btn-block custom-btn">
+                ¿No tiene cuenta? ¡Regístrate!
+            </a>
         </div>
     </div>
 </div>
@@ -44,7 +47,7 @@
     }
 
     .login-container {
-        background-color: #f7f7f7; /* Fondo blanco para el login */
+        background-color: #f7f7f7; /* Fondo blanco para el contenedor */
         padding: 20px;
         border: 1px solid #ddd;
         border-radius: 5px;
@@ -53,7 +56,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin: 0 auto; /* Centrar la caja de login */
+        margin: 0 auto; /* Centrar el contenedor */
     }
 
     .custom-hr {
@@ -63,29 +66,15 @@
         margin: 20px 0; /* Espacio alrededor del hr */
     }
 
-    .login-form {
-        width: 100%;
-        max-width: 400px; /* Limitar el ancho máximo del formulario */
-    }
-
-        .login-form .form-group {
-            width: 100%;
-        }
-
     .form-control,
     .btn-block {
         width: 100%; /* Asegura que los campos y el botón ocupen el 100% del ancho del formulario */
         text-align: center; /* Centrar el texto dentro del input y el botón */
     }
 
-    .mb-4 {
-        margin-bottom: 1.5rem;
-    }
-
     .custom-btn {
-        width: 70%; /* Hacer que el botón ocupe el 100% del ancho */
+        width: 70%; /* Ajusta el ancho del botón */
         margin: 0 auto; /* Centra el botón */
         font-size: 14px;
     }
-
 </style>

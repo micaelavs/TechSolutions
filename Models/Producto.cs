@@ -30,6 +30,7 @@ namespace TechSolutions.Models
         [Required]
         public int Stock { get; set; }
         [Required]
+        //esta luego se transformara en una lista de imagenes... que las imagenes estaran en otra tabla
         public string Foto { get; set; }
         //Activo = 1 esta activo, habilitado... Activo = 0  baja
         public bool Activo { get; set; } = true;

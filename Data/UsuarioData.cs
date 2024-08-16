@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
+using System.Web.Helpers;
 using TechSolutions.Interfaces;
 using TechSolutions.Models;
 
@@ -24,6 +26,12 @@ namespace TechSolutions.Data
             return db.Usuarios.Find(id);
 
         }
+        public Usuario FindByEmail(string Email)
+        {
+            var db = new ApiDbContext();
+            return db.Usuarios.FirstOrDefault(u => u.Email == Email);
+        }
+     
 
         public void Insert(Usuario entity)
         {

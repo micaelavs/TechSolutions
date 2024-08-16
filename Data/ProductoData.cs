@@ -23,7 +23,9 @@ namespace TechSolutions.Data
         public Producto GetById(int id)
         {
             var db = new ApiDbContext();
-            return db.Productos.Find(id);
+            return db.Productos
+                 .Include(p => p.CategoriaProducto) 
+                 .SingleOrDefault(p => p.Id == id);
 
         }
 
@@ -34,11 +36,16 @@ namespace TechSolutions.Data
             db.SaveChanges();
         }
 
+        //trae solo los activos
         public IEnumerable<Producto> List()
         {
-
             var db = new ApiDbContext();
-            var productos = db.Productos.ToList();
+            var productos = db.Productos
+                          .Include(p => p.CategoriaProducto) 
+                          .Include(p => p.Calificaciones) 
+                          .Where(p => p.Activo) 
+                          .ToList();
+
             return productos;
 
 
