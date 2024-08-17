@@ -1,81 +1,92 @@
 ﻿@model TechSolutions.Models.Producto
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Eliminar";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Producto</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CategoriaProducto.Nombre)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CategoriaProducto.Nombre)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Precio)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Precio)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Stock)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Stock)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Foto)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Foto)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Activo)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Activo)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
+<style>
+    /* Estilo para el fondo de la página */
+    body {
+        background-color: #93C47D;
     }
+
+    /* Estilo para el contenedor de eliminación */
+    .delete-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    /* Estilo para los títulos y descripciones */
+    dt {
+        font-weight: bold;
+    }
+
+    dd {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+
+    /* Estilo para los botones */
+    .form-actions input[type="submit"] {
+        background-color: #d9534f;
+        color: white;
+        border: none;
+        padding: 7px 30px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .form-actions a {
+        margin-left: 10px;
+        color: white;
+        text-decoration: none;
+    }
+
+        /*.form-actions a:hover {
+            text-decoration: underline;
+        }*/
+</style>
+
+<div class="container">
+    <br>
+    <h2>Eliminar Producto</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="delete-container"> <!--aca seria dar debaja producto cuando das de baja restas 1 producto d stock-->
+                <h4>¿Está seguro que quiere eliminar el producto <strong>@Html.DisplayFor(model => model.Nombre)</strong>?</h4>
+                <p>Presione <strong>Borrar</strong> para confirmar o <strong>Cancelar</strong> para volver al listado.</p>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>@Html.DisplayNameFor(model => model.Nombre)</dt>
+                    <dd>@Html.DisplayFor(model => model.Nombre)</dd>
+
+                    <dt>Categoría</dt>
+                    <dd>@Html.DisplayFor(model => model.CategoriaProducto.Nombre)</dd>
+
+                    <dt>@Html.DisplayNameFor(model => model.Descripcion)</dt>
+                    <dd>@Html.DisplayFor(model => model.Descripcion)</dd>
+
+                    <dt>@Html.DisplayNameFor(model => model.Precio)</dt>
+                    <dd>@Html.DisplayFor(model => model.Precio)</dd>
+
+                    <dt>@Html.DisplayNameFor(model => model.Stock)</dt>
+                    <dd>@Html.DisplayFor(model => model.Stock)</dd>
+                </dl>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-actions">
+                        <input type="submit" value="Borrar" class="btn btn-danger" />
+                        @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>

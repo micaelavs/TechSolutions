@@ -5,63 +5,71 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Detalles</h2>
+<style>
+    /* Estilo para el fondo de la página */
+    body {
+        background-color: #93C47D;
+    }
 
-<div>
-    <h4>Producto</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            Categoría
-        </dt>
+    /* Estilo para el contenedor de detalles */
+    .details-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        <dd>
-            @Html.DisplayFor(model => model.CategoriaProducto.Nombre)
-        </dd>
+    /* Estilo para los títulos y descripciones */
+    dt {
+        font-weight: bold;
+    }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
+    dd {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+</style>
 
-        <dd>
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
+<div class="container">
+    <br>
+    <h2>Detalles del Producto</h2>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="details-container">
+                <h4>@Html.DisplayFor(model => model.Nombre)</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>@Html.DisplayNameFor(model => model.Nombre)</dt>
+                    <dd>@Html.DisplayFor(model => model.Nombre)</dd>
+                    
+                    <dt>Categoría</dt>
+                    <dd>@Html.DisplayFor(model => model.CategoriaProducto.Nombre)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
+                    <dt>@Html.DisplayNameFor(model => model.Descripcion)</dt>
+                    <dd>@Html.DisplayFor(model => model.Descripcion)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Precio)
-        </dt>
+                    <dt>@Html.DisplayNameFor(model => model.Precio)</dt>
+                    <dd>@Html.DisplayFor(model => model.Precio)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Precio)
-        </dd>
+                    <dt>@Html.DisplayNameFor(model => model.Stock)</dt>
+                    <dd>@Html.DisplayFor(model => model.Stock)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Stock)
-        </dt>
+                    <dt>@Html.DisplayNameFor(model => model.Foto)</dt>
+                    <dd>
+                        <a href="@Model.Foto" target="_blank" class="btn btn-dark btn-sm">
+                            <i class="fas fa-eye"></i> Ver Foto
+                        </a>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Stock)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Foto)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Foto)
-        </dd>
-
-    </dl>
+    <br>
+    <div class="text-center">
+        @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-secondary" })
+        @Html.ActionLink("Listado de Productos", "Index", null, new { @class = "btn btn-primary" })
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Listado de Productos", "Index")
-</p>

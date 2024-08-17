@@ -1,31 +1,158 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Tech Solutions - Innovación en Productos Reacondicionados";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+<!-- Vinculando Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    /* Estilos personalizados */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
+    /* Jumbotron */
+    .jumbotron {
+        background-color: #93C47D;
+        color: black;
+        padding: 50px 30px;
+        text-align: center;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+        .jumbotron h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .jumbotron .btn-primary {
+            background-color: #6aa84f;
+            border-color: #6aa84f;
+            padding: 12px 24px;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+
+    /* Tarjetas */
+    .card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        height: 100%;
+        margin-bottom: 30px;
+    }
+
+        .card h2 {
+            color: #206329;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .card .btn-default {
+            background-color: #93C47D;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+    /* Secciones amplias */
+    .section {
+        padding: 60px 0;
+        background-color: #fff;
+    }
+
+        .section h2 {
+            color: #6aa84f;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+    /* Ajuste del footer */
+    .footer {
+        background-color: #6aa84f;
+        color: white;
+        padding: 20px 0;
+        text-align: center;
+    }
+</style>
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>Tech Solutions</h1>
+        <p class="lead">Especialistas en la venta online de productos electrónicos reacondicionados de primera y segunda mano. Con un año en el mercado, nos destacamos por brindar un excelente servicio al cliente y ofrecer soluciones integrales.</p>
+        <p><a href="#about-us" class="btn btn-primary btn-lg">Descubrí más &raquo;</a></p>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-lg-4 col-md-6">
+            <div class="card">
+                <h2>Sobre Nosotros</h2>
+                <p>
+                    Tech Solutions nació hace un año con la misión de transformar la manera en que adquirimos tecnología. Nos especializamos en productos electrónicos reacondicionados, asegurando la calidad y el rendimiento óptimo de cada dispositivo que vendemos.
+                </p>
+                <p><a class="btn btn-default" href="#about-us">Más sobre nosotros &raquo;</a></p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card">
+                <h2>Nuestra Experiencia</h2>
+                <p>
+                    En Tech Solutions, también nos enfocamos en la gestión de residuos tecnológicos. Trabajamos con industrias del estado, ayudándoles a reorganizar su inventario, acondicionar sus equipos y gestionar la logística. Lo que no se reutiliza, lo donamos o lo vendemos a través de nuestro e-commerce.
+                </p>
+                <p><a class="btn btn-default" href="#services">Nuestros servicios &raquo;</a></p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-12">
+            <div class="card">
+                <h2>¿Por Qué Elegirnos?</h2>
+                <p>
+                    Nuestro compromiso es con la calidad, la sostenibilidad y la satisfacción del cliente. Nos enorgullece poder ofrecer soluciones tecnológicas que no solo son rentables, sino que también contribuyen a un futuro más sostenible.
+                </p>
+                <p><a class="btn btn-default" href="#why-us">Por qué Tech Solutions &raquo;</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section text-center">
+        <h2 id="about-us">Tech Solutions: Líder en Reacondicionamiento Tecnológico</h2>
+        <p>
+            En Tech Solutions, nos dedicamos a reacondicionar y vender productos electrónicos de alta calidad. Nos hemos posicionado en el mercado tecnológico por ofrecer equipos confiables y un servicio al cliente excepcional. Trabajamos exclusivamente con entidades públicas y organismos estatales, ayudándoles a optimizar sus inventarios tecnológicos.
+        </p>
+        <!-- Imagen relevante -->
+        <img src="https://via.placeholder.com/800x400?text=Sobre+Nosotros" alt="Sobre Nosotros" class="img-fluid">
+    </div>
+
+    <div class="section text-center">
+        <h2 id="services">Nuestros Servicios</h2>
+        <p>
+            Ofrecemos una gama completa de servicios, desde el reacondicionamiento de equipos hasta la gestión de logística y donaciones. Nuestra meta es proporcionar soluciones que beneficien tanto a nuestros clientes como al medio ambiente.
+        </p>
+        <!-- Imagen relacionada con los servicios -->
+        <img src="https://via.placeholder.com/800x400?text=Nuestros+Servicios" alt="Nuestros Servicios" class="img-fluid">
+    </div>
+
+    <div class="section text-center">
+        <h2 id="why-us">¿Por Qué Elegir Tech Solutions?</h2>
+        <p>
+            Nos distinguimos por nuestra experiencia en la industria tecnológica y nuestro enfoque en la sostenibilidad. Al elegir Tech Solutions, eliges calidad, servicio, y un compromiso real con la reutilización y el reciclaje de tecnología.
+        </p>
+        <!-- Imagen que represente la sostenibilidad -->
+        <img src="https://via.placeholder.com/800x400?text=Por+Qué+Elegirnos" alt="Por Qué Elegirnos" class="img-fluid">
+    </div>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+<!-- Vinculando Bootstrap JS y dependencias -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

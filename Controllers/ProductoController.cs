@@ -52,6 +52,7 @@ namespace TechSolutions.Controllers
         {
             //ESTO despuestengo que traerlo de la bd
             //ViewBag.IdCategoriaProducto = new SelectList(db.Categorias, "Id", "Nombre");
+            ViewBag.IdCategoriaProducto = new SelectList(_categoriaProductoData.List(), "Id", "Nombre");
             return View();
         }
 
@@ -131,8 +132,9 @@ namespace TechSolutions.Controllers
             /*Producto producto = db.Productos.Find(id);
             db.Productos.Remove(producto);
             db.SaveChanges();*/
-
-            _productoRepository.Delete(id);
+            Producto producto = _productoRepository.GetById(id);
+            producto.Activo = false;
+            _productoRepository.Update(producto);
             return RedirectToAction("Index");
         }
 
