@@ -1,17 +1,128 @@
 ﻿@{
-    ViewBag.Title = "Contact";
+    ViewBag.Title = "Contacto - Tech Solutions";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<!-- Vinculando Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+<style>
+    /* Estilos personalizados */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
+    .section {
+        padding: 60px 20px;
+        background-color: #fff;
+        text-align: center;
+    }
+
+        .section h2 {
+            color: #6aa84f;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        .section p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+    .contact-info {
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+
+        .contact-info address {
+            font-style: normal;
+            margin-bottom: 20px;
+        }
+
+        .contact-info a {
+            color: #597eaa;
+            text-decoration: none;
+        }
+
+            .contact-info a:hover {
+                text-decoration: underline;
+            }
+
+    /* Estilos para secciones adicionales */
+    .additional-info {
+        background-color: #e9f5e9;
+        padding: 40px;
+        margin-top: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para dar efecto de profundidad */
+        border: 1px solid #ddd; /* Borde sutil */
+    }
+
+        .additional-info h3 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .additional-info p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+    .footer {
+        background-color: #6aa84f;
+        color: white;
+        padding: 20px 0;
+        text-align: center;
+    }
+</style>
+
+<div class="container">
+    <div class="section">
+        <h2>@ViewBag.Title</h2>
+        <p>@ViewBag.Message</p>
+
+        <div class="contact-info">
+            <address>
+                <strong>Trabajamos en toda la Argentina</strong><br />
+                Pero nos enfocamos en la Ciudad Autónoma de Buenos Aires
+                <br /><strong>Comprá con confianza</strong>
+                <br />Nuestra tienda online es segura y fácil de operar
+                <abbr title="Phone">Teléfono:</abbr> 01169196055
+            </address>
+
+            <address>
+                <strong>Soporte:</strong> <a href="mailto:Support@example.com">soporte@techsolutions.com.ar</a><br />
+                <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">marketing@techsolutions.com.ar</a>
+            </address>
+        </div>
+
+        <!-- Mapa de Buenos Aires incrustado desde Google Maps -->
+        <div class="map mt-4">
+            <h3>Nuestra ubicación en Buenos Aires</h3>
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13136.212421222677!2d-58.44383274999999!3d-34.611780449999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccb2d154f4e13%3A0x464fce2cf10811d6!2sBuenos%20Aires%2C%20Argentina!5e0!3m2!1sen!2s!4v1636209739822!5m2!1sen!2s"
+                        allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="additional-info">
+        <h3>Elegí cómo pagar</h3>
+        <p>Podés pagar con tarjeta de débito, crédito en 3, 6 o 12 cuotas sin interés.</p>
+
+        <h3>Envío gratis</h3>
+        <p>Solo por estar registrado tenés envíos gratis en muchos productos. Es un beneficio de Tech Solutions.</p>
+
+        <h3>Seguridad, de principio a fin</h3>
+        <p>¿No te gusta? ¡Devolvelo! En Tech Solutions, no hay nada que no puedas hacer, porque estás siempre protegido.</p>
+    </div>
+</div>
+
+<!-- Vinculando Bootstrap JS y dependencias -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

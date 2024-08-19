@@ -147,6 +147,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CalificacionProductoController.cs" />
+    <Compile Include="Controllers\CategfgdfgdforiaProductoController.cs" />
     <Compile Include="Controllers\CategoriaProductoController.cs" />
     <Compile Include="Controllers\DetalleDevoluionController.cs" />
     <Compile Include="Controllers\DetalleFacturaController.cs" />
@@ -226,6 +227,9 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\Images\imagen2.jpg" />
+    <Content Include="Content\Images\imagen3.jpg" />
+    <Content Include="Content\Images\imagen1.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -306,6 +310,11 @@
     <Content Include="Views\Usuario\Details.cshtml" />
     <Content Include="Views\Usuario\Edit.cshtml" />
     <Content Include="Views\Usuario\Index.cshtml" />
+    <Content Include="Views\CategoriaProducto\Create.cshtml" />
+    <Content Include="Views\CategoriaProducto\Delete.cshtml" />
+    <Content Include="Views\CategoriaProducto\Details.cshtml" />
+    <Content Include="Views\CategoriaProducto\Edit.cshtml" />
+    <Content Include="Views\CategoriaProducto\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,7 +1,133 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "About Tech Solutions - Gestión de RAEE y Servicios Informáticos";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+<!-- Vinculando Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    /* Estilos personalizados */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
+    .section {
+        padding: 60px 0;
+        background-color: #fff;
+        text-align: center;
+    }
+
+        .section h2 {
+            color: #6aa84f;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        .section p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: justify;
+            padding: 20px;
+        }
+
+    /* Estilo del botón Comprar */
+    .btn-comprar {
+        background-color: #ff8800;
+        color: #fff;
+        font-size: 18px;
+        padding: 15px 30px;
+        border-radius: 50px;
+        text-transform: uppercase;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+        transition: background-color 0.3s ease-in-out;
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+        .btn-comprar:hover {
+            background-color: #ff7700;
+            text-decoration: none;
+        }
+
+        .btn-comprar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.4);
+            transition: all 0.5s ease-in-out;
+            z-index: 1;
+        }
+
+        .btn-comprar:hover::before {
+            left: 100%;
+        }
+
+        .btn-comprar:active {
+            background-color: #e07600;
+        }
+
+    /* Ajuste del footer */
+    .footer {
+        background-color: #6aa84f;
+        color: white;
+        padding: 20px 0;
+        text-align: center;
+    }
+</style>
+
+<div class="container">
+    <div class="section">
+        <h2>Sobre Tech Solutions</h2>
+        <p>
+            En Argentina, el tratamiento de los Residuos de Aparatos Eléctricos y Electrónicos (RAEE) se ha convertido en un tema de preocupación debido al aumento constante de estos desechos y la necesidad de reducir su impacto en el medio ambiente y la salud pública.
+        </p>
+        <p>
+            Sin embargo, el país enfrenta importantes obstáculos en la gestión adecuada de los RAEE. De acuerdo con un informe de la Secretaría de Ambiente y Desarrollo Sustentable de la Nación, solo aproximadamente el 10% de los RAEE generados en Argentina se reciclan o reutilizan correctamente, mientras que el resto termina en vertederos o en las calles, generando problemas ambientales y sanitarios.
+        </p>
+        <p>
+            Existe una carencia de infraestructura adecuada y políticas claras para la gestión de los RAEE, así como una falta de concienciación sobre la importancia de su manejo responsable tanto por parte de los consumidores como de las empresas. Sin embargo, la adhesión de Argentina a los Objetivos de Desarrollo Sostenible (ODS) 2030 ha marcado un avance importante, fomentando una mayor conciencia entre la población y las empresas sobre el impacto positivo de una gestión adecuada de los RAEE.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Nuestros Servicios Informáticos</h2>
+        <p>
+            Tech Solutions ofrece servicios informáticos avanzados a otras empresas, con un enfoque especial en organizaciones con un gran volumen de empleados, comenzando a partir de 2000 empleados. Brindamos soporte técnico para computadoras, instalación de servidores, seguridad informática, y otros servicios de TI.
+        </p>
+        <p>
+            Nos especializamos en gestionar el inventario tecnológico de nuestros clientes, proporcionando soluciones integrales para la gestión y optimización de los recursos tecnológicos. Esto incluye la administración y control de hardware y software, así como la provisión de servicios de predicción de datos, permitiendo asesorar a las compañías sobre cuándo es necesario reemplazar el hardware obsoleto y realizar el mantenimiento adecuado del software.
+        </p>
+        <p>
+            Además, nos encargamos del reciclado responsable de hardware en desuso, siguiendo las normativas legales de Argentina sobre el descarte y manejo de desechos electrónicos. Este enfoque sostenible no solo ayuda a las empresas a deshacerse de sus dispositivos obsoletos de manera adecuada, sino que también contribuye a la protección del medio ambiente.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Compra de Equipos Recuperados</h2>
+        <p>
+            En nuestro sitio, también podrás encontrar equipos recuperados de primera línea, disponibles a precios competitivos y con garantías. Estos dispositivos han sido reacondicionados cuidadosamente para asegurar su calidad y rendimiento óptimo.
+        </p>
+        <p>
+            Ofrecemos amplios medios de pago para la compra de equipos recuperados, incluyendo opciones de financiación que facilitan el acceso a tecnología de calidad. Nuestro objetivo es que nuestros clientes puedan adquirir los dispositivos que necesitan sin complicaciones, con la confianza de que están invirtiendo en productos sostenibles y con un respaldo sólido.
+        </p>
+        <p>
+            Además, proporcionamos una solución completa que permite a los clientes obtener ganancias mediante la venta de equipos recuperados, es decir, que los clientes pueden vender los equipos tecnológicos que ya no necesitan o que han sido reemplazados por nuevos modelos. Estos equipos se recuperan, reparan si es necesario y se venden de nuevo, generando ingresos para el cliente. Esto ayuda a reducir los costos asociados con el proceso de renovación y, al mismo tiempo, contribuye al cuidado del medio ambiente al minimizar la generación de residuos tecnológicos.
+        </p>
+
+        <!-- Botón Comprar -->
+        <a href="/Login/Index" class="btn-comprar">Comprar Ahora</a>
+    </div>
+</div>
+
+<!-- Vinculando Bootstrap JS y dependencias -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
