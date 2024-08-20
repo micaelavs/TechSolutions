@@ -13,22 +13,29 @@ namespace TechSolutions.Controllers
 {
     public class UsuarioController : Controller
     {
-        private ApiDbContext db = new ApiDbContext();
-
+        //private ApiDbContext db = new ApiDbContext();
+        
+        private readonly UsuarioData _usuarioRepository;
+       
+        public UsuarioController()
+        {
+            
+            _usuarioRepository = new UsuarioData();
+        }
         // GET: Usuario
         public ActionResult Index()
         {
-            return View(db.Usuarios.ToList());
+            return View(_usuarioRepository.List());
         }
 
         // GET: Usuario/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
+            /*if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Usuario usuario = db.Usuarios.Find(id);
+            }*/
+            Usuario usuario = _usuarioRepository.GetById(id);
             if (usuario == null)
             {
                 return HttpNotFound();
@@ -43,16 +50,15 @@ namespace TechSolutions.Controllers
         }
 
         // POST: Usuario/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Email,Password,Rol,Activo,Nombre,Apellido")] Usuario usuario)
+        public ActionResult Create([Bind(Include = "Id,Email,Password,Rol,Nombre,Apellido")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
-                db.Usuarios.Add(usuario);
-                db.SaveChanges();
+                _usuarioRepository.Insert(usuario);
+                /*db.Usuarios.Add(usuario);
+                db.SaveChanges();*/
                 return RedirectToAction("Index");
             }
 
@@ -60,13 +66,14 @@ namespace TechSolutions.Controllers
         }
 
         // GET: Usuario/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
+            /*if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Usuario usuario = db.Usuarios.Find(id);
+            }*/
+
+            Usuario usuario = _usuarioRepository.GetById(id);
             if (usuario == null)
             {
                 return HttpNotFound();
@@ -75,29 +82,30 @@ namespace TechSolutions.Controllers
         }
 
         // POST: Usuario/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Email,Password,Rol,Activo,Nombre,Apellido")] Usuario usuario)
+        public ActionResult Edit([Bind(Include = "Id,Email,Password,Rol,Nombre,Apellido")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(usuario).State = EntityState.Modified;
-                db.SaveChanges();
+                /*db.Entry(usuario).State = EntityState.Modified;
+                db.SaveChanges();*/
+                _usuarioRepository.Update(usuario);
                 return RedirectToAction("Index");
             }
             return View(usuario);
         }
 
         // GET: Usuario/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
+        public ActionResult Delete(int id)
+        {   //al momento de eliminar un usuario hay que validar que
+            //si es comprador no tenga compras asociadas.
+            /*if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Usuario usuario = db.Usuarios.Find(id);
+            }*/
+            Usuario usuario = _usuarioRepository.GetById(id);
+            
             if (usuario == null)
             {
                 return HttpNotFound();
@@ -110,19 +118,18 @@ namespace TechSolutions.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Usuario usuario = db.Usuarios.Find(id);
+            /*Usuario usuario = db.Usuarios.Find(id);
             db.Usuarios.Remove(usuario);
-            db.SaveChanges();
+            db.SaveChanges();*/
+            Usuario usuario = _usuarioRepository.GetById(id);
+            if (usuario == null)
+            {
+                return HttpNotFound();
+            }
+            usuario.Activo = false;
+            _usuarioRepository.Update(usuario);
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

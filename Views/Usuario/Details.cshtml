@@ -5,63 +5,64 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<style>
+    /* Estilo para el fondo de la página */
+    body {
+        background-color: #93C47D;
+    }
 
-<div>
-    <h4>Usuario</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
+    /* Estilo para el contenedor de detalles */
+    .details-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
+    /* Estilo para los títulos y descripciones */
+    dt {
+        font-weight: bold;
+    }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
+    dd {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+</style>
 
-        <dd>
-            @Html.DisplayFor(model => model.Password)
-        </dd>
+<div class="container">
+    <br>
+    <h2>Detalles del Usuario</h2>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Rol)
-        </dt>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="details-container">
+                <h4>@Html.DisplayFor(model => model.Nombre) @Html.DisplayFor(model => model.Apellido)</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>@Html.DisplayNameFor(model => model.Email)</dt>
+                    <dd>@Html.DisplayFor(model => model.Email)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Rol)
-        </dd>
+                    <dt>@Html.DisplayNameFor(model => model.Rol)</dt>
+                    <dd>@Html.DisplayFor(model => model.Rol)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Activo)
-        </dt>
+                    <dt>@Html.DisplayNameFor(model => model.Activo)</dt>
+                    <dd>@Html.DisplayFor(model => model.Activo)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Activo)
-        </dd>
+                    <dt>@Html.DisplayNameFor(model => model.Nombre)</dt>
+                    <dd>@Html.DisplayFor(model => model.Nombre)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
+                    <dt>@Html.DisplayNameFor(model => model.Apellido)</dt>
+                    <dd>@Html.DisplayFor(model => model.Apellido)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Apellido)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Apellido)
-        </dd>
-
-    </dl>
+    <br>
+    <div class="text-center">
+        @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-secondary" })
+        @Html.ActionLink("Listado de Usuarios", "Index", null, new { @class = "btn btn-primary" })
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

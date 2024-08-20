@@ -13,7 +13,7 @@ namespace TechSolutions.Controllers
 {
     public class ProductoController : Controller
     {
-        private ApiDbContext db = new ApiDbContext();
+        //private ApiDbContext db = new ApiDbContext();
         
         private readonly ProductoData _productoRepository;
         private readonly CategoriaProductoData _categoriaProductoData;
@@ -69,7 +69,13 @@ namespace TechSolutions.Controllers
             }
 
 
-            ViewBag.IdCategoriaProducto = new SelectList(_categoriaProductoData.List(), "Id", "Nombre", producto.IdCategoriaProducto);
+            ViewBag.IdCategoriaProducto = new SelectList(
+                _categoriaProductoData.List(),
+                "Id",
+                "Nombre",
+                producto?.IdCategoriaProducto,
+                "--Seleccione--"
+            );
             return View(producto);
         }
 

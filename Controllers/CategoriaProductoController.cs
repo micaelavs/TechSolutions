@@ -16,10 +16,12 @@ namespace TechSolutions.Controllers
         private ApiDbContext db = new ApiDbContext();
 
         private readonly CategoriaProductoData _categoriaProductoData;
+        private readonly Producto _productoData;
         public CategoriaProductoController()
         {
             
             _categoriaProductoData = new CategoriaProductoData();
+            _productoData = new Producto();
         }
 
         // GET
@@ -124,7 +126,17 @@ namespace TechSolutions.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             CategoriaProducto categoriaProducto = _categoriaProductoData.GetById(id);
+            //antes de eliminar hay que revuisar que la categoria no tenga asociados productos, de lo contrario hay que mostrar un mensdaje
+            var productosAsociados = db.Productos.Where(p => p.IdCategoriaProducto == id).ToList();
             
+            if (productosAsociados.Any())
+            {
+                // Si hay productos asociados, mostrar un mensaje de error y redirigir a la vista de detalles
+                TempData["ErrorMessage"] = "No se puede eliminar la categoría porque está asociada a uno o más productos.";
+                return RedirectToAction("Index", new { id = id });
+            }
+
+
             categoriaProducto.Activo= false;
             _categoriaProductoData.Update(categoriaProducto);
             db.SaveChanges();

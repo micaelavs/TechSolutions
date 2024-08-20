@@ -1,46 +1,93 @@
 ﻿@model IEnumerable<TechSolutions.Models.CategoriaProducto>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Listado de Categorías";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<style>
+    /* Estilo para el fondo de la página */
+    body {
+        background-color: #93C47D;
+    }
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Activo)
-        </th>
-        <th></th>
-    </tr>
+    /* Estilo para el botón "Nueva Categoría" */
+    .new-category-link {
+        text-align: right;
+        margin: 20px 0;
+    }
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Descripcion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Activo)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    /* Opcional: Espaciado entre los botones */
+    .btn-action {
+        margin: 2px 5px;
+    }
+</style>
 
-</table>
+<div class="container">
+    <br>
+    <h2>Listado de Categorías</h2>
+    <!-- Mensaje de error -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger" id="errorMessage">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+                            <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                                <td>
+                                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-secondary btn-sm btn-action">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm btn-action">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                    <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm btn-action">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-end">
+            <a href="@Url.Action("Create", "CategoriaProducto")" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Nueva Categoría
+            </a>
+        </div>
+    </div>
+</div>
+<!-- jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Si el mensaje de error está presente, lo ocultamos después de 5 segundos (5000 ms)
+        if ($('#errorMessage').length) {
+            setTimeout(function () {
+                $('#errorMessage').fadeOut('slow', function () {
+                    $(this).remove(); // Eliminar el elemento del DOM después de desvanecerlo
+                });
+            }, 5000); // Cambia este valor para ajustar el tiempo de visibilidad del mensaje
+        }
+    });
+</script>

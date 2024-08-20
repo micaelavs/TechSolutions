@@ -1,43 +1,59 @@
 ﻿@model TechSolutions.Models.CategoriaProducto
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalles de la Categoría";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<style>
+    /* Estilo para el fondo de la página */
+    body {
+        background-color: #93C47D;
+    }
 
-<div>
-    <h4>CategoriaProducto</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
+    /* Estilo para el contenedor de detalles */
+    .details-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        <dd>
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
+    /* Estilo para los títulos y descripciones */
+    dt {
+        font-weight: bold;
+    }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
+    dd {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+</style>
 
-        <dd>
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
+<div class="container">
+    <br>
+    <h2>Detalles de la Categoría</h2>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Activo)
-        </dt>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="details-container">
+                <h4>@Html.DisplayFor(model => model.Nombre)</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>@Html.DisplayNameFor(model => model.Nombre)</dt>
+                    <dd>@Html.DisplayFor(model => model.Nombre)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Activo)
-        </dd>
+                    <dt>@Html.DisplayNameFor(model => model.Descripcion)</dt>
+                    <dd>@Html.DisplayFor(model => model.Descripcion)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
 
-    </dl>
+    <br>
+    <div class="text-center">
+        @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-secondary" })
+        @Html.ActionLink("Listado de Categorías", "Index", null, new { @class = "btn btn-primary" })
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

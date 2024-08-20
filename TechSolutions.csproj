@@ -147,7 +147,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CalificacionProductoController.cs" />
-    <Compile Include="Controllers\CategfgdfgdforiaProductoController.cs" />
     <Compile Include="Controllers\CategoriaProductoController.cs" />
     <Compile Include="Controllers\DetalleDevoluionController.cs" />
     <Compile Include="Controllers\DetalleFacturaController.cs" />
