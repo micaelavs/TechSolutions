@@ -10,7 +10,7 @@
   <Class Name="TechSolutions.Controllers.CategoriaProductoController">
     <Position X="22" Y="3.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAACRAACAAAAAAAAAAAEAAEACAAEAAAAAAAA=</HashCode>
       <FileName>Controllers\CategoriaProductoController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -76,7 +76,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAAAAACBAACAAAAAAAAAAAEAAEACAAEAAAAAAAA=</HashCode>
       <FileName>Controllers\ProductoController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -90,7 +90,7 @@
   <Class Name="TechSolutions.Controllers.UsuarioController">
     <Position X="24.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAABAACAAAAAAQAAAAEAAEACAAEAAAAAAAA=</HashCode>
       <FileName>Controllers\UsuarioController.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -119,16 +119,8 @@
   </Class>
   <Class Name="TechSolutions.Data.DetalleDevolucionData" BaseTypeListCollapsed="true">
     <Position X="12" Y="7.25" Width="2" />
-    <Members>
-      <Method Name="IRepository&lt;DetalleDevolucion&gt;.Delete" Hidden="true" />
-      <Method Name="IRepository&lt;DetalleDevolucion&gt;.GetById" Hidden="true" />
-      <Method Name="IRepository&lt;DetalleDevolucion&gt;.GetById1" Hidden="true" />
-      <Method Name="IRepository&lt;DetalleDevolucion&gt;.Insert" Hidden="true" />
-      <Method Name="IRepository&lt;DetalleDevolucion&gt;.List" Hidden="true" />
-      <Method Name="IRepository&lt;DetalleDevolucion&gt;.Update" Hidden="true" />
-    </Members>
     <TypeIdentifier>
-      <HashCode>AAQBAEAgAAAAAAAAAAAAgAAAAAEAAAAAAQAAAAAAQII=</HashCode>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
       <FileName>Data\DetalleDevolucionData.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.175" />
@@ -176,7 +168,7 @@
   <Class Name="TechSolutions.Data.UsuarioData" BaseTypeListCollapsed="true">
     <Position X="16" Y="7.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAII=</HashCode>
       <FileName>Data\UsuarioData.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -189,7 +181,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="System.Data.Entity.DbContext">
-    <Position X="9" Y="0.5" Width="2.75" />
+    <Position X="7.5" Y="0.75" Width="2.75" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>

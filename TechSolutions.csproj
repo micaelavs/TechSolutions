@@ -314,6 +314,7 @@
     <Content Include="Views\CategoriaProducto\Details.cshtml" />
     <Content Include="Views\CategoriaProducto\Edit.cshtml" />
     <Content Include="Views\CategoriaProducto\Index.cshtml" />
+    <Content Include="Views\Producto\Calificar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,27 +13,42 @@ namespace TechSolutions.Data
     {
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var db = new ApiDbContext();
+            CalificacionProducto calificacion = db.CalificacionesProductos.Find(id);
+            db.CalificacionesProductos.Remove(calificacion);
+            db.SaveChanges();
+
         }
 
         public CalificacionProducto GetById(int id)
         {
-            throw new NotImplementedException();
-        }
+            var db = new ApiDbContext();
+            return db.CalificacionesProductos.Find(id);
 
+        }
+       
         public void Insert(CalificacionProducto entity)
         {
-            throw new NotImplementedException();
+            var db = new ApiDbContext();
+            db.CalificacionesProductos.Add(entity);
+            db.SaveChanges();
         }
 
         public IEnumerable<CalificacionProducto> List()
         {
-            throw new NotImplementedException();
+
+            var db = new ApiDbContext();
+            var calificaciones = db.CalificacionesProductos.ToList();
+            return calificaciones;
+
+
         }
 
         public void Update(CalificacionProducto entity)
         {
-            throw new NotImplementedException();
+            var db = new ApiDbContext();
+            db.Entry(entity).State = EntityState.Modified;
+            db.SaveChanges();
         }
     }
 }

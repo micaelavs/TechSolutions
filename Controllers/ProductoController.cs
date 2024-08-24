@@ -17,10 +17,13 @@ namespace TechSolutions.Controllers
         
         private readonly ProductoData _productoRepository;
         private readonly CategoriaProductoData _categoriaProductoData;
+        private readonly CalificacionProductoData _calificacionProductoRepository;
+
         public ProductoController()
         {
             _productoRepository = new ProductoData();
             _categoriaProductoData = new CategoriaProductoData();
+            _calificacionProductoRepository = new CalificacionProductoData();
         }
         // GET
         public ActionResult Index()
@@ -143,6 +146,42 @@ namespace TechSolutions.Controllers
             _productoRepository.Update(producto);
             return RedirectToAction("Index");
         }
+        //get para mostrar la pantalla
+        // GET: Producto/Calificar/5
+        public ActionResult Calificar(int id)
+        {
+            var producto = _productoRepository.GetById(id);
+            if (producto == null)
+            {
+                return HttpNotFound();
+            }
 
+            var calificacion = new CalificacionProducto
+            {
+                IdProducto = id,
+                Producto = producto
+            };
+
+            return View(calificacion);
+        }
+
+        // POST: Producto/Calificar/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Calificar([Bind(Include = "IdProducto,Puntaje,Comentario")] CalificacionProducto calificacion)
+        {
+            if (ModelState.IsValid)
+            {
+                _calificacionProductoRepository.Insert(calificacion);
+                //vemos despues a donde redirije
+                return RedirectToAction("Index");
+            }
+
+            var producto = _productoRepository.GetById(calificacion.IdProducto);
+            calificacion.Producto = producto;
+            return View(calificacion);
+        }
     }
+
+
 }

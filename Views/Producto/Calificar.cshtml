@@ -1,0 +1,108 @@
+﻿@model TechSolutions.Models.CalificacionProducto
+
+@{
+    ViewBag.Title = "Calificar Producto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="login-container">
+            <h2>Calificar Producto</h2>
+            <hr class="custom-hr" />
+
+            <div class="product-info">
+                <img src="@Model.Producto.Foto" alt="@Model.Producto.Nombre" class="product-image" />
+                <h3>@Model.Producto.Nombre</h3>
+                <p>@Model.Producto.Descripcion</p>
+            </div>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.IdProducto)
+
+                    <div class="form-group row justify-content-center">
+                        <label class="control-label col-md-12 text-center">¿Qué te pareció tu producto?</label>
+                        <div class="col-md-12 text-center">
+                            <div class="star-rating">
+                                @for (int i = 5; i >= 1; i--)
+                                {
+                                    <input type="radio" id="star-@i" name="Puntaje" value="@i" />
+                                    <label for="star-@i" aria-label="@i estrellas"></label>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row justify-content-center">
+                        @Html.LabelFor(model => model.Comentario, htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                        <div class="col-md-6">
+                            @Html.TextAreaFor(model => model.Comentario, new { @class = "form-control", placeholder = "Contanos más acerca de tu producto..." })
+                            @Html.ValidationMessageFor(model => model.Comentario, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group row justify-content-center">
+                        <div class="col-md-12 text-center">
+                            <input type="submit" value="Guardar y Volver al Listado" class="btn btn-primary btn-block custom-btn" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<style>
+    body {
+        background-color: #93C47D; /* Fondo verde suave */
+    }
+
+    .product-info {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .product-image {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        gap: 0.5em; /* Espacio entre estrellas */
+    }
+
+    .star-rating input[type="radio"] {
+        display: none; /* Oculta los radio buttons */
+    }
+
+    .star-rating label {
+        font-size: 1.5em; /* Tamaño más pequeño para ser más discreto */
+        color: #ddd;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .star-rating label:before {
+        content: "★"; /* Icono de estrella */
+        display: inline-block;
+    }
+
+    .star-rating input[type="radio"]:checked ~ label:before,
+    .star-rating label:hover:before,
+    .star-rating label:hover ~ label:before {
+        color: #ffcc00; /* Color de estrellas seleccionadas y al pasar el cursor */
+    }
+
+</style>
