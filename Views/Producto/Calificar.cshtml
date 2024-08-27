@@ -57,6 +57,33 @@
     </div>
 </div>
 
+<!-- Carousel Section for Featured Products -->
+<div class="featured-products">
+    <h3>Productos Destacados</h3>
+    <div id="featuredProductsCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <!-- Carousel items go here -->
+            <div class="carousel-item active">
+                <img src="~/Content/Images/producto1.png" class="d-block w-100" alt="Producto 1">
+            </div>
+            <div class="carousel-item">
+                <img src="~/Content/Images/producto2.png" class="d-block w-100" alt="Producto 2">
+            </div>
+            <div class="carousel-item">
+                <img src="~/Content/Images/producto3.png" class="d-block w-100" alt="Producto 3">
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#featuredProductsCarousel" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </a>
+        <a class="carousel-control-next" href="#featuredProductsCarousel" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </a>
+    </div>
+</div>
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
@@ -83,26 +110,36 @@
         gap: 0.5em; /* Espacio entre estrellas */
     }
 
-    .star-rating input[type="radio"] {
-        display: none; /* Oculta los radio buttons */
+        .star-rating input[type="radio"] {
+            display: none; /* Oculta los radio buttons */
+        }
+
+        .star-rating label {
+            font-size: 1.5em; /* Tamaño más pequeño para ser más discreto */
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+            .star-rating label:before {
+                content: "★"; /* Icono de estrella */
+                display: inline-block;
+            }
+
+            .star-rating input[type="radio"]:checked ~ label:before,
+            .star-rating label:hover:before,
+            .star-rating label:hover ~ label:before {
+                color: #ffcc00; /* Color de estrellas seleccionadas y al pasar el cursor */
+            }
+
+    /* Carousel styles */
+    .featured-products {
+        margin-top: 30px;
     }
 
-    .star-rating label {
-        font-size: 1.5em; /* Tamaño más pequeño para ser más discreto */
-        color: #ddd;
-        cursor: pointer;
-        transition: color 0.3s ease;
+    .carousel-item img {
+        max-width: 300px; /* Establece un ancho máximo que se ajuste a tu diseño */
+        max-height: 200px; /* Ajusta la altura según necesites */
+        margin: auto; /* Centra la imagen */
     }
-
-    .star-rating label:before {
-        content: "★"; /* Icono de estrella */
-        display: inline-block;
-    }
-
-    .star-rating input[type="radio"]:checked ~ label:before,
-    .star-rating label:hover:before,
-    .star-rating label:hover ~ label:before {
-        color: #ffcc00; /* Color de estrellas seleccionadas y al pasar el cursor */
-    }
-
 </style>

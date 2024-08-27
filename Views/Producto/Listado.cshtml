@@ -1,0 +1,94 @@
+﻿@model IEnumerable<TechSolutions.Models.Producto>
+
+@{
+    ViewBag.Title = "Listado de Productos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Estilo para el fondo de la página */
+    body {
+        background-color: #93C47D;
+    }
+
+    /* Estilo para el contenedor de detalles */
+    .details-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Estilo para el contenedor de productos */
+    .product-container {
+        margin-bottom: 20px;
+    }
+
+    /* Estilo para cada producto en la cuadrícula */
+    .product-item {
+        background-color: #ffffff;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .product-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+    .search-bar {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container">
+    <br>
+    <h2>Listado de Productos</h2>
+
+    <!-- Buscador -->
+    <div class="row search-bar">
+        <div class="col-md-8 offset-md-2">
+            <input type="text" id="searchInput" class="form-control" placeholder="Buscar producto..." />
+        </div>
+    </div>
+
+    <!-- Listado de Productos -->
+    <div class="row">
+        @foreach (var producto in Model)
+        {
+            <div class="col-md-3 product-container">
+                <div class="product-item">
+                    <img src="@producto.Foto" alt="@producto.Nombre" />
+                    <h5>@producto.Nombre</h5>
+                </div>
+            </div>
+        }
+    </div>
+
+    <br>
+    <div class="text-center">
+        @Html.ActionLink("Volver al Inicio", "Index", "Home", new { @class = "btn btn-primary" })
+    </div>
+</div>
+
+<script>
+    // JavaScript para filtrar productos por nombre
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        var searchValue = this.value.toLowerCase();
+        var productItems = document.querySelectorAll(".product-item");
+
+        productItems.forEach(function (item) {
+            var productName = item.querySelector("h5").innerText.toLowerCase();
+            if (productName.includes(searchValue)) {
+                item.parentElement.style.display = "block";
+            } else {
+                item.parentElement.style.display = "none";
+            }
+        });
+    });
+</script>

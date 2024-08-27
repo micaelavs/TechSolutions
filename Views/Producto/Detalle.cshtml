@@ -1,0 +1,146 @@
+﻿@model TechSolutions.Models.Producto
+
+@{
+    ViewBag.Title = "Detalle del Producto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    body {
+        background-color: #93C47D;
+    }
+
+    .details-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .product-image {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .product-details {
+        margin-left: 20px;
+        max-width: 50%;
+    }
+
+    .product-info {
+        text-align: center;
+    }
+
+    .btn-custom {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .btn-green {
+        background-color: #5cb85c;
+        color: white;
+    }
+
+    .btn-orange {
+        background-color: #f0ad4e;
+        color: white;
+    }
+
+    .quantity-input {
+        width: 100%;
+        padding: 5px;
+        text-align: center;
+    }
+
+    .product-description {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    /* Estilo para el carrusel */
+    .featured-products {
+        margin-top: 30px;
+    }
+    .carousel-item {
+        text-align: center;
+    }
+
+        .carousel-item img {
+            display: inline-block;
+            max-width: 100%;
+            height: auto;
+            max-width: 300px; /* Establece un ancho máximo que se ajuste a tu diseño */
+            max-height: 200px; /* Ajusta la altura según necesites */
+        }
+</style>
+
+<div class="container">
+    <br>
+    <h2>Detalle del Producto</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="details-container">
+                <div class="col-md-6">
+                    <img src="~/Content/Images/monitor_lg.png" alt="Imagen de @Model.Nombre" class="product-image" />
+
+                    <!-- Características Principales -->
+                    <div class="product-description">
+                        <h5>Características Principales:</h5>
+                        <p>@Model.Descripcion</p>
+                        <button class="btn btn-green btn-custom">Agregar a Carrito</button>
+                    </div>
+                </div>
+
+                <div class="product-details">
+                    <h4>@Model.Nombre</h4>
+                    <p class="text-muted">@Model.Precio.ToString("C")</p>
+                    <p><strong>Stock disponible:</strong> @Model.Stock</p>
+
+                    <!-- Campo numérico para elegir la cantidad -->
+                    <label for="cantidad">Elegir cantidad:</label>
+                    <input type="number" id="cantidad" class="quantity-input" min="1" max="@Model.Stock" value="1" />
+
+                    <!-- Botones de acciones -->
+                    <button class="btn btn-green btn-custom">Iniciar Compra</button>
+                    <button class="btn btn-orange btn-custom" onclick="location.href='@Url.Action("VerCalificaciones", "Producto", new { id = Model.Id })'">Ver Calificaciones</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Productos Destacados -->
+    <div class="featured-products">
+        <h3>Productos Destacados</h3>
+        <div id="featuredProductsCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <!-- Primer producto destacado -->
+                <div class="carousel-item active">
+                    <img src="~/Content/Images/producto1.png" alt="Producto 1">
+                </div>
+                <!-- Segundo producto destacado -->
+                <div class="carousel-item">
+                    <img src="~/Content/Images/producto2.png" alt="Producto 2">
+                </div>
+                <!-- Tercer producto destacado -->
+                <div class="carousel-item">
+                    <img src="~/Content/Images/producto3.png" alt="Producto 3">
+                </div>
+            </div>
+            <!-- Controles del carrusel -->
+            <a class="carousel-control-prev" href="#featuredProductsCarousel" role="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </a>
+            <a class="carousel-control-next" href="#featuredProductsCarousel" role="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </a>
+        </div>
+    </div>
+</div>

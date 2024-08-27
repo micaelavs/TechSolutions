@@ -24,7 +24,8 @@ namespace TechSolutions.Data
         {
             var db = new ApiDbContext();
             return db.Productos
-                 .Include(p => p.CategoriaProducto) 
+                 .Include(p => p.CategoriaProducto)
+                 .Include(p => p.Calificaciones)
                  .SingleOrDefault(p => p.Id == id);
 
         }

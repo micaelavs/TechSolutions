@@ -181,6 +181,49 @@ namespace TechSolutions.Controllers
             calificacion.Producto = producto;
             return View(calificacion);
         }
+        //get
+        public ActionResult VerCalificaciones(int id)
+        {
+            var producto = _productoRepository.GetById(id);
+
+            if (producto == null)
+            {
+                return HttpNotFound();
+            }
+
+           
+            double promedioPuntaje = producto.Calificaciones.Any()
+                ? producto.Calificaciones.Average(c => (int)c.Puntaje)
+                : 0;
+
+            ViewBag.PromedioPuntaje = promedioPuntaje;
+
+            return View(producto);
+        }
+
+        //get
+        public ActionResult Listado()
+        {
+            var productos = _productoRepository.List();
+
+            return View(productos);
+        }
+        public ActionResult Detalle(int id)
+        {
+            var producto = _productoRepository.GetById(id);
+
+            if (producto == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(producto);
+        }
+
+
+
+
+
     }
 
 

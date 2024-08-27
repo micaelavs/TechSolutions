@@ -1,0 +1,84 @@
+﻿@model TechSolutions.Models.Producto
+
+@{
+    ViewBag.Title = "Opiniones del Producto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Include Font Awesome if not already included -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+<style>
+    body {
+        background-color: #93C47D;
+    }
+
+    .details-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .review-container {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .stars {
+        color: #FFD700; /* Gold color for stars */
+    }
+</style>
+
+<div class="container">
+    <br>
+    <h2>Opiniones del Producto</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="details-container">
+                <h4>@Model.Nombre</h4>
+                <hr />
+                <p>Promedio de calificaciones: @ViewBag.PromedioPuntaje / 5</p>
+                <div class="stars">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= Math.Round((double)ViewBag.PromedioPuntaje))
+                        {
+                            <i class="fas fa-star"></i>
+                        }
+                        else
+                        {
+                            <i class="far fa-star"></i>
+                        }
+                    }
+                </div>
+                <br />
+                <h5>Comentarios:</h5>
+                @if (Model.Calificaciones.Any())
+                {
+                    foreach (var calificacion in Model.Calificaciones)
+                    {
+                        <div class="review-container">
+                            <p><strong>Puntaje:</strong> @((int)calificacion.Puntaje) / 5</p>
+                            <p>@calificacion.Comentario</p>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No hay comentarios para este producto.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="text-center">
+        @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-primary" })
+    </div>
+</div>

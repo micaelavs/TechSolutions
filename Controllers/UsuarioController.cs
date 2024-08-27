@@ -131,5 +131,37 @@ namespace TechSolutions.Controllers
             return RedirectToAction("Index");
         }
 
+
+        // GET: Usuario/MiPerfil
+        public ActionResult MiPerfil(int id)
+        {
+            /*if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }*/
+
+            Usuario usuario = _usuarioRepository.GetById(id);
+            if (usuario == null)
+            {
+                return HttpNotFound();
+            }
+            return View(usuario);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MiPerfil([Bind(Include = "Id,Email,Password,Rol,Nombre,Apellido")] Usuario usuario)
+        {
+            //aca habria que hacer que si la contraseña viene vacia dejas la q estaba si no guardas la q completa
+            if (ModelState.IsValid)
+            {
+                /*db.Entry(usuario).State = EntityState.Modified;
+                db.SaveChanges();*/
+                _usuarioRepository.Update(usuario);
+                return RedirectToAction("Index");
+            }
+            return View(usuario);
+        }
+
     }
 }

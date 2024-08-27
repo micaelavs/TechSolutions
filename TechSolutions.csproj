@@ -160,7 +160,6 @@
     <Compile Include="Controllers\RecuperoController.cs" />
     <Compile Include="Controllers\RegistroController.cs" />
     <Compile Include="Controllers\SolicitudDevolucionController.cs" />
-    <Compile Include="Controllers\UsuaridddoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Data\ApiDbContext.cs" />
     <Compile Include="Data\CalificacionProductoData.cs" />
@@ -315,6 +314,11 @@
     <Content Include="Views\CategoriaProducto\Edit.cshtml" />
     <Content Include="Views\CategoriaProducto\Index.cshtml" />
     <Content Include="Views\Producto\Calificar.cshtml" />
+    <Content Include="Views\Producto\VerCalificaciones.cshtml" />
+    <Content Include="Views\Producto\Listado.cshtml" />
+    <Content Include="Views\Producto\Detalle.cshtml" />
+    <Content Include="Views\Usuario\MiPerfil.cshtml" />
+    <Content Include="Views\Pedido\Pagar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
