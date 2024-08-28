@@ -43,7 +43,7 @@ namespace TechSolutions.Controllers
             };
 
             var subtotal = productos.Sum(p => p.Precio);
-            var total = subtotal; 
+            var total = subtotal;
 
             // Configurar el ViewBag
             ViewBag.Productos = productos;
@@ -51,7 +51,14 @@ namespace TechSolutions.Controllers
             ViewBag.Total = total;
 
             // Configurar el ViewBag para el tipo de tarjeta
-            ViewBag.TipoTarjetaList = Enum.GetValues(typeof(TipoTarjeta)).Cast<TipoTarjeta>().Select(e => new SelectListItem
+            ViewBag.MediodePago = Enum.GetValues(typeof(MedioPago)).Cast<MedioPago>().Select(e => new SelectListItem
+            {
+                Value = ((int)e).ToString(),
+                Text = e.ToString()
+            });
+
+            // Configurar el ViewBag para los tipos de tarjetas
+            ViewBag.TiposTarjeta = Enum.GetValues(typeof(TipoTarjeta)).Cast<TipoTarjeta>().Select(e => new SelectListItem
             {
                 Value = ((int)e).ToString(),
                 Text = e.ToString()
@@ -67,8 +74,9 @@ namespace TechSolutions.Controllers
 
             return View();
         }
-
-
-
-    }
+        public ActionResult Index()
+        {
+            return View();
+        }
+    }   
 }

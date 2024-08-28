@@ -319,6 +319,7 @@
     <Content Include="Views\Producto\Detalle.cshtml" />
     <Content Include="Views\Usuario\MiPerfil.cshtml" />
     <Content Include="Views\Pedido\Pagar.cshtml" />
+    <Content Include="Views\Pedido\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

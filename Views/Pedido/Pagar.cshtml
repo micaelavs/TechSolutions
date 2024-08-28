@@ -8,7 +8,7 @@
         <div class="col-md-8">
             <div class="payment-container">
                 <h2>Pagar</h2>
-                <p>Todos los datos marcados con (*) deben ser obligatorios</p>
+                <p>Todos los datos marcados con (*) son obligatorios</p>
                 <hr class="custom-hr" />
 
                 @using (Html.BeginForm("ConfirmarPago", "Pedido", FormMethod.Post))
@@ -44,63 +44,78 @@
                             <label>Total:</label>
                             <p>$@ViewBag.Total</p>
                         </div>
-
+                        <hr class="custom-hr" />
                         <div class="form-group">
-                            @Html.Label("TipoTarjeta", "Tipo de Tarjeta")
-                            @Html.DropDownList("TipoTarjeta", (IEnumerable<SelectListItem>)ViewBag.TipoTarjetaList, "Seleccionar", new { @class = "form-control" })
+                            @Html.Label("TipoTarjeta", "Tipo de tarjeta")
+                            @Html.DropDownList("MediodePago", (IEnumerable<SelectListItem>)ViewBag.MediodePago, "--Seleccione--", new { @class = "form-control select-sm", style = "width: auto; display: inline-block;" })
                         </div>
 
+                        <div class="form-group">
+                            <!--<label>Tipo de Tarjeta:</label>-->
+                            <div class="radio-options">
+                                @foreach (var item in ViewBag.TiposTarjeta as IEnumerable<SelectListItem>)
+                                {
+                                    <div>
+                                        @Html.RadioButton("TipoTarjeta", item.Value, new { id = "tipoTarjeta" + item.Value })
+                                        @Html.Label("tipoTarjeta" + item.Value, item.Text)
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <hr class="custom-hr" />
                         <div class="form-group">
                             <label>Cuotas:</label>
-                            @Html.RadioButton("Cuotas", 1, new { id = "cuotas1" }) @Html.Label("cuotas1", "1 cuota sin interés")
-                            @Html.RadioButton("Cuotas", 3, new { id = "cuotas3" }) @Html.Label("cuotas3", "3 cuotas sin interés")
-                            @Html.RadioButton("Cuotas", 6, new { id = "cuotas6" }) @Html.Label("cuotas6", "6 cuotas sin interés")
+                            <div class="radio-options">
+                                @foreach (var item in ViewBag.CuotasList as IEnumerable<SelectListItem>)
+                                {
+                                    <div>
+                                        @Html.RadioButton("Cuotas", item.Value, new { id = "cuotas" + item.Value })
+                                        @Html.Label("cuotas" + item.Value, item.Text)<br />
+                                    </div>
+                                }
+                            </div>
                         </div>
-
+                        <hr class="custom-hr" />
                         <h3>Datos Personales</h3>
                         <div class="form-group row justify-content-center">
                             @Html.Label("Apellido", "Apellido (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
                             <div class="col-md-8">
-                                @Html.TextBox("Apellido", null, new { @class = "form-control" })
+                                @Html.TextBox("Apellido", null, new { @class = "form-control input-sm text-center" })
                             </div>
                         </div>
-
                         <div class="form-group row justify-content-center">
                             @Html.Label("Nombre", "Nombre (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
                             <div class="col-md-8">
-                                @Html.TextBox("Nombre", null, new { @class = "form-control" })
+                                @Html.TextBox("Nombre", null, new { @class = "form-control input-sm text-center" })
                             </div>
                         </div>
-
                         <div class="form-group row justify-content-center">
                             @Html.Label("DNI", "DNI (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
                             <div class="col-md-8">
-                                @Html.TextBox("DNI", null, new { @class = "form-control" })
+                                @Html.TextBox("DNI", null, new { @class = "form-control input-sm text-center" })
                             </div>
                         </div>
-
+                        <hr class="custom-hr" />
                         <h3>Datos de Tarjeta</h3>
                         <div class="form-group row justify-content-center">
-                            @Html.Label("NumeroTarjeta", "Número de Tarjeta (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
+                            @Html.Label("NumeroTarjeta", "Número de Tarjeta (*)", htmlAttributes: new { @class = "control-label col-md-4 text-center" })
                             <div class="col-md-8">
-                                @Html.TextBox("NumeroTarjeta", null, new { @class = "form-control" })
+                                @Html.TextBox("NumeroTarjeta", null, new { @class = "form-control input-sm text-center" })
                             </div>
                         </div>
-
                         <div class="form-group row justify-content-center">
                             @Html.Label("FechaExpiracion", "Fecha de Expiración (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
                             <div class="col-md-8">
-                                @Html.TextBox("FechaExpiracion", null, new { @class = "form-control" })
+                                @Html.TextBox("FechaExpiracion", null, new { @class = "form-control input-sm text-center" })
                             </div>
                         </div>
-
                         <div class="form-group row justify-content-center">
                             @Html.Label("CodigoSeguridad", "Código de Seguridad (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
                             <div class="col-md-8">
-                                @Html.TextBox("CodigoSeguridad", null, new { @class = "form-control" })
+                                @Html.TextBox("CodigoSeguridad", null, new { @class = "form-control input-sm text-center" })
                             </div>
                         </div>
-
+                        <!--vemos luego a donde redifirigen estos botones-->
                         <div class="form-group row justify-content-center">
                             <div class="col-md-12 text-center">
                                 <a href="@Url.Action("Index", "Pedido")" class="btn btn-danger">Cancelar</a>
@@ -117,41 +132,89 @@
 <style>
     body {
         background-color: #93C47D;
+        font-family: 'Arial', sans-serif;
     }
 
     .payment-container {
-        background-color: #f7f7f7;
-        padding: 20px;
+        background-color: #ffffff;
+        padding: 30px;
         border: 1px solid #ddd;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         text-align: center;
+        margin-top: 20px;
     }
 
     .custom-hr {
         border: none;
         border-top: 3px solid #085394;
-        width: 100%;
-        margin: 20px 0;
+        width: 50%;
+        margin: 20px auto;
     }
 
     .table {
-        background-color: #f7f7f7;
-        border: 1px solid #ddd;
-        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+        .table th, .table td {
+            text-align: center;
+        }
+
+    .form-group label,
+    .form-group .form-control {
+        margin-bottom: 5px; /* Reduce el espacio entre el label y el input */
+    }
+
+    .form-group {
+        margin-bottom: 15px; /* Ajusta el espacio entre grupos de formulario */
     }
 
     .form-control {
-        text-align: center;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .input-sm {
+        width: 60%;
+        margin: 0 auto;
+    }
+
+    .radio-options {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+        .radio-options div {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-options label {
+            margin-left: 5px;
+            font-weight: normal;
+        }
+
+    .btn-danger, .btn-success {
+        width: 120px;
+        margin: 10px;
     }
 
     .btn-danger {
-        background-color: #dc3545;
-        border-color: #dc3545;
+        background-color: #e3342f;
+        border-color: #e3342f;
     }
 
     .btn-success {
-        background-color: #28a745;
-        border-color: #28a745;
+        background-color: #38c172;
+        border-color: #38c172;
+    }
+
+    .select-sm {
+        width: 150px; /* Ajusta el ancho como necesites */
+        margin: 0 auto; /* Centra el select */
+        display: block;
     }
 </style>

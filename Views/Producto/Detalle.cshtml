@@ -66,6 +66,7 @@
     .featured-products {
         margin-top: 30px;
     }
+
     .carousel-item {
         text-align: center;
     }
@@ -77,6 +78,22 @@
             max-width: 300px; /* Establece un ancho máximo que se ajuste a tu diseño */
             max-height: 200px; /* Ajusta la altura según necesites */
         }
+    /*estilos para el carrito*/
+    .position-fixed {
+        position: fixed !important;
+    }
+
+    .top-0 {
+        top: 0 !important;
+    }
+
+    .end-0 {
+        right: 0 !important;
+    }
+
+    .m-3 {
+        margin: 1rem !important;
+    }
 </style>
 
 <div class="container">
@@ -144,3 +161,66 @@
         </div>
     </div>
 </div>
+<!-- Contenedor para la notificación del carrito -->
+<div id="cartNotification" class="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-3 d-none" role="alert">
+    <span id="notificationMessage"></span>
+    <button type="button" class="btn btn-light btn-sm ms-3" onclick="viewCart()">Ver Carrito</button>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<script>
+    //Inicializar un array para almacenar los productos del carrito en memoria
+    var carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+    //Función para agregar productos al carrito
+    function agregarAlCarrito(productoId, productoNombre, productoPrecio, productoStock) {
+        // Crear un objeto producto
+        var producto = {
+            id: productoId,
+            nombre: productoNombre,
+            precio: productoPrecio,
+            stock: productoStock
+        };
+
+        carrito.push(producto);
+
+        //Guardar el carrito en el almacenamiento local del navegador
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+
+        mostrarNotificacion(productoNombre);
+    }
+
+    // Función para mostrar la notificación con Bootstrap
+    function mostrarNotificacion(productoNombre) {
+        document.getElementById('notificationMessage').innerText = productoNombre + " ha sido añadido al carrito.";
+
+        //Mostrar la alerta 
+        var notification = document.getElementById('cartNotification');
+        notification.classList.remove('d-none');
+        notification.classList.add('show');
+
+        //Ocultar la alerta después de 3 segundos
+        setTimeout(function () {
+            notification.classList.add('d-none');
+            notification.classList.remove('show');
+        }, 3000);
+    }
+
+    //Función para ver el carrito
+    function viewCart() {
+        //Redirigir a la página del carrito
+        window.location.href = '@Url.Action("Index", "Pedido")';
+    }
+
+    //Evento del botón "Agregar a Carrito"
+    document.querySelector('.btn-green').addEventListener('click', function () {
+        //Obtener el nombre y el ID del producto desde el modelo Razor
+        var productoId = '@Model.Id';
+        var productoNombre = '@Model.Nombre';
+        var productoPrecio = '@Model.Precio';
+        var productoStock = '@Model.Stock';
+
+        // Llamar a la función para agregar al carrito
+        agregarAlCarrito(productoId, productoNombre, productoPrecio, productoStock);
+    });
+</script>
+

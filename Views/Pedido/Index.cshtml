@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "Carrito de Compras";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .cart-table {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+        .cart-table th,
+        .cart-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+    .cart-actions {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .btn-custom {
+        margin-top: 10px;
+        width: 150px;
+    }
+</style>
+
+<div class="container">
+    <h2>Carrito de Compras</h2>
+
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="cartItems">
+            <!-- Los elementos del carrito se cargarán aquí dinámicamente -->
+        </tbody>
+    </table>
+
+    <!-- Contenedor de acciones -->
+    <div class="cart-actions">
+        <button class="btn btn-primary btn-custom" onclick="volverAProductos()">Volver</button>
+        <button class="btn btn-success btn-custom" onclick="iniciarCompra()">Iniciar Compra</button>
+    </div>
+</div>
+
+<script>
+    // Obtener carrito desde localStorage
+    var carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+    // Función para cargar los productos en la tabla del carrito
+    function cargarCarrito() {
+        var cartItemsContainer = document.getElementById('cartItems');
+        cartItemsContainer.innerHTML = '';
+
+        carrito.forEach(function (producto, index) {
+            var row = `
+                <tr>
+                    <td>${producto.nombre}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="actualizarCantidad(${index}, -1)">-</button>
+                        ${producto.stock}
+                        <button class="btn btn-sm btn-success" onclick="actualizarCantidad(${index}, 1)">+</button>
+                    </td>
+                    <td>$${(producto.precio * producto.stock).toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${index})">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+            cartItemsContainer.innerHTML += row;
+        });
+
+        // Actualizar el almacenamiento local
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+    }
+
+    // Función para actualizar la cantidad de un producto en el carrito
+    function actualizarCantidad(index, cambio) {
+        if (carrito[index].stock + cambio > 0) {
+            carrito[index].stock += cambio;
+        } else {
+            carrito.splice(index, 1);
+        }
+        cargarCarrito();
+    }
+
+    // Función para eliminar un producto del carrito
+    function eliminarProducto(index) {
+        carrito.splice(index, 1);
+        cargarCarrito();
+    }
+
+    // Función para volver a la página de productos
+    function volverAProductos() {
+        window.location.href = '@Url.Action("Index", "Producto")'; // Cambia a la acción y el controlador que corresponda
+    }
+
+    // Función para iniciar la compra
+    function iniciarCompra() {
+        if (carrito.length > 0) {
+            alert('Iniciando el proceso de compra...');
+            // Aquí podrías redirigir a una página de checkout o realizar alguna acción adicional
+        } else {
+            alert('Tu carrito está vacío.');
+        }
+    }
+
+    // Cargar el carrito al cargar la página
+    document.addEventListener('DOMContentLoaded', cargarCarrito);
+</script>
