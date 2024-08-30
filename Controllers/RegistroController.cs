@@ -59,6 +59,15 @@ namespace TechSolutions.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Email,Password,Nombre,Apellido")] Usuario usuario)
         {
+            if (string.IsNullOrWhiteSpace(usuario.Nombre))
+            {
+                ModelState.AddModelError("Nombre", "El campo nombre es obligatorio.");
+            }
+
+            if (string.IsNullOrWhiteSpace(usuario.Apellido))
+            {
+                ModelState.AddModelError("Apellido", "El campo Apellido es obligatorio.");
+            }
 
             var passSinEncriptar = ""; 
 
@@ -113,23 +122,29 @@ namespace TechSolutions.Controllers
 
             if (ModelState.IsValid)
             {
-                _usuarioData.Insert(usuario);
+                bool isInserted = _usuarioData.InsertUsuario(usuario);
 
-                // Enviar correo de confirmación
-                 var emailService = new EmailService();
-                string subject = "Registro exitoso en Tech Solutions";
-                string body = $"Hola {usuario.Nombre},<br/><br/>" +
-                              "Tu cuenta ha sido creada exitosamente en Tech Solutions.<br/><br/>" +
-                              $"Correo electrónico: {usuario.Email}<br/>" +
-                              $"Contraseña: {passSinEncriptar}<br/><br/>" +
-                              "Gracias por registrarte con nosotros.";
+                if (isInserted)
+                {
+                    var emailService = new EmailService();
+                    string subject = "Registro exitoso en Tech Solutions";
+                    string body = $"Hola {usuario.Nombre},<br/><br/>" +
+                                  "Tu cuenta ha sido creada exitosamente en Tech Solutions.<br/><br/>" +
+                                  $"Correo electrónico: {usuario.Email}<br/>" +
+                                  $"Contraseña: {passSinEncriptar}<br/><br/>" +
+                                  "Gracias por registrarte con nosotros.";
 
-                //emailService.SendEmail(usuario.Email, subject, body);
-                emailService.SendEmail("micaelavs@hotmail.com", subject, body);
+                    // Enviar el correo al usuario registrado
+                    emailService.SendEmail(usuario.Email, subject, body);
 
-
-
-                return RedirectToAction("Index", "Login");
+                    TempData["SuccessMessage"] = "¡Registro exitoso! Por favor, verifica tu correo electrónico para más detalles.";
+                    return RedirectToAction("Index", "Login");
+                }
+                else
+                {
+                    //Añadir un mensaje de error si la inserción falló
+                    ModelState.AddModelError("", "Ocurrió un error al crear el usuario. Inténtelo nuevamente.");
+                }
             }
 
             return View(usuario);

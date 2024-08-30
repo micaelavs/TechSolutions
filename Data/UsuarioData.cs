@@ -40,6 +40,25 @@ namespace TechSolutions.Data
             db.SaveChanges();
         }
 
+        public bool InsertUsuario(Usuario entity)
+        {
+            try
+            {
+                using (var db = new ApiDbContext())
+                {
+                    db.Usuarios.Add(entity);
+                    int result = db.SaveChanges();
+                    // Retornar true si se afectó al menos una fila, de lo contrario false.
+                    return result > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejar la excepción según tus necesidades.
+                // Por ejemplo, podrías registrar el error o enviar una alerta.
+                return false;
+            }
+        }
         public IEnumerable<Usuario> List()
         {
 

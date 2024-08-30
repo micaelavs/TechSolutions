@@ -15,6 +15,25 @@
         <div class="login-container">
             <h1>Bienvenido!</h1>
             <hr class="custom-hr" />
+            <!-- Mostrar mensaje de éxito si existe -->
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div id="errorMessage" class="alert alert-danger" role="alert">
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                </div>
+            }
+            @if (ViewBag.SuccessMessage != null)
+            {
+                <div id="successMessage" class="alert alert-success" role="alert">
+                    @ViewBag.SuccessMessage
+                </div>
+            }
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div id="errorMessage" class="alert alert-danger" role="alert">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
             <h3>Ingreso</h3>
             <a href="/Recupero/Index" class="btn btn-secondary btn-block custom-btn">
                 No recuerda sus datos, ingrese aquí!
@@ -22,22 +41,42 @@
             <br />
             <p>Ingrese sus datos para continuar</p>
             <br />
-            <form method="post" action="/Account/Login">
+            <form method="post" action="/Login/Login">
+                @Html.AntiForgeryToken()
                 <div class="form-group">
                     <label for="Email">Correo electrónico</label>
-                    <input type="email" class="form-control" id="Email" name="Email" required>
+                    <input type="email" class="form-control" id="Email" name="Email" value="@Request.Form["Email"]" required>
+                    @Html.ValidationMessage("Email", "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
-                    <label for="Password">Constraseña</label>
-                    <input type="password" class="form-control" id="Password" name="Password" required>
+                    <label for="Password">Contraseña</label>
+                    <input type="password" class="form-control" id="Password" name="Password" value="@Request.Form["Password"]" required>
+                    @Html.ValidationMessage("Password", "", new { @class = "text-danger" })
                 </div>
                 <br />
                 <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
             </form>
+
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        var successMessage = $('#successMessage');
+        if (successMessage.length) {
+            setTimeout(function () {
+                successMessage.fadeOut('slow');
+            }, 5000); // 5000 milisegundos = 5 segundos
+        }
 
+        var errorMessage = $('#errorMessage');
+        if (errorMessage.length) {
+            setTimeout(function () {
+                errorMessage.fadeOut('slow');
+            }, 5000); // 5000 milisegundos = 5 segundos
+        }
+    });
+</script>
 <style>
     body {
         background-color: #93C47D; /* Fondo verde para todo el cuerpo */
