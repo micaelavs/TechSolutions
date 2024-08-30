@@ -56,6 +56,13 @@
     // Obtener carrito desde localStorage
     var carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
+    // Inicializar la cantidad de cada producto si no está definida
+    carrito.forEach(function (producto) {
+        if (!producto.cantidad) {
+            producto.cantidad = 1;  // Puedes inicializarlo con 1 o el valor que consideres adecuado
+        }
+    });
+
     // Función para cargar los productos en la tabla del carrito
     function cargarCarrito() {
         var cartItemsContainer = document.getElementById('cartItems');
@@ -67,10 +74,10 @@
                     <td>${producto.nombre}</td>
                     <td>
                         <button class="btn btn-sm btn-danger" onclick="actualizarCantidad(${index}, -1)">-</button>
-                        ${producto.stock}
+                        <span id="cantidad-${index}">${producto.cantidad}</span>
                         <button class="btn btn-sm btn-success" onclick="actualizarCantidad(${index}, 1)">+</button>
                     </td>
-                    <td>$${(producto.precio * producto.stock).toFixed(2)}</td>
+                    <td>$${(producto.precio * producto.cantidad).toFixed(2)}</td>
                     <td>
                         <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${index})">Eliminar</button>
                     </td>
@@ -85,11 +92,15 @@
 
     // Función para actualizar la cantidad de un producto en el carrito
     function actualizarCantidad(index, cambio) {
-        if (carrito[index].stock + cambio > 0) {
-            carrito[index].stock += cambio;
+        var cantidadActual = carrito[index].cantidad;
+        var nuevaCantidad = cantidadActual + cambio;
+
+        if (nuevaCantidad > 0) {
+            carrito[index].cantidad = nuevaCantidad;
         } else {
             carrito.splice(index, 1);
         }
+
         cargarCarrito();
     }
 
@@ -101,7 +112,7 @@
 
     // Función para volver a la página de productos
     function volverAProductos() {
-        window.location.href = '@Url.Action("Index", "Producto")'; // Cambia a la acción y el controlador que corresponda
+        window.location.href = '@Url.Action("Listado", "Producto")'; // Cambia a la acción y el controlador que corresponda
     }
 
     // Función para iniciar la compra

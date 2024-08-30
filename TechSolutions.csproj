@@ -320,6 +320,7 @@
     <Content Include="Views\Usuario\MiPerfil.cshtml" />
     <Content Include="Views\Pedido\Pagar.cshtml" />
     <Content Include="Views\Pedido\Index.cshtml" />
+    <Content Include="Views\Pedido\Devolver.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

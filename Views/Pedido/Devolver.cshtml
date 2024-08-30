@@ -1,0 +1,96 @@
+﻿@model TechSolutions.Models.DetallePedido
+
+@{
+    ViewBag.Title = "Devolución del Producto";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Asegúrate de que el layout esté correctamente configurado
+}
+
+<style>
+    body {
+        background-color: #93C47D; /* Mismo fondo que la página de detalles del producto */
+    }
+
+    .return-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    .product-info {
+        text-align: center;
+    }
+
+    .form-horizontal {
+        margin-top: 20px;
+    }
+
+    .custom-hr {
+        border-top: 2px solid #ddd;
+        margin-bottom: 20px;
+    }
+
+    .btn-success, .btn-primary {
+        width: 100%;
+    }
+</style>
+
+<<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="return-container">
+            <h2>Devolución del Producto</h2>
+            <hr class="custom-hr" />
+
+            <div class="product-info">
+                <h3>@*@Model.Producto.Nombre*@ Soporte monitor</h3> <!-- Nombre del producto -->
+                <p>Todos los campos son obligatorios (*)</p>
+            </div>
+
+            @using (Html.BeginForm("DevolverProducto", "Pedido", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id) <!-- ID del detalle del pedido -->
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group row">
+                        <label class="control-label col-md-4">Indique el motivo de su devolución</label>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label col-md-4">Motivo (*)</label>
+                        <!--<div class="col-md-6">
+                            @*@Html.DropDownListFor(
+                                model => model.Motivo, // Asegúrate de que `Motivo` esté en el modelo `DetallePedido`
+                                (SelectList)ViewBag.MotivoList,
+                                "Seleccione un motivo",
+                                new { @class = "form-control", required = "required" }
+                            )
+                            @Html.ValidationMessageFor(model => model.Motivo, "", new { @class = "text-danger" })*@
+                        </div>-->
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label col-md-4">Descripción (*)</label>
+                        <div class="col-md-6">
+                            @Html.TextArea("Descripcion", null, new { @class = "form-control", placeholder = "Indique el motivo de su devolución...", rows = 4, required = "required" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-3 d-flex justify-content-center">
+                            <!-- Centrar los botones -->
+                            <button type="submit" class="btn btn-success me-2">Confirmar</button> <!-- Margen derecho para separación -->
+
+                        </div>
+                        <div class="col-md-3 d-flex justify-content-center">
+                            <a href="@(Url.Action("Index", "Pedido"))" class="btn btn-primary">Cancelar</a> <!-- Botón de cancelar -->
+                        </div>
+                        </div>
+                    </div>
+            }
+        </div>
+    </div>
+</div>

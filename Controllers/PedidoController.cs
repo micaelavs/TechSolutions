@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using TechSolutions.Data;
 using TechSolutions.Models;
 using TechSolutions.SharedKernel;
 
@@ -11,6 +12,13 @@ namespace TechSolutions.Controllers
 {
     public class PedidoController : Controller
     {
+        private readonly DetallePedidoData _detallepedidoRepository;
+
+        public PedidoController()
+        {
+
+            _detallepedidoRepository = new DetallePedidoData();
+        }
         // Acción para cargar la vista de pago con una lista de productos
         public ActionResult Pagar()
         {
@@ -77,6 +85,35 @@ namespace TechSolutions.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult Devolver()//id
+        {
+            // Recuperar el detalle del pedido desde la base de datos
+            //var detallePedido = _detallepedidoRepository.GetById(id);
+
+            // Preparar la lista de motivos
+            //ViewBag.MotivoList = new SelectList(Enum.GetValues(typeof(Motivo)), "Value", "DisplayName");
+            return View(/*detallePedido*/);
+        }
+
+        [HttpPost]
+        public ActionResult DevolverProducto(DetallePedido detallePedido, string descripcion, Motivo motivo)
+        {
+            if (ModelState.IsValid)
+            {
+                // Lógica para procesar la devolución del producto
+                var detalle = _detallepedidoRepository.GetById(detallePedido.Id);
+                if (detalle != null)
+                {
+                    // Actualiza el detalle del pedido según el motivo de la devolución
+                    // Añade lógica específica para manejar devoluciones aquí
+
+                    //ver a donde redirige despues
+                    return RedirectToAction("Index"); // Redirige a la página que consideres apropiada
+                }
+            }
+            return View(detallePedido); // Devuelve a la vista en caso de error
         }
     }   
 }
