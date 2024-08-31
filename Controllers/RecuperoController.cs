@@ -13,8 +13,12 @@ namespace TechSolutions.Controllers
 {
     public class RecuperoController : Controller
     {
-        private ApiDbContext db = new ApiDbContext();
+        //private ApiDbContext db = new ApiDbContext();
+        public readonly UsuarioData _usuarioData;
 
+        public RecuperoController() { 
+            _usuarioData = new UsuarioData();
+        }
         // GET: Recupero
         public ActionResult Index()
         {

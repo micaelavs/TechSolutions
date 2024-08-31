@@ -11,8 +11,12 @@ namespace TechSolutions.Controllers
 {
     public class LoginController : Controller
     {
-        private readonly UsuarioData _usuarioData = new UsuarioData();
+        public readonly UsuarioData _usuarioData;
 
+        public LoginController()
+        {
+            _usuarioData= new UsuarioData();
+        }
         [HttpGet]
         public ActionResult Index()
         {
