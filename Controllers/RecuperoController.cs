@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using TechSolutions.Data;
 using TechSolutions.Models;
+using TechSolutions.Servicios;
 
 namespace TechSolutions.Controllers
 {
@@ -15,6 +20,7 @@ namespace TechSolutions.Controllers
     {
         //private ApiDbContext db = new ApiDbContext();
         public readonly UsuarioData _usuarioData;
+        private readonly string _encryptionKey = "TuClaveDeEncriptacionSecreta"; //Debe ser segura y almacenada correctamente
 
         public RecuperoController() { 
             _usuarioData = new UsuarioData();
@@ -25,6 +31,129 @@ namespace TechSolutions.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult RecuperarCuenta(string email)
+        {
+            var usuario = _usuarioData.FindByEmail(email);
+            
+            if (usuario != null)
+            {
+                string token = GenerarTokenSeguro(usuario.Email);
+                string resetLink = Url.Action("RestablecerContrasena", "Recupero", new { token = token }, protocol: Request.Url.Scheme);
+
+                // Enviar el correo con el enlace
+                var emailService = new EmailService();
+                emailService.SendEmail(usuario.Email, "Recupera tu cuenta", $"Haz clic en el siguiente enlace para recuperar tu cuenta: <a href='{resetLink}'>Recuperar Cuenta</a>");
+
+                ViewBag.Message = "Se ha enviado un correo con las instrucciones para recuperar su cuenta.";
+                return View("Confirmacion");
+            }
+            else
+            {
+                ModelState.AddModelError("", "No se encontró una cuenta con ese correo electrónico.");
+                return View("Index");
+            }
+        }
+
+        private string GenerarTokenSeguro(string email)
+        {
+            var data = $"{email}|{DateTime.UtcNow}";
+            return Encriptar(data, _encryptionKey);
+        }
+
+        private string Encriptar(string clearText, string encryptionKey)
+        {
+            byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(encryptionKey, new byte[] { 0x53, 0x47, 0x18, 0x30, 0x77, 0x21, 0x38, 0x44, 0x71, 0x28, 0x39, 0x59, 0x47, 0x21, 0x30, 0x44 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(clearBytes, 0, clearBytes.Length);
+                        cs.Close();
+                    }
+                    clearText = Convert.ToBase64String(ms.ToArray());
+                }
+            }
+            return clearText;
+        }
+
+        private string Desencriptar(string cipherText, string encryptionKey)
+        {
+            cipherText = cipherText.Replace(" ", "+");
+            byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(encryptionKey, new byte[] { 0x53, 0x47, 0x18, 0x30, 0x77, 0x21, 0x38, 0x44, 0x71, 0x28, 0x39, 0x59, 0x47, 0x21, 0x30, 0x44 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(cipherBytes, 0, cipherBytes.Length);
+                        cs.Close();
+                    }
+                    cipherText = Encoding.Unicode.GetString(ms.ToArray());
+                }
+            }
+            return cipherText;
+        }
+
+        [HttpGet]
+        public ActionResult RestablecerContrasena(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("Index", "Login");
+            }
+
+            try
+            {
+                string decryptedToken = Desencriptar(token, _encryptionKey);
+                string[] tokenParts = decryptedToken.Split('|');
+                string email = tokenParts[0];
+                DateTime requestTime = DateTime.Parse(tokenParts[1]);
+
+                // Verificar si el enlace ha expirado (por ejemplo, 1 hora de validez)
+                if ((DateTime.UtcNow - requestTime).TotalHours > 1)
+                {
+                    ViewBag.Message = "El enlace de recuperación ha expirado.";
+                    return View("Error");
+                }
+
+                // Mostrar formulario para restablecer la contraseña
+                ViewBag.Email = email;
+                return View();
+            }
+            catch
+            {
+                ViewBag.Message = "Enlace de recuperación inválido.";
+                return View("Error");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult RestablecerContrasena(string email, string newPassword)
+        {
+            var usuario = _usuarioData.FindByEmail(email);
+            if (usuario != null)
+            {
+                // Actualizar la contraseña del usuario
+                usuario.Password = newPassword; // Asegúrate de encriptar la contraseña antes de guardarla
+                _usuarioData.Update(usuario);
+
+                ViewBag.Message = "Tu contraseña ha sido restablecida exitosamente.";
+                return View("ResetPasswordConfirmation");
+            }
+
+            ViewBag.Message = "Error al restablecer la contraseña.";
+            return View("Error");
+        }
 
 
         // GET: Recupero/Details/5

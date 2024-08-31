@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "Confirmación Restablecimiento de Contraseña";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Asegúrate de que esta ruta coincida con tu layout
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <!-- Aquí podrías agregar texto o imágenes a la izquierda -->
+        <h2>Contraseña restablecida con éxito</h2>
+        <p>
+            Su contraseña ha sido restablecida exitosamente. Ahora puede utilizar su nueva contraseña para iniciar sesión en su cuenta.
+        </p>
+    </div>
+    <div class="col-md-6">
+        <div class="confirmation-container">
+            <h1>Confirmación de Restablecimiento</h1>
+            <hr class="custom-hr" />
+            <h3>¡Su contraseña ha sido restablecida!</h3>
+            <p>Puede ingresar a su cuenta utilizando su nueva contraseña.</p>
+            <br />
+            <a href="/Login/Index" class="btn btn-secondary btn-block">Iniciar Sesión</a>
+            <br />
+            <a href="/Home/Index" class="btn btn-primary btn-block custom-btn">Ir a la página principal</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #93C47D; /* Fondo verde para todo el cuerpo */
+    }
+
+    .confirmation-container {
+        background-color: #f7f7f7; /* Fondo blanco para el contenedor */
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto; /* Centrar el contenedor */
+    }
+
+    .custom-hr {
+        border: none;
+        border-top: 3px solid #085394; /* Personaliza el color y el grosor */
+        width: 80%; /* Ajusta el ancho del hr */
+        margin: 20px 0; /* Espacio alrededor del hr */
+    }
+
+    .btn-block {
+        width: 100%; /* Asegura que el botón ocupe el 100% del ancho del contenedor */
+        text-align: center; /* Centrar el texto dentro del botón */
+    }
+
+    .custom-btn {
+        width: 70%; /* Ajusta el ancho del botón */
+        margin: 0 auto; /* Centra el botón */
+        font-size: 14px;
+    }
+</style>

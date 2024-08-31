@@ -1,40 +1,45 @@
 ﻿@{
-    ViewBag.Title = "asdasd";
+    ViewBag.Title = "Restablecer Contraseña";
     Layout = "~/Views/Shared/_Layout.cshtml"; // Asegúrate de que esta ruta coincida con tu layout
 }
 
 <div class="row">
     <div class="col-md-6">
         <!-- Aquí podrías agregar texto o imágenes a la izquierda -->
-        <h2>La tienda donde encontrarás los mejores precios</h2>
+        <h2>Restablece tu contraseña</h2>
         <p>
-            La tienda online donde encontrarás los mejores productos tecnológicos a precios
-            increíbles del mercado. Aquí encontrarás entre desktop, laptos, tablets, discos, teléfonos,
-            distintos dispositivos electrónicos de distinta índole y mucho más...
+            Restablezca su contraseña para acceder nuevamente a su cuenta. Asegúrese de elegir una contraseña segura
+            que no utilice en otros sitios web.
         </p>
     </div>
     <div class="col-md-6">
-        <div class="login-container">
-            <h1>asdasdasd</h1>
+        <div class="reset-password-container">
+            <h1>Restablecer Contraseña</h1>
             <hr class="custom-hr" />
-            <h3>Recupero cuenta</h3>
-            <p>Ingrese su email para recuperar la cuenta</p>
+            <h3>Ingrese su nueva contraseña</h3>
+            <p>Por favor, ingrese su nueva contraseña dos veces para confirmarla.</p>
             <br />
-            <p>En minutos le llegará un correo</p>
-            <form method="post" action="/Account/RecoverAccount">
+            <form method="post" action="/Recupero/RestablecerContrasena">
+                <!-- Campo oculto para el correo electrónico -->
+                <input type="hidden" name="email" value="@ViewBag.Email" />
+
                 <div class="form-group">
-                    <label for="Email">Correo electrónico</label>
-                    <input type="email" class="form-control" id="Email" name="Email" required>
+                    <label for="NuevaContrasena">Nueva Contraseña</label>
+                    <input type="password" class="form-control" id="NuevaContrasena" name="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="ConfirmarContrasena">Confirmar Nueva Contraseña</label>
+                    <input type="password" class="form-control" id="ConfirmarContrasena" required>
                 </div>
                 <br />
-                <button type="submit" class="btn btn-secondary btn-block">Enviar</button>
+                <button type="submit" class="btn btn-secondary btn-block">Restablecer Contraseña</button>
             </form>
             <br />
-            <a href="/Account/Login" class="btn btn-primary btn-block custom-btn">
+            <a href="/Login/Index" class="btn btn-primary btn-block custom-btn">
                 ¿Ya tiene un usuario? Ingresar
             </a>
             <br />
-            <a href="/Account/Register" class="btn btn-primary btn-block custom-btn">
+            <a href="/Registro/Create" class="btn btn-primary btn-block custom-btn">
                 ¿No tiene cuenta? ¡Regístrate!
             </a>
         </div>
@@ -46,7 +51,7 @@
         background-color: #93C47D; /* Fondo verde para todo el cuerpo */
     }
 
-    .login-container {
+    .reset-password-container {
         background-color: #f7f7f7; /* Fondo blanco para el contenedor */
         padding: 20px;
         border: 1px solid #ddd;
