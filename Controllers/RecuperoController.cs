@@ -23,9 +23,24 @@ namespace TechSolutions.Controllers
         private readonly string _encryptionKey = "TuClaveDeEncriptacionSecreta"; //Debe ser segura y almacenada correctamente
 
         public RecuperoController() { 
+
             _usuarioData = new UsuarioData();
         }
-        // GET: Recupero
+        /**
+         * Mecanismo de como recuperar la cuenta:
+         * Generar un Token Seguro: Al recibir la solicitud de recuperación de cuenta, se genera un token seguro que 
+         * contiene información del usuario y una marca de tiempo, y se cifra utilizando una clave secreta conocida solo por el servidor.
+         * Enviar el Token por Correo Electrónico: El token se envía al usuario como parte de un enlace en un correo electrónico.
+         * Verificar el Token al Acceder al Enlace: Cuando el usuario hace clic en el enlace, el servidor descifra el token, 
+         * valida la información contenida (por ejemplo, que no haya expirado y que coincida con la información del usuario) y permite al usuario restablecer su contraseña.
+         * Puntos Clave del Enfoque:
+         * SIN persistencia de tokens: El token generado no se guarda en la base de datos. En cambio, se confía en la encriptación segura para mantener la integridad del proceso de recuperación.
+         * Cifrado y Descifrado: La información se cifra al generar el token y se descifra cuando el usuario accede al enlace de restablecimiento.
+         * Validación de Expiración: Se verifica que el token no haya expirado antes de permitir el restablecimiento de la contraseña.
+         * **/
+
+
+        // GET
         public ActionResult Index()
         {
             return View();
@@ -144,11 +159,11 @@ namespace TechSolutions.Controllers
             if (usuario != null)
             {
                 // Actualizar la contraseña del usuario
-                usuario.Password = newPassword; // Asegúrate de encriptar la contraseña antes de guardarla
+                usuario.Password = PasswordHelper.HashPassword(newPassword); // Asegúrate de encriptar la contraseña antes de guardarla
                 _usuarioData.Update(usuario);
 
                 ViewBag.Message = "Tu contraseña ha sido restablecida exitosamente.";
-                return View("ResetPasswordConfirmation");
+                return View("Confirmacion");
             }
 
             ViewBag.Message = "Error al restablecer la contraseña.";

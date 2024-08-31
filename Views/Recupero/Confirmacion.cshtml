@@ -6,17 +6,24 @@
 <div class="row">
     <div class="col-md-6">
         <!-- Aquí podrías agregar texto o imágenes a la izquierda -->
-        <h2>Contraseña restablecida con éxito</h2>
+        <h2>Confirmación</h2>
         <p>
-            Su contraseña ha sido restablecida exitosamente. Ahora puede utilizar su nueva contraseña para iniciar sesión en su cuenta.
+            @if (!string.IsNullOrEmpty(ViewBag.Message))
+            {
+                @ViewBag.Message
+            }
+            else
+            {
+                <text>Su contraseña ha sido restablecida exitosamente. Ahora puede utilizar su nueva contraseña para iniciar sesión en su cuenta.</text>
+            }
         </p>
     </div>
     <div class="col-md-6">
         <div class="confirmation-container">
-            <h1>Confirmación de Restablecimiento</h1>
+            <h1>Confirmación de Acción</h1>
             <hr class="custom-hr" />
-            <h3>¡Su contraseña ha sido restablecida!</h3>
-            <p>Puede ingresar a su cuenta utilizando su nueva contraseña.</p>
+            <h3>@ViewBag.Message</h3>
+            <p>Puede continuar con la acción solicitada.</p>
             <br />
             <a href="/Login/Index" class="btn btn-secondary btn-block">Iniciar Sesión</a>
             <br />
