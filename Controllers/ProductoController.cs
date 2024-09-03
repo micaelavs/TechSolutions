@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -53,21 +54,40 @@ namespace TechSolutions.Controllers
 
         public ActionResult Create()
         {
-            //ESTO despuestengo que traerlo de la bd
-            //ViewBag.IdCategoriaProducto = new SelectList(db.Categorias, "Id", "Nombre");
             ViewBag.IdCategoriaProducto = new SelectList(_categoriaProductoData.List(), "Id", "Nombre");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,Descripcion,Precio,IdCategoriaProducto,Stock,Foto,Activo")] Producto producto)
+        public ActionResult Create([Bind(Include = "Id,Nombre,Descripcion,Precio,IdCategoriaProducto,Stock,Foto")] Producto producto, HttpPostedFileBase Foto)
         {
             if (ModelState.IsValid)
             {
-                /*db.Productos.Add(producto);
-                db.SaveChanges();*/
+
+                if(Foto != null && Foto.ContentLength > 0)
+{
+                    string fileExtension = Path.GetExtension(Foto.FileName);
+                    string uniqueFileName = $"{Path.GetFileNameWithoutExtension(Foto.FileName)}_{DateTime.Now:yyyyMMddHHmmss}{fileExtension}";
+                    string uploadsPath = Server.MapPath("~/Uploads/");
+
+                    if (!Directory.Exists(uploadsPath))
+                    {
+                        Directory.CreateDirectory(uploadsPath);
+                    }
+
+                    // Define la ruta completa donde se guardará el archivo
+                    string path = Path.Combine(uploadsPath, uniqueFileName);
+
+                    //Guarda el archivo en la ruta especificada
+                    Foto.SaveAs(path);
+
+                    // Aquí se guarda la ruta relativa completa
+                    producto.Foto = uniqueFileName;
+                }
+
                 _productoRepository.Insert(producto);
+                TempData["SuccessMessage"] = "Producto creado exitosamente!";
                 return RedirectToAction("Index");
             }
 
@@ -85,10 +105,6 @@ namespace TechSolutions.Controllers
         // GET: Productoes/Edit/5
         public ActionResult Edit(int id)
         {
-            /*if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }*/
             Producto producto = _productoRepository.GetById(id);
             
             if (producto == null)
@@ -100,31 +116,51 @@ namespace TechSolutions.Controllers
             return View(producto);
         }
 
-        // POST: Productoes/Edit/5
-       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nombre,Descripcion,Precio,IdCategoriaProducto,Stock,Foto,Activo")] Producto producto)
+        public ActionResult Edit(Producto producto, HttpPostedFileBase foto)
         {
-            if (ModelState.IsValid)
-            {
-                /*db.Entry(producto).State = EntityState.Modified;
-                db.SaveChanges();*/
+            //como imagen es obligatorio en el modelo pero... en la edicion, si no agrega una nueva foto, se deja la que esta
+            //comento esto, si no tira error de modelo al validar
+            //if (ModelState.IsValid)
+            //{
+                // Obtener el producto actual desde la base de datos para preservar la foto actual si no se ha subido una nueva
+                var existingProduct = _productoRepository.GetById(producto.Id);
+
+                if (existingProduct == null)
+                {
+                    return HttpNotFound();
+                }
+
+                // Verificar si se ha proporcionado un archivo de foto
+                if (foto != null && foto.ContentLength > 0)
+                {
+                    // Guardar la imagen en el servidor
+                    var fileName = Path.GetFileName(foto.FileName);
+                    var path = Path.Combine(Server.MapPath("~/Uploads"), fileName);
+                    foto.SaveAs(path);
+                    producto.Foto = fileName;
+                }
+                else
+                {
+                    // Si no se proporciona una foto, mantener la foto existente
+                    producto.Foto = existingProduct.Foto;
+                }
+
+                // Actualizar el producto
                 _productoRepository.Update(producto);
+                TempData["SuccessMessage"] = "Producto editado exitosamente!";
                 return RedirectToAction("Index");
-            }
-            //ViewBag.IdCategoriaProducto = new SelectList(db.Categorias, "Id", "Nombre", producto.IdCategoriaProducto);
-            return View(producto);
+            //}
+
+            /*ViewBag.IdCategoriaProducto = new SelectList(_categoriaProductoData.List(), "Id", "Nombre", producto.IdCategoriaProducto);
+            return View(producto);*/
         }
+
 
         // GET: Productoes/Delete/5
         public ActionResult Delete(int id)
         {
-            /*if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }*/
-            //Producto producto = db.Productos.Find(id);
             Producto producto = _productoRepository.GetById(id);
             if (producto == null)
             {
@@ -138,12 +174,20 @@ namespace TechSolutions.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            /*Producto producto = db.Productos.Find(id);
-            db.Productos.Remove(producto);
-            db.SaveChanges();*/
+         
             Producto producto = _productoRepository.GetById(id);
-            producto.Activo = false;
+            if (producto.Stock > 1)
+            {
+                producto.Stock -= 1;
+            }
+            else
+            {
+                producto.Stock = 0;
+                producto.Activo = false;
+            }
+
             _productoRepository.Update(producto);
+            TempData["SuccessMessage"] = "Producto eliminado exitosamente!";
             return RedirectToAction("Index");
         }
         //get para mostrar la pantalla

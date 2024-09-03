@@ -17,67 +17,67 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.HiddenFor(model => model.Id)
 
-                <div class="form-horizontal">
-                    <div class="form-group row justify-content-center">
-                        @Html.LabelFor(model => model.Nombre, "Nombre (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
-                        <div class="col-md-6">
-                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group row justify-content-center">
-                        @Html.LabelFor(model => model.Descripcion, "Descripción (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
-                        <div class="col-md-6">
-                            @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group row justify-content-center">
-                        @Html.LabelFor(model => model.Precio, "Precio (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
-                        <div class="col-md-6">
-                            @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group row justify-content-center">
-                        @Html.LabelFor(model => model.IdCategoriaProducto, "Categoría (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
-                        <div class="col-md-6">
-                            @Html.DropDownList("IdCategoriaProducto", null, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.IdCategoriaProducto, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group row justify-content-center">
-                        @Html.LabelFor(model => model.Stock, "Stock (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
-                        <div class="col-md-6">
-                            @Html.EditorFor(model => model.Stock, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Stock, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group row justify-content-center">
-                        @Html.LabelFor(model => model.Foto, "Foto (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
-                        <div class="col-md-6">
-                            <input type="file" id="Foto" name="Foto" class="form-control" />
-                            @Html.ValidationMessageFor(model => model.Foto, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group row justify-content-center">
-                        <div class="col-md-6">
-                            <img id="imagePreview" src="#" alt="Vista previa de la imagen" style="display: none; max-width: 100%; height: auto;" />
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group row justify-content-center">
-                        <div class="col-md-12 text-center">
-                            <input type="submit" value="Guardar" class="btn btn-primary btn-block custom-btn" />
-                        </div>
-                    </div>
+        <div class="form-horizontal">
+            <div class="form-group row justify-content-center">
+                @Html.LabelFor(model => model.Nombre, "Nombre (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
                 </div>
+            </div>
+            <br />
+            <div class="form-group row justify-content-center">
+                @Html.LabelFor(model => model.Descripcion, "Descripción (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+            <div class="form-group row justify-content-center">
+                @Html.LabelFor(model => model.Precio, "Precio (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+            <div class="form-group row justify-content-center">
+                @Html.LabelFor(model => model.IdCategoriaProducto, "Categoría (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                <div class="col-md-6">
+                    @Html.DropDownList("IdCategoriaProducto", (SelectList)ViewBag.IdCategoriaProducto, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IdCategoriaProducto, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+            <div class="form-group row justify-content-center">
+                @Html.LabelFor(model => model.Stock, "Stock (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Stock, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Stock, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+            <div class="form-group row justify-content-center">
+                @Html.LabelFor(model => model.Foto, "Foto (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                <div class="col-md-6">
+                    <input type="file" id="Foto" name="Foto" class="form-control" />
+                    @*@Html.ValidationMessageFor(model => model.Foto, "", new { @class = "text-danger" }) *@
+                </div>
+            </div>
+            <br />
+            <div class="form-group row justify-content-center">
+                <div class="col-md-6">
+                    <img id="imagePreview" src="@(!string.IsNullOrEmpty(Model.Foto) ? Url.Content("~/Uploads/" + Model.Foto) : "#")" alt="Vista previa de la imagen" style="display: @(!string.IsNullOrEmpty(Model.Foto) ? "block" : "none"); max-width: 100%; height: auto;" />
+                </div>
+            </div>
+            <br />
+            <div class="form-group row justify-content-center">
+                <div class="col-md-12 text-center">
+                    <input type="submit" value="Guardar" class="btn btn-primary btn-block custom-btn" />
+                </div>
+            </div>
+        </div>
             }
         </div>
     </div>

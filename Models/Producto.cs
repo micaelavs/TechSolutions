@@ -26,6 +26,7 @@ namespace TechSolutions.Models
         [ForeignKey("CategoriaProducto")]
         [Column(Order = 2)]
         [Required]
+        [Display(Name = "Categoría Producto")] // Aquí se agrega el Display attribute
         public int IdCategoriaProducto { get; set; }
         [Required]
         public int Stock { get; set; }
