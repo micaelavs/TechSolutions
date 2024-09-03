@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using TechSolutions.Data;
@@ -46,7 +47,7 @@ namespace TechSolutions.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost] //este es el post del index
         public ActionResult RecuperarCuenta(string email)
         {
             var usuario = _usuarioData.FindByEmail(email);
@@ -58,7 +59,7 @@ namespace TechSolutions.Controllers
 
                 // Enviar el correo con el enlace
                 var emailService = new EmailService();
-                emailService.SendEmail(usuario.Email, "Recupera tu cuenta", $"Haz clic en el siguiente enlace para recuperar tu cuenta: <a href='{resetLink}'>Recuperar Cuenta</a>");
+                emailService.SendEmail(usuario.Email, "Tech Solutions: Recupera tu cuenta", $"Hola! {usuario.Email}. Has iniciado el proceso para recuperar tu cuenta de Tech Solutions, por favor si deseas recuperarla, haz clic en el siguiente enlace: <a href='{resetLink}'>Recuperar Cuenta</a>");
 
                 ViewBag.Message = "Se ha enviado un correo con las instrucciones para recuperar su cuenta.";
                 return View("Confirmacion");
@@ -155,9 +156,20 @@ namespace TechSolutions.Controllers
         [HttpPost]
         public ActionResult RestablecerContrasena(string email, string newPassword)
         {
+            var regex = new Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{7,}$");
+            
             var usuario = _usuarioData.FindByEmail(email);
+            
             if (usuario != null)
             {
+                //esto esta aca, per tamb se valida en el front ( en el front es necesario para q no se pierda el token si se refresca!
+                if (!regex.IsMatch(newPassword))
+                {
+                    ViewBag.Message = "La contraseña debe tener al menos una letra, un número y siete caracteres.";
+                    ViewBag.Email = email;
+                    return View();
+                }
+
                 // Actualizar la contraseña del usuario
                 usuario.Password = PasswordHelper.HashPassword(newPassword); // Asegúrate de encriptar la contraseña antes de guardarla
                 _usuarioData.Update(usuario);

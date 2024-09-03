@@ -1,15 +1,15 @@
 ﻿@{
-    ViewBag.Title = "Confirmación Restablecimiento de Contraseña";
+    ViewBag.Title = "Error";
     Layout = "~/Views/Shared/_Layout.cshtml"; // Asegúrate de que esta ruta coincida con tu layout
 }
 
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <div class="confirmation-container">
-            <h1>Aviso:</h1>
+        <div class="error-container">
+            <h1>Error:</h1>
             <hr class="custom-hr" />
             <h3>@ViewBag.Message</h3>
-            <p>Puede continuar con la acción solicitada.</p>
+            <p>Por favor, intente nuevamente o contacte al soporte si el problema persiste.</p>
             <div class="button-container">
                 <a href="/Login/Index" class="btn btn-secondary custom-btn">Iniciar Sesión</a>
                 <a href="/Home/Index" class="btn btn-primary custom-btn">Ir a la página principal</a>
@@ -20,10 +20,10 @@
 
 <style>
     body {
-        background-color: #93C47D; /* Fondo verde para todo el cuerpo */
+        background-color: #93C47D; /* Fondo rojo para todo el cuerpo */
     }
 
-    .confirmation-container {
+    .error-container {
         background-color: #f7f7f7; /* Fondo blanco para el contenedor */
         padding: 20px;
         border: 1px solid #ddd;

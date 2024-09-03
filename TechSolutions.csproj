@@ -299,9 +299,6 @@
     <Content Include="Views\Producto\Edit.cshtml" />
     <Content Include="Views\Producto\Index.cshtml" />
     <Content Include="Views\Recupero\RestablecerContrasena.cshtml" />
-    <Content Include="Views\Recupero\Delete.cshtml" />
-    <Content Include="Views\Recupero\Details.cshtml" />
-    <Content Include="Views\Recupero\Edit.cshtml" />
     <Content Include="Views\Recupero\Index.cshtml" />
     <Content Include="Views\Usuario\Create.cshtml" />
     <Content Include="Views\Usuario\Delete.cshtml" />
@@ -322,6 +319,7 @@
     <Content Include="Views\Pedido\Index.cshtml" />
     <Content Include="Views\Pedido\Devolver.cshtml" />
     <Content Include="Views\Recupero\Confirmacion.cshtml" />
+    <Content Include="Views\Recupero\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

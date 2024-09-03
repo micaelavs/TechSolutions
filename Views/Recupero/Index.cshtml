@@ -21,6 +21,14 @@
             <p>Ingrese su email para recuperar la cuenta</p>
             <br />
             <p>En minutos le llegará un correo</p>
+            
+            <!-- Muestra los errores de validación aquí -->
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    @Html.ValidationSummary()
+                </div>
+            }
             <form method="post" action="/Recupero/RecuperarCuenta">
                 <div class="form-group">
                     <label for="Email">Correo electrónico</label>

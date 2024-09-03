@@ -1,11 +1,10 @@
 ﻿@{
     ViewBag.Title = "Restablecer Contraseña";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Asegúrate de que esta ruta coincida con tu layout
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row">
     <div class="col-md-6">
-        <!-- Aquí podrías agregar texto o imágenes a la izquierda -->
         <h2>Restablece tu contraseña</h2>
         <p>
             Restablezca su contraseña para acceder nuevamente a su cuenta. Asegúrese de elegir una contraseña segura
@@ -19,8 +18,14 @@
             <h3>Ingrese su nueva contraseña</h3>
             <p>Por favor, ingrese su nueva contraseña dos veces para confirmarla.</p>
             <br />
-            <form method="post" action="/Recupero/RestablecerContrasena">
-                <!-- Campo oculto para el correo electrónico -->
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Message
+                </div>
+            }
+            <span class="alert alert-danger" id="error-message" style="color: red; display: none;">Las contraseñas no coinciden. Por favor, inténtelo de nuevo.</span>
+            <form method="post" action="/Recupero/RestablecerContrasena" id="resetPasswordForm">
                 <input type="hidden" name="email" value="@ViewBag.Email" />
 
                 <div class="form-group">
@@ -31,6 +36,8 @@
                     <label for="ConfirmarContrasena">Confirmar Nueva Contraseña</label>
                     <input type="password" class="form-control" id="ConfirmarContrasena" required>
                 </div>
+                <small class="form-text text-muted">Utilice al menos una letra, un número y siete caracteres.</small>
+                <br />
                 <br />
                 <button type="submit" class="btn btn-secondary btn-block">Restablecer Contraseña</button>
             </form>
@@ -48,11 +55,11 @@
 
 <style>
     body {
-        background-color: #93C47D; /* Fondo verde para todo el cuerpo */
+        background-color: #93C47D;
     }
 
     .reset-password-container {
-        background-color: #f7f7f7; /* Fondo blanco para el contenedor */
+        background-color: #f7f7f7;
         padding: 20px;
         border: 1px solid #ddd;
         border-radius: 5px;
@@ -61,25 +68,56 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin: 0 auto; /* Centrar el contenedor */
+        margin: 0 auto;
     }
 
     .custom-hr {
         border: none;
-        border-top: 3px solid #085394; /* Personaliza el color y el grosor */
-        width: 80%; /* Ajusta el ancho del hr */
-        margin: 20px 0; /* Espacio alrededor del hr */
+        border-top: 3px solid #085394;
+        width: 80%;
+        margin: 20px 0;
     }
 
-    .form-control,
+    .form-control {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
     .btn-block {
-        width: 100%; /* Asegura que los campos y el botón ocupen el 100% del ancho del formulario */
-        text-align: center; /* Centrar el texto dentro del input y el botón */
+        width: 60%;
+        margin: 0 auto;
+        font-size: 14px;
     }
 
     .custom-btn {
-        width: 70%; /* Ajusta el ancho del botón */
-        margin: 0 auto; /* Centra el botón */
+        width: 70%;
+        margin: 0 auto;
         font-size: 14px;
     }
+
+    #error-message {
+        margin-bottom: 10px; /* Espacio fijo debajo del mensaje de error */
+    }
 </style>
+
+<script>
+    $(document).ready(function () {
+        $("#resetPasswordForm").submit(function (event) {
+            var nuevaContrasena = $("#NuevaContrasena").val();
+            var confirmarContrasena = $("#ConfirmarContrasena").val();
+            var regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{7,}$/;
+
+            if (nuevaContrasena !== confirmarContrasena) {
+                $("#error-message").text("Las contraseñas no coinciden. Por favor, inténtelo de nuevo.").show();
+                event.preventDefault();
+                //esta validacion es muy necesaria, si se hace dellado del servidor se refresca y se pierde el mail
+            } else if (!regex.test(nuevaContrasena)) {
+                $("#error-message").text("La contraseña debe tener al menos 7 caracteres, incluyendo letras y números.").show();
+                event.preventDefault();
+            } else {
+                $("#error-message").hide();
+            }
+        });
+    });
+</script>
