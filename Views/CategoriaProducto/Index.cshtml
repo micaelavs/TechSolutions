@@ -26,6 +26,12 @@
 <div class="container">
     <br>
     <h2>Listado de Categorías</h2>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div id="successMessage" class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
     <!-- Mensaje de error -->
     @if (TempData["ErrorMessage"] != null)
     {

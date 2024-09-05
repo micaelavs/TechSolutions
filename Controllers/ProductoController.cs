@@ -29,13 +29,6 @@ namespace TechSolutions.Controllers
         // GET
         public ActionResult Index()
         {
-            /*var productos = db.Productos
-                 .Include(p => p.CategoriaProducto)
-                 .Where(p => p.Activo)
-                 .ToList();
-
-            return View(productos);*/
-
             var productos = _productoRepository.List();
             //var productosActivos = productos.Where(p => p.Activo).ToList();
             return View(productos);

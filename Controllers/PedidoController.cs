@@ -82,6 +82,7 @@ namespace TechSolutions.Controllers
 
             return View();
         }
+        //mustra el carrito
         public ActionResult Index()
         {
             return View();

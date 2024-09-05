@@ -34,11 +34,6 @@ namespace TechSolutions.Controllers
         // GET: CategoriaProducto/Details/5
         public ActionResult Details(int id)
         {
-            /*if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }*/
-            
             CategoriaProducto categoriaProducto = _categoriaProductoData.GetById(id);
             
             if (categoriaProducto == null)
@@ -61,9 +56,8 @@ namespace TechSolutions.Controllers
         {
             if (ModelState.IsValid)
             {
-                /*db.Categorias.Add(categoriaProducto);
-                db.SaveChanges();*/
                 _categoriaProductoData.Insert(categoriaProducto);
+                TempData["SuccessMessage"] = "Categoría creada exitosamente!";
                 return RedirectToAction("Index");
             }
 
@@ -73,11 +67,6 @@ namespace TechSolutions.Controllers
         // GET: CategoriaProducto/Edit/5
         public ActionResult Edit(int id)
         {
-            /*if (id == null)
-             * 
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }*/
 
             CategoriaProducto categoriaProducto = _categoriaProductoData.GetById(id);
 
@@ -96,8 +85,7 @@ namespace TechSolutions.Controllers
             if (ModelState.IsValid)
             {
                 _categoriaProductoData.Update(categoriaProducto);
-                /*db.Entry(categoriaProducto).State = EntityState.Modified;
-                db.SaveChanges();*/
+                TempData["SuccessMessage"] = "Categoría editada exitosamente!";
                 return RedirectToAction("Index");
             }
             return View(categoriaProducto);
@@ -106,11 +94,6 @@ namespace TechSolutions.Controllers
         // GET: CategoriaProducto/Delete/5
         public ActionResult Delete(int id)
         {
-            /*if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }*/
-
             CategoriaProducto categoriaProducto = _categoriaProductoData.GetById(id);
 
             if (categoriaProducto == null)
@@ -139,17 +122,9 @@ namespace TechSolutions.Controllers
 
             categoriaProducto.Activo= false;
             _categoriaProductoData.Update(categoriaProducto);
-            db.SaveChanges();
+            TempData["SuccessMessage"] = "Categoría dada de baja exitosamente!";
             return RedirectToAction("Index");
         }
 
-        /*protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }*/
     }
 }

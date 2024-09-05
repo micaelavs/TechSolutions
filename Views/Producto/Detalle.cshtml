@@ -104,7 +104,7 @@
         <div class="col-md-8">
             <div class="details-container">
                 <div class="col-md-6">
-                    <img src="~/Content/Images/monitor_lg.png" alt="Imagen de @Model.Nombre" class="product-image" />
+                    <img src="@(!string.IsNullOrEmpty(Model.Foto) ? Url.Content("~/Uploads/" + Model.Foto) : "#")" alt="Imagen de @Model.Nombre" class="product-image" />
 
                     <!-- Características Principales -->
                     <div class="product-description">
@@ -116,7 +116,7 @@
 
                 <div class="product-details">
                     <h4>@Model.Nombre</h4>
-                    <p class="text-muted">@Model.Precio.ToString("C")</p>
+                    <p class="text-muted">$@Model.Precio</p>
                     <p><strong>Stock disponible:</strong> @Model.Stock</p>
 
                     <!-- Campo numérico para elegir la cantidad -->
@@ -169,8 +169,9 @@
 </div>
 <script>
     //Inicializar un array para almacenar los productos del carrito en memoria
+    localStorage.removeItem('carrito');
     var carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-
+    console.log(carrito); 
     //Función para agregar productos al carrito
     function agregarAlCarrito(productoId, productoNombre, productoPrecio, productoStock) {
         // Crear un objeto producto
@@ -182,7 +183,7 @@
         };
 
         carrito.push(producto);
-
+        console.log(carrito);
         //Guardar el carrito en el almacenamiento local del navegador
         localStorage.setItem('carrito', JSON.stringify(carrito));
 

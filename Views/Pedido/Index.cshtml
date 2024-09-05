@@ -55,7 +55,7 @@
 <script>
     // Obtener carrito desde localStorage
     var carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-
+    console.log(carrito);
     // Inicializar la cantidad de cada producto si no está definida
     carrito.forEach(function (producto) {
         if (!producto.cantidad) {
@@ -119,6 +119,9 @@
     function iniciarCompra() {
         if (carrito.length > 0) {
             alert('Iniciando el proceso de compra...');
+            localStorage.removeItem('carrito');
+            console.log("llega aca");
+            console.log(localStorage);
             // Aquí podrías redirigir a una página de checkout o realizar alguna acción adicional
         } else {
             alert('Tu carrito está vacío.');
