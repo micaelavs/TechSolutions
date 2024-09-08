@@ -189,6 +189,7 @@
     <Compile Include="Models\EncabezadoFactura.cs" />
     <Compile Include="Models\DetalleFactura.cs" />
     <Compile Include="Models\HistorialPedido.cs" />
+    <Compile Include="Models\PagoViewModel.cs" />
     <Compile Include="Models\Persona.cs" />
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\Producto.cs" />
@@ -320,6 +321,7 @@
     <Content Include="Views\Pedido\Devolver.cshtml" />
     <Content Include="Views\Recupero\Confirmacion.cshtml" />
     <Content Include="Views\Recupero\Error.cshtml" />
+    <Content Include="Views\Pedido\ConfirmarPago.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

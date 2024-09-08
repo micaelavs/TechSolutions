@@ -30,6 +30,16 @@ namespace TechSolutions.Data
 
         }
 
+        public IEnumerable<Producto> GetByIds(List<int> ids)
+        {
+            var db = new ApiDbContext();
+            return db.Productos
+                     .Include(p => p.CategoriaProducto)
+                     .Include(p => p.Calificaciones)
+                     .Where(p => ids.Contains(p.Id) && p.Activo)
+                     .ToList();
+        }
+
         public void Insert(Producto entity)
         {
             var db = new ApiDbContext();

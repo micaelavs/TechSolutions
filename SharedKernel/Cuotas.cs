@@ -8,9 +8,9 @@ namespace TechSolutions.SharedKernel
 {
     public enum Cuotas
     {
-        Una_cuota = 5,
-        Tres_cuotas = 4,
-        Seis_cuotas = 3
+        Una = 1,
+        Tres = 2,
+        Seis = 3
 
     }
 }

@@ -118,13 +118,14 @@
                     <h4>@Model.Nombre</h4>
                     <p class="text-muted">$@Model.Precio</p>
                     <p><strong>Stock disponible:</strong> @Model.Stock</p>
+                    <label for="Cantidad">Elegir cantidad:</label>
+                    <input type="number" id="Cantidad" class="quantity-input" min="1" max="@Model.Stock" value="1" />
 
-                    <!-- Campo numérico para elegir la cantidad -->
-                    <label for="cantidad">Elegir cantidad:</label>
-                    <input type="number" id="cantidad" class="quantity-input" min="1" max="@Model.Stock" value="1" />
-
-                    <!-- Botones de acciones -->
-                    <button class="btn btn-green btn-custom">Iniciar Compra</button>
+                    <form id="purchaseForm" action="@Url.Action("Pagar", "Pedido")" method="get">
+                        <input type="hidden" name="Id" value="@Model.Id" />
+                        <input type="hidden" id="Cantidad" name="Cantidad" min="1" max="@Model.Stock" value="1" />
+                        <button type="submit" class="btn btn-green btn-custom">Iniciar Compra</button>
+                    </form>
                     <button class="btn btn-orange btn-custom" onclick="location.href='@Url.Action("VerCalificaciones", "Producto", new { id = Model.Id })'">Ver Calificaciones</button>
                 </div>
             </div>

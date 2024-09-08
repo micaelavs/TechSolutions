@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,27 +13,40 @@ namespace TechSolutions.Data
     {
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var db = new ApiDbContext();
+            EncabezadoFactura factura = db.EncabezadosFacturas.Find(id);
+            db.EncabezadosFacturas.Remove(factura);
+            db.SaveChanges();
+
         }
 
         public EncabezadoFactura GetById(int id)
         {
-            throw new NotImplementedException();
+            var db = new ApiDbContext();
+            return db.EncabezadosFacturas.Find(id);
+
         }
 
         public void Insert(EncabezadoFactura entity)
         {
-            throw new NotImplementedException();
+            var db = new ApiDbContext();
+            db.EncabezadosFacturas.Add(entity);
+            db.SaveChanges();
         }
 
         public IEnumerable<EncabezadoFactura> List()
         {
-            throw new NotImplementedException();
+            var db = new ApiDbContext();
+            var encabezadosfacturas = db.EncabezadosFacturas.ToList();
+            return encabezadosfacturas;
+
         }
 
         public void Update(EncabezadoFactura entity)
         {
-            throw new NotImplementedException();
+            var db = new ApiDbContext();
+            db.Entry(entity).State = EntityState.Modified;
+            db.SaveChanges();
         }
     }
 }
