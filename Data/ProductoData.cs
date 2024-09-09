@@ -59,7 +59,20 @@ namespace TechSolutions.Data
 
             return productos;
 
+        }
 
+        public IEnumerable<Producto> ListProductosDisponibles()
+        {
+            using (var db = new ApiDbContext())
+            {
+                var productos = db.Productos
+                                  .Include(p => p.CategoriaProducto)
+                                  .Include(p => p.Calificaciones) 
+                                  .Where(p => p.Activo && p.Stock > 0) 
+                                  .ToList();
+
+                return productos;
+            }
         }
 
         public void Update(Producto entity)

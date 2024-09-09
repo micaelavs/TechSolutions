@@ -34,6 +34,16 @@ namespace TechSolutions.Data
             db.SaveChanges();
         }
 
+        public int InsertReturnId(Pedido entity)
+        {
+            using (var db = new ApiDbContext())
+            {
+                db.Pedidos.Add(entity);
+                db.SaveChanges(); 
+                return entity.Id;
+            }
+        }
+
         public IEnumerable<Pedido> List()
         {
             var db = new ApiDbContext();

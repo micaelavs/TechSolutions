@@ -9,6 +9,7 @@ namespace TechSolutions.Models
     public class PagoViewModel
     {
         public Producto Producto { get; set; }
+        public int ProductoId { get; set; }
         public int Cantidad { get; set; }
         public float Subtotal { get; set; }
         public float Total { get; set; }

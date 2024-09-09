@@ -12,14 +12,20 @@ namespace TechSolutions.Controllers
 {
     public class PedidoController : Controller
     {
+      
         private readonly DetallePedidoData _detallepedidoRepository;
-        private readonly ProductoData _productoData;
-
+        private readonly PedidoData _pedidoRepository;
+        private readonly ProductoData _productoRepository;
+        private readonly EncabezadoFacturaData _encabezadoFacturaRepository;
+        private readonly DetalleFacturaData _detallefacturaRepository;
         public PedidoController()
         {
 
             _detallepedidoRepository = new DetallePedidoData();
-            _productoData = new ProductoData();
+            _productoRepository = new ProductoData();
+            _pedidoRepository = new PedidoData();
+            _encabezadoFacturaRepository = new EncabezadoFacturaData();
+            _detallefacturaRepository = new DetalleFacturaData();
         }
         // Acción para cargar la vista de pago con una lista de productos
         [HttpGet]
@@ -27,18 +33,13 @@ namespace TechSolutions.Controllers
         {
             PagoViewModel pago = new PagoViewModel();
             Producto producto = new Producto();
-            producto = _productoData.GetById(Id); 
+            producto = _productoRepository.GetById(Id); 
             
             pago.Producto = producto;
             pago.Subtotal = (float)(producto.Precio * Cantidad);
             pago.Total = pago.Subtotal;
             pago.Cantidad = Cantidad;
-
-            // Configurar el ViewBag
-            /*ViewBag.Producto = producto;
-            ViewBag.Subtotal = subtotal;
-            ViewBag.Cantidad = Cantidad;    
-            ViewBag.Total = total;*/
+            pago.ProductoId = producto.Id;
 
             //Otros datos
             ViewBag.MediodePago = Enum.GetValues(typeof(MedioPago)).Cast<MedioPago>().Select(e => new SelectListItem
@@ -63,115 +64,140 @@ namespace TechSolutions.Controllers
 
             return View(pago);
         }
-        /*
-         public class Pedido: IEntity
-     {
-         [Key]
-         [Column(Order = 1)]
-         [Required]
-         public int Id { get; set; }
-         [Required]
-         public int Numero { get; set; }
-
-         [ForeignKey("Usuario")]
-         [Column(Order = 2)]
-         [Required]
-         public int IdUsuario { get; set; }
-         public Usuario Usuario { get; set; }
-         public EstadoPedido Estado { get; set; }
-
-         public float MontoTotal { get; set; }
-         public DateTime FechaOperacion { get; set; } = DateTime.Now;
-
-         public IList<DetallePedido> DetallesPedidos { get; private set; }
-
-         public IList<HistorialPedido> HistorialPedidos { get; private set; }
-     }
-
-        public class DetallePedido: IEntity
-    {
-        [Key]
-        [Column(Order = 1)]
-        [Required]
-        public int Id { get; set; }
-        public Producto Producto { get; set; }
-        public Pedido Pedido { get; set; }
-
-        [ForeignKey("Producto")]
-        [Column(Order = 2)]
-        [Required]
-        public int IdProducto { get; set; }
-
-        [ForeignKey("Pedido")]
-        [Column(Order = 3)]
-        [Required]
-        public int IdPedido { get; set; }
-        [Required]
-        public int Cantidad { get; set; }
-        [Required]
-        public float PrecioUnitario {  get; set; }
       
-    }
-         */
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ConfirmarPago(PagoViewModel pago)
         {
-            /*if (ModelState.IsValid)
+            var db = new ApiDbContext();
+
+            if (ModelState.IsValid)
             {
-              
-                Pedido pedido = new Pedido();
-                pedido.IdUsuario = (int)Session["UserId"];
-                pedido.Numero = GenerarNumeroPedido();
-                pedido.FechaOperacion = DateTime.Now;
-                pedido.MontoTotal = total;
-                pedido.Estado = EstadoPedido.Pago_aprobado;
-                //pedido.Id = ped
-                DetallePedido NuevoDetallePedido = new DetallePedido();
-
-                foreach (var producto in productos)
+                using (var transaction = db.Database.BeginTransaction())
                 {
-                    NuevoDetallePedido.IdProducto = producto.Id;
-                    NuevoDetallePedido.IdPedido = 99;
-                    NuevoDetallePedido.Cantidad = 
-                }
-                
-
-                    DetallesPedido = productos.Select(p => new DetallePedido
+                    try
                     {
-                        ProductoId = p.Id,
-                        Precio = p.Precio,
-                        Cantidad = 1 // Aquí puedes manejar cantidades si las tienes en el modelo
-                    }).ToList()
-                
+                        var producto = _productoRepository.GetById(pago.ProductoId);
+                        if (producto == null)
+                        {
+                            ModelState.AddModelError("", "Producto no encontrado.");
+                            return View(pago);
+                        }
 
-                // Guardar el pedido en la base de datos
-                _pedidoData.Add(nuevoPedido);
+                        // Crear pedido
+                        Pedido pedido = new Pedido
+                        {
+                            IdUsuario = (int)Session["UserId"],
+                            Numero = GenerarNumeroPedido(),
+                            FechaOperacion = DateTime.Now,
+                            MontoTotal = pago.Total,
+                            Estado = EstadoPedido.Pago_aprobado
+                        };
 
-                // Lógica para manejar el procesamiento del pago
-                bool pagoExitoso = ProcesarPago(model);
-                if (pagoExitoso)
-                {
-                    // Cambiar estado del pedido a pagado
-                    nuevoPedido.Estado = EstadoPedido.Pagado;
-                    _pedidoData.Update(nuevoPedido);
+                        int idPedido = _pedidoRepository.InsertReturnId(pedido);
+                        if (idPedido <= 0)
+                        {
+                            throw new Exception("Error al crear el pedido.");
+                        }
 
-                    // Redirigir a una vista de confirmación de pago
-                    return RedirectToAction("ConfirmacionPago", new { id = nuevoPedido.Id });
+                        // Crear detalle del pedido
+                        DetallePedido detallePedido = new DetallePedido
+                        {
+                            IdProducto = producto.Id,
+                            IdPedido = idPedido,
+                            Cantidad = pago.Cantidad,
+                            PrecioUnitario = producto.Precio
+                        };
+
+                        int detallePedidoId = _detallepedidoRepository.InsertReturnId(detallePedido);
+
+                        if (detallePedidoId <= 0)
+                        {
+                            throw new Exception("Error al crear el detalle de pedido.");
+                        }
+
+                        // Crear factura
+                        EncabezadoFactura factura = new EncabezadoFactura
+                        {
+                            Numero = GenerarNumeroPedido(),
+                            TipoFactura = TipoFactura.A,
+                            IdPedido = idPedido,
+                            IdUsuario = (int)Session["UserId"],
+                            MedioPago = pago.MediodePago,
+                            TipoTarjeta = pago.TipoTarjeta,
+                            NombreTarjeta = pago.Nombre,
+                            ApellidoTarjeta = pago.Apellido,
+                            DNI = pago.DNI,
+                            Nrotarjeta = pago.NumeroTarjeta,
+                            Cuota = pago.Cuotas,
+                            Monto = pago.Total,
+                            Fecha = DateTime.Now
+                        };
+
+                        int facturaid = _encabezadoFacturaRepository.InsertReturnId(factura);
+                        if (facturaid <= 0)
+                        {
+                            throw new Exception("Error al crear la factura.");
+                        }
+
+                        // Crear detalle de factura
+                        DetalleFactura detallefactura = new DetalleFactura
+                        {
+                            IdFactura = facturaid,
+                            IdProducto = producto.Id,
+                            Cantidad = pago.Cantidad,
+                            PrecioUnitario = producto.Precio
+                        };
+                        int detallefacturaid = _detallefacturaRepository.InsertReturnId(detallefactura);
+
+                        if (detallefacturaid <= 0)
+                        {
+                            throw new Exception("Error al crear el detallefactura.");
+                        }
+
+                        // Restar la cantidad al stock del producto
+                        var stock_actual = producto.Stock - pago.Cantidad;
+                        producto.Stock = stock_actual;
+
+                        _productoRepository.Update(producto);
+
+                        transaction.Commit();
+
+                        // Pasar datos a la vista usando TempData
+                        TempData["Producto"] = producto.Nombre;
+                        TempData["Cantidad"] = pago.Cantidad;
+                        TempData["Subtotal"] = producto.Precio * pago.Cantidad;
+                        TempData["Total"] = pago.Total;
+                        TempData["PrecioUnitario"] = producto.Precio;
+                        TempData["NumeroPedido"] = pedido.Numero;
+                        TempData["NumeroFactura"] = factura.Numero;
+                        TempData["FechaFactura"] = factura.Fecha.ToString("dd/MM/yyyy");
+                        TempData["MedioPago"] = $"{pago.TipoTarjeta} - {pago.Cuotas} cuotas";
+                        TempData["MontoFactura"] = factura.Monto;
+
+                        return RedirectToAction("ConfirmacionPago");
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        ModelState.AddModelError("", $"Hubo un error procesando el pago: {ex.Message}");
+                        return View(pago);
+                    }
                 }
-                else
-                {
-                    // Si falla el pago, mostrar error
-                    ModelState.AddModelError("", "Hubo un error procesando el pago. Por favor, inténtelo nuevamente.");
-                }
-            }*/
+            }
 
-            // Si el modelo no es válido o falló el pago, volver a mostrar la vista de pago
-            //return View(model);
-            return View();
-          
+            // Si el modelo no es válido
+            return View(pago);
         }
-        private int GenerarNumeroPedido()
+
+        [HttpGet]
+        public ActionResult ConfirmacionPago()
+        {
+            return View();
+        }
+
+
+            private int GenerarNumeroPedido()
         {
             Random random = new Random();
             return random.Next(10000, 99999); // Genera un número entre 10000 y 99999

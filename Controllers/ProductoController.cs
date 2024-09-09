@@ -26,7 +26,7 @@ namespace TechSolutions.Controllers
             _categoriaProductoData = new CategoriaProductoData();
             _calificacionProductoRepository = new CalificacionProductoData();
         }
-        // GET
+        // GET este es listado del abm
         public ActionResult Index()
         {
             var productos = _productoRepository.List();
@@ -241,7 +241,7 @@ namespace TechSolutions.Controllers
         //get
         public ActionResult Listado()
         {
-            var productos = _productoRepository.List();
+            var productos = _productoRepository.ListProductosDisponibles();
 
             return View(productos);
         }

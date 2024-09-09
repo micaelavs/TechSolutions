@@ -12,6 +12,11 @@ namespace TechSolutions.Models
 {
     public class SolicitudDevolucion : IEntity
     {
+        public SolicitudDevolucion()
+        {
+            DetallesDevoluciones = new List<DetalleDevolucion>();
+           
+        }
         [Key]
         [Column(Order = 1)]
         [Required]

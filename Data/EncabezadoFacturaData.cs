@@ -26,6 +26,13 @@ namespace TechSolutions.Data
             return db.EncabezadosFacturas.Find(id);
 
         }
+        public EncabezadoFactura GetByNumero(int numeroFactura)
+        {
+            var db = new ApiDbContext();
+            return db.EncabezadosFacturas
+                           .Include(e => e.DetallesFacturas)
+                           .FirstOrDefault(e => e.Numero == numeroFactura);
+        }
 
         public void Insert(EncabezadoFactura entity)
         {
@@ -34,6 +41,15 @@ namespace TechSolutions.Data
             db.SaveChanges();
         }
 
+        public int InsertReturnId(EncabezadoFactura entity)
+        {
+            using (var db = new ApiDbContext())
+            {
+                db.EncabezadosFacturas.Add(entity);
+                db.SaveChanges();
+                return entity.Id;
+            }
+        }
         public IEnumerable<EncabezadoFactura> List()
         {
             var db = new ApiDbContext();

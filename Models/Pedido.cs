@@ -13,6 +13,11 @@ namespace TechSolutions.Models
 {
     public class Pedido: IEntity
     {
+        public Pedido()
+        {
+            DetallesPedidos = new List<DetallePedido>(); 
+            HistorialPedidos = new List<HistorialPedido>(); 
+        }
         [Key]
         [Column(Order = 1)]
         [Required]

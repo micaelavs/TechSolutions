@@ -33,6 +33,15 @@ namespace TechSolutions.Data
             db.DetallesFacturas.Add(entity);
             db.SaveChanges();
         }
+        public int InsertReturnId(DetalleFactura entity)
+        {
+            using (var db = new ApiDbContext())
+            {
+                db.DetallesFacturas.Add(entity);
+                db.SaveChanges();
+                return entity.Id;
+            }
+        }
 
         public IEnumerable<DetalleFactura> List()
         {

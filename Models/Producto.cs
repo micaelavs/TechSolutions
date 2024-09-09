@@ -10,6 +10,11 @@ namespace TechSolutions.Models
 {
     public class Producto : IEntity
     {
+        public Producto()
+        {
+            Calificaciones = new List<CalificacionProducto>();
+           
+        }
         [Key]
         [Column(Order = 1)]
         [Required]

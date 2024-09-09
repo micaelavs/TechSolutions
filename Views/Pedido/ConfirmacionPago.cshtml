@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "Confirmación de Pago";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="confirmation-container">
+            <h1>Confirmación de Pago</h1>
+            <hr class="custom-hr" />
+
+            <h3>¡Gracias por tu compra!</h3>
+            <p>Detalles de la compra:</p>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@TempData["Producto"]</td>
+                        <td>@TempData["Cantidad"]</td>
+                        <td>@TempData["PrecioUnitario"]</td>
+                        <td>@TempData["Subtotal"]</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p><strong>Subtotal:</strong> @TempData["Subtotal"]</p>
+            <p><strong>Total:</strong> @TempData["Total"]</p>
+
+            <h4>Código de Pedido: @TempData["NumeroPedido"]</h4>
+            <h4>Número de Factura: @TempData["NumeroFactura"]</h4>
+
+            <h5>Condiciones de compra:</h5>
+            <p><strong>Fecha de Compra:</strong> @TempData["FechaFactura"]</p>
+            <p><strong>Medio de Pago:</strong> @TempData["MedioPago"]</p>
+            <p><strong>Importe de Factura:</strong> @TempData["MontoFactura"]</p>
+
+            <h5>Datos de la entrega:</h5>
+            <p><strong>Tipo de Entrega:</strong> Retiro en sucursal Avenida Córdoba 877, Capital Federal</p>
+            <p><strong>Promesa de Entrega:</strong> 1 día hábil a partir de la fecha de compra.</p>
+
+            <div class="button-container">
+                <a href="/Pedido/MisCompras" class="btn btn-secondary custom-btn">Mis Compras</a>
+                <a href="/Producto/Listado" class="btn btn-primary custom-btn">Volver</a>
+                <a href="/EncabezadoFactura/GenerarFactura?numeroFactura=@TempData["NumeroFactura"]" class="btn btn-success custom-btn">Descargar Factura</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    body {
+        background-color: #93C47D; /* Fondo verde */
+    }
+
+    .confirmation-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin: 20px auto;
+        width: 100%;
+        max-width: 900px;
+    }
+
+    .custom-hr {
+        border: none;
+        border-top: 3px solid #085394;
+        width: 80%;
+        margin: 20px auto;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .custom-btn {
+        font-size: 14px;
+        padding: 5px 15px;
+    }
+
+    .btn-secondary, .btn-primary {
+        width: auto;
+    }
+</style>

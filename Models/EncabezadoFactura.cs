@@ -12,7 +12,11 @@ namespace TechSolutions.Models
 {
     public class EncabezadoFactura: IEntity
     {
-
+        public EncabezadoFactura()
+        {
+            DetallesFacturas = new List<DetalleFactura>();
+           
+        }
         [Key]
         [Column(Order = 1)]
         [Required]
@@ -41,9 +45,9 @@ namespace TechSolutions.Models
         [Required]
         public string ApellidoTarjeta { get; set; }
         [Required]
-        public int DNI { get; set; }
+        public string DNI { get; set; }
         [Required]
-        public int Nrotarjeta { get; set; }
+        public string Nrotarjeta { get; set; }
 
         [Required]
         public Cuotas Cuota { get; set; }
