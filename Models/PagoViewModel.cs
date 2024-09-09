@@ -8,8 +8,16 @@ namespace TechSolutions.Models
 {
     public class PagoViewModel
     {
+        public PagoViewModel()
+        {
+            Productos = new Dictionary<int, Producto>();
+            Subtotales = new Dictionary<int, float>();
+
+        }
         public Producto Producto { get; set; }
         public int ProductoId { get; set; }
+        public Dictionary<int, Producto> Productos { get; private set; }
+        public Dictionary<int,float> Subtotales     { get; private set; }
         public int Cantidad { get; set; }
         public float Subtotal { get; set; }
         public float Total { get; set; }

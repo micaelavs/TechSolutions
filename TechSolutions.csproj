@@ -388,6 +388,7 @@
     <Content Include="Views\Recupero\Confirmacion.cshtml" />
     <Content Include="Views\Recupero\Error.cshtml" />
     <Content Include="Views\Pedido\ConfirmacionPago.cshtml" />
+    <Content Include="Views\Pedido\PagarCarrito.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

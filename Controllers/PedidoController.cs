@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +9,7 @@ using System.Web.Mvc;
 using TechSolutions.Data;
 using TechSolutions.Models;
 using TechSolutions.SharedKernel;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace TechSolutions.Controllers
 {
@@ -29,7 +32,7 @@ namespace TechSolutions.Controllers
         }
         // Acción para cargar la vista de pago con una lista de productos
         [HttpGet]
-        public ActionResult Pagar(int Id, int Cantidad) //ver como pasar la lista de productos cuando compras varios del carrito o hacer metodo aparte
+        public ActionResult Pagar(int Id, int Cantidad) 
         {
             PagoViewModel pago = new PagoViewModel();
             Producto producto = new Producto();
@@ -196,8 +199,64 @@ namespace TechSolutions.Controllers
             return View();
         }
 
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult PagarCarrito(string carrito)
+        {
+            var listaDeObjetos = JsonConvert.DeserializeObject<List<dynamic>>(carrito);
 
-            private int GenerarNumeroPedido()
+            PagoViewModel pago = new PagoViewModel();
+
+            float subtotalGeneral = 0;
+
+            foreach (var obj in listaDeObjetos)
+            {
+                int cantidad = int.Parse((string)obj.cantidad);
+                var producto = new Producto
+                {
+                    Id = int.Parse((string)obj.id),
+                    Nombre = (string)obj.nombre,
+                    Precio = float.Parse((string)obj.precio),
+                    Stock = int.Parse((string)obj.stock)
+                };
+
+                // Agregar al diccionario
+                pago.Productos[cantidad] = producto;
+
+                // Calcular subtotal para este producto
+                float subtotalProducto = producto.Precio * cantidad;
+                subtotalGeneral += subtotalProducto;
+
+                // Agregar al diccionario de subtotales si es necesario para la vista
+                pago.Subtotales[cantidad] = subtotalProducto;
+            }
+
+            // Calcular total general
+            pago.Total = subtotalGeneral;
+
+            // Configurar ViewBag para otros datos
+            ViewBag.MediodePago = Enum.GetValues(typeof(MedioPago)).Cast<MedioPago>().Select(e => new SelectListItem
+            {
+                Value = ((int)e).ToString(),
+                Text = e.ToString()
+            });
+
+            ViewBag.TiposTarjeta = Enum.GetValues(typeof(TipoTarjeta)).Cast<TipoTarjeta>().Select(e => new SelectListItem
+            {
+                Value = ((int)e).ToString(),
+                Text = e.ToString()
+            });
+
+            ViewBag.CuotasList = Enum.GetValues(typeof(Cuotas)).Cast<Cuotas>().Select(e => new SelectListItem
+            {
+                Value = ((int)e).ToString(),
+                Text = e.ToString()
+            });
+
+            return View(pago);
+        }
+
+        private int GenerarNumeroPedido()
         {
             Random random = new Random();
             return random.Next(10000, 99999); // Genera un número entre 10000 y 99999

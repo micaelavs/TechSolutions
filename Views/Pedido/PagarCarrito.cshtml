@@ -1,0 +1,126 @@
+﻿@model TechSolutions.Models.PagoViewModel
+@{
+    ViewBag.Title = "Resumen de Compra";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="payment-container">
+                <h2>Resumen de Compra</h2>
+                <hr class="custom-hr" />
+
+                <h3>Detalle de Productos</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var kvp in Model.Productos)
+                        {
+                            <tr>
+                                <td>@kvp.Value.Nombre</td>
+                                <td>$@kvp.Value.Precio</td>
+                                <td>@kvp.Key</td>
+                                <td>$@Model.Subtotales[kvp.Key]</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Subtotal General: $@Model.Total</h4>
+                    </div>
+                </div>
+
+                <hr class="custom-hr" />
+
+                <h3>Datos del Pago</h3>
+                @using (Html.BeginForm("ConfirmarPago", "Pedido", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group">
+                        <label for="medioPago">Medio de Pago:</label>
+                        @Html.DropDownList("medioPago", (IEnumerable<SelectListItem>)ViewBag.MediodePago, "Seleccione un medio de pago", new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipoTarjeta">Tipo de Tarjeta:</label>
+                        @Html.DropDownList("tipoTarjeta", (IEnumerable<SelectListItem>)ViewBag.TiposTarjeta, "Seleccione un tipo de tarjeta", new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cuotas">Cantidad de Cuotas:</label>
+                        @Html.DropDownList("cuotas", (IEnumerable<SelectListItem>)ViewBag.CuotasList, "Seleccione una cantidad de cuotas", new { @class = "form-control" })
+                    </div>
+
+                    <div class="form-group row justify-content-center">
+                        <div class="col-md-12 text-center">
+                            <a href="@Url.Action("Index", "Pedido")" class="btn btn-danger">Cancelar</a>
+                            <input type="submit" value="Confirmar Pago" class="btn btn-success" />
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .payment-container {
+        background-color: #ffffff;
+        padding: 30px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .custom-hr {
+        border: none;
+        border-top: 3px solid #085394;
+        width: 50%;
+        margin: 20px auto;
+    }
+
+    .table {
+        margin-bottom: 20px;
+    }
+
+        .table th, .table td {
+            text-align: center;
+        }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .btn-danger, .btn-success {
+        width: 120px;
+        margin: 10px;
+    }
+
+    .btn-danger {
+        background-color: #e3342f;
+        border-color: #e3342f;
+    }
+
+    .btn-success {
+        background-color: #38c172;
+        border-color: #38c172;
+    }
+</style>

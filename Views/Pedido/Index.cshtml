@@ -26,6 +26,11 @@
         margin-top: 10px;
         width: 150px;
     }
+
+    .btn-disabled {
+        pointer-events: none;
+        opacity: 0.6;
+    }
 </style>
 
 <div class="container">
@@ -44,11 +49,13 @@
             <!-- Los elementos del carrito se cargarán aquí dinámicamente -->
         </tbody>
     </table>
-
+    <form id="formCompra" method="post" action="@Url.Action("PagarCarrito", "Pedido")" style="display: none;">
+        <input type="hidden" name="carrito" id="carritoInput" />
+    </form>
     <!-- Contenedor de acciones -->
     <div class="cart-actions">
         <button class="btn btn-primary btn-custom" onclick="volverAProductos()">Volver</button>
-        <button class="btn btn-success btn-custom" onclick="iniciarCompra()">Iniciar Compra</button>
+        <button id="checkoutButton" class="btn btn-success btn-custom btn-disabled" onclick="iniciarCompra()">Iniciar Compra</button>
     </div>
 </div>
 
@@ -56,12 +63,6 @@
     // Obtener carrito desde localStorage
     var carrito = JSON.parse(localStorage.getItem('carrito')) || [];
     console.log(carrito);
-    // Inicializar la cantidad de cada producto si no está definida
-    carrito.forEach(function (producto) {
-        if (!producto.cantidad) {
-            producto.cantidad = 1;  // Puedes inicializarlo con 1 o el valor que consideres adecuado
-        }
-    });
 
     // Función para cargar los productos en la tabla del carrito
     function cargarCarrito() {
@@ -88,16 +89,20 @@
 
         // Actualizar el almacenamiento local
         localStorage.setItem('carrito', JSON.stringify(carrito));
+
+        // Actualizar el estado del botón de checkout
+        actualizarEstadoBotonCheckout();
     }
 
     // Función para actualizar la cantidad de un producto en el carrito
     function actualizarCantidad(index, cambio) {
         var cantidadActual = carrito[index].cantidad;
         var nuevaCantidad = cantidadActual + cambio;
+        var stockDisponible = carrito[index].stock; // Debes asegurarte de que el stock esté disponible en el carrito
 
-        if (nuevaCantidad > 0) {
+        if (nuevaCantidad > 0 && nuevaCantidad <= stockDisponible) {
             carrito[index].cantidad = nuevaCantidad;
-        } else {
+        } else if (nuevaCantidad <= 0) {
             carrito.splice(index, 1);
         }
 
@@ -119,12 +124,27 @@
     function iniciarCompra() {
         if (carrito.length > 0) {
             alert('Iniciando el proceso de compra...');
-            localStorage.removeItem('carrito');
-            console.log("llega aca");
-            console.log(localStorage);
-            // Aquí podrías redirigir a una página de checkout o realizar alguna acción adicional
+            var carritoJson = JSON.stringify(carrito);
+            document.getElementById('carritoInput').value = carritoJson;
+
+            // Envía el formulario
+            document.getElementById('formCompra').submit();
         } else {
             alert('Tu carrito está vacío.');
+        }
+    }
+
+    // Función para actualizar el estado del botón de checkout
+    function actualizarEstadoBotonCheckout() {
+        var botonCheckout = document.getElementById('checkoutButton');
+        var carritoValido = carrito.every(function (producto) {
+            return producto.cantidad <= producto.stock;
+        });
+
+        if (carritoValido) {
+            botonCheckout.classList.remove('btn-disabled');
+        } else {
+            botonCheckout.classList.add('btn-disabled');
         }
     }
 
