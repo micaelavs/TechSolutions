@@ -118,16 +118,16 @@
                     <h4>@Model.Nombre</h4>
                     <p class="text-muted">$@Model.Precio</p>
                     <p><strong>Stock disponible:</strong> @Model.Stock</p>
-                    <label for="Cantidad">Elegir cantidad:</label>
-                    <input type="number" id="Cantidad" class="quantity-input" min="1" max="@Model.Stock" value="1" />
-
                     <form id="purchaseForm" action="@Url.Action("Pagar", "Pedido")" method="get">
                         <input type="hidden" name="Id" value="@Model.Id" />
-                        <input type="hidden" id="Cantidad" name="Cantidad" min="1" max="@Model.Stock" value="1" />
+                        <label for="Cantidad">Elegir cantidad:</label>
+                        <input type="number" id="Cantidad" name="Cantidad" class="quantity-input" min="1" max="@Model.Stock" />
+                        <div id="error-message" style="color: red; display: none;"></div>
                         <button type="submit" class="btn btn-green btn-custom">Iniciar Compra</button>
                     </form>
                     <button class="btn btn-orange btn-custom" onclick="location.href='@Url.Action("VerCalificaciones", "Producto", new { id = Model.Id })'">Ver Calificaciones</button>
                 </div>
+               
             </div>
         </div>
     </div>
@@ -169,11 +169,38 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <script>
+    //validaciones
+    $(document).ready(function () {
+        $('#purchaseForm').on('submit', function (event) {
+            var $cantidadInput = $('#Cantidad');
+            var cantidad = parseInt($cantidadInput.val(), 10);
+            var maxStock = parseInt($cantidadInput.attr('max'), 10);
+            var $errorMessage = $('#error-message');
+
+            // Verifica si la cantidad está vacía, es menor que 1 o mayor que el stock
+            if (isNaN(cantidad) || cantidad < 1 || cantidad > maxStock) {
+                event.preventDefault(); // Previene el envío del formulario
+
+                // Muestra el mensaje de error
+                $errorMessage.text('Por favor, complete la cantidad para comprar.');
+                $errorMessage.show(); // Muestra el contenedor del mensaje de error
+
+                // Opcional: Enfoca el campo para que el usuario pueda corregirlo
+                $cantidadInput.focus();
+            } else {
+                $errorMessage.hide(); // Oculta el mensaje de error si la cantidad es válida
+
+                // Actualiza el campo oculto con la cantidad seleccionada
+                $('#hiddenCantidad').val(cantidad);
+            }
+        });
+    });
+
     //Inicializar un array para almacenar los productos del carrito en memoria
     localStorage.removeItem('carrito');
     var carrito = JSON.parse(localStorage.getItem('carrito')) || [];
     console.log(carrito); 
-    //Función para agregar productos al carrito
+
     function agregarAlCarrito(productoId, productoNombre, productoPrecio, productoStock) {
         // Crear un objeto producto
         var producto = {

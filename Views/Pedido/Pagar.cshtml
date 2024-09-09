@@ -16,120 +16,119 @@
                 {
                     @Html.AntiForgeryToken()
 
-                    <div class="form-horizontal">
-                        <h3>Detalle de Productos</h3>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Precio</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>@Model.Producto.Nombre</td>
-                                    <td>$@Model.Producto.Precio</td>
-                                </tr>
-                            </tbody>
-                        </table>
+            <div class="form-horizontal">
+                <h3>Detalle de Productos</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.Producto.Nombre</td>
+                            <td>$@Model.Producto.Precio</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                        <div class="form-group">
-                            <label>Cantidad:</label>
-                            <input type="hidden" name="Cantidad" value="@Model.Cantidad" />
-                            <input type="hidden" name="ProductoId" value="@Model.ProductoId" />
-                            <p>@Model.Cantidad</p>
-                        </div>
-                        <div class="form-group">
-                            <label>Subtotal:</label>
-                            <input type="hidden" name="Subtotal" value="@Model.Subtotal" />
-                            <p>$@Model.Subtotal</p>
-                        </div>
+                <div class="form-group">
+                    <label>Cantidad:</label>
+                    <input type="hidden" name="Cantidad" value="@Model.Cantidad" />
+                    <input type="hidden" name="ProductoId" value="@Model.ProductoId" />
+                    <p>@Model.Cantidad</p>
+                </div>
+                <div class="form-group">
+                    <label>Subtotal:</label>
+                    <input type="hidden" name="Subtotal" value="@Model.Subtotal" />
+                    <p>$@Model.Subtotal</p>
+                </div>
+                <div class="form-group">
+                    <label>Total:</label>
+                    <input type="hidden" name="Total" value="@Model.Total" />
+                    <p>$@Model.Total</p>
+                </div>
+                <hr class="custom-hr" />
+                <div class="form-group">
+                    @Html.Label("Medio de Pago", "Medio de Pago")
+                    @Html.DropDownList("MediodePago", (IEnumerable<SelectListItem>)ViewBag.MediodePago, "--Seleccione--", new { @class = "form-control select-sm", style = "width: auto; display: inline-block;" })
+                </div>
 
-                        <div class="form-group">
-                            <label>Total:</label>
-                            <input type="hidden" name="Total" value="@Model.Total" />
-                            <p>$@Model.Total</p>
-                        </div>
-                        <hr class="custom-hr" />
-                        <div class="form-group">
-                            @Html.Label("Medio de Pago", "Medio de Pago")
-                            @Html.DropDownList("MediodePago", (IEnumerable<SelectListItem>)ViewBag.MediodePago, "--Seleccione--", new { @class = "form-control select-sm", style = "width: auto; display: inline-block;" })
-                        </div>
-
-                        <div class="form-group">
-                            <!--<label>Tipo de Tarjeta:</label>-->
-                            <div class="radio-options">
-                                @foreach (var item in ViewBag.TiposTarjeta as IEnumerable<SelectListItem>)
-                                {
-                                    <div>
-                                        @Html.RadioButton("TipoTarjeta", item.Value, new { id = "tipoTarjeta" + item.Value })
-                                        @Html.Label("tipoTarjeta" + item.Value, item.Text)
-                                    </div>
-                                }
+                <div class="form-group">
+                    <!--<label>Tipo de Tarjeta:</label>-->
+                    <div class="radio-options">
+                        @foreach (var item in ViewBag.TiposTarjeta as IEnumerable<SelectListItem>)
+                        {
+                            <div>
+                                @Html.RadioButton("TipoTarjeta", item.Value, new { id = "tipoTarjeta" + item.Value })
+                                @Html.Label("tipoTarjeta" + item.Value, item.Text)
                             </div>
-                        </div>
-                        <hr class="custom-hr" />
-                        <div class="form-group">
-                            <label>Cuotas:</label><br />
-                            <small>Sin itereses</small>
-                            <div class="radio-options">
-                                @foreach (var item in ViewBag.CuotasList as IEnumerable<SelectListItem>)
-                                {
-                                    <div>
-                                        @Html.RadioButton("Cuotas", item.Value, new { id = "cuotas" + item.Value })
-                                        @Html.Label("cuotas" + item.Value, item.Text)<br />
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        <hr class="custom-hr" />
-                        <h3>Datos Personales</h3>
-                        <div class="form-group row justify-content-center">
-                            @Html.Label("Apellido", "Apellido (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
-                            <div class="col-md-8">
-                                @Html.TextBox("Apellido", null, new { @class = "form-control input-sm text-center" })
-                            </div>
-                        </div>
-                        <div class="form-group row justify-content-center">
-                            @Html.Label("Nombre", "Nombre (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
-                            <div class="col-md-8">
-                                @Html.TextBox("Nombre", null, new { @class = "form-control input-sm text-center" })
-                            </div>
-                        </div>
-                        <div class="form-group row justify-content-center">
-                            @Html.Label("DNI", "DNI (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
-                            <div class="col-md-8">
-                                @Html.TextBox("DNI", null, new { @class = "form-control input-sm text-center" })
-                            </div>
-                        </div>
-                        <hr class="custom-hr" />
-                        <h3>Datos de Tarjeta</h3>
-                        <div class="form-group row justify-content-center">
-                            @Html.Label("NumeroTarjeta", "Número de Tarjeta (*)", htmlAttributes: new { @class = "control-label col-md-4 text-center" })
-                            <div class="col-md-8">
-                                @Html.TextBox("NumeroTarjeta", null, new { @class = "form-control input-sm text-center" })
-                            </div>
-                        </div>
-                        <div class="form-group row justify-content-center">
-                            @Html.Label("FechaExpiracion", "Fecha de Expiración (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
-                            <div class="col-md-8">
-                                @Html.TextBox("FechaExpiracion", null, new { @class = "form-control input-sm text-center" })
-                            </div>
-                        </div>
-                        <div class="form-group row justify-content-center">
-                            @Html.Label("CodigoSeguridad", "Código de Seguridad (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
-                            <div class="col-md-8">
-                                @Html.TextBox("CodigoSeguridad", null, new { @class = "form-control input-sm text-center" })
-                            </div>
-                        </div>
-                        <!--vemos luego a donde redifirigen estos botones-->
-                        <div class="form-group row justify-content-center">
-                            <div class="col-md-12 text-center">
-                                <a href="@Url.Action("Index", "Pedido")" class="btn btn-danger">Cancelar</a>
-                                <input type="submit" value="Pagar" class="btn btn-success" />
-                            </div>
-                        </div>
+                        }
                     </div>
+                </div>
+                <hr class="custom-hr" />
+                <div class="form-group">
+                    <label>Cuotas:</label><br />
+                    <small>Sin itereses</small>
+                    <div class="radio-options">
+                        @foreach (var item in ViewBag.CuotasList as IEnumerable<SelectListItem>)
+                        {
+                            <div>
+                                @Html.RadioButton("Cuotas", item.Value, new { id = "cuotas" + item.Value })
+                                @Html.Label("cuotas" + item.Value, item.Text)<br />
+                            </div>
+                        }
+                    </div>
+                </div>
+                <hr class="custom-hr" />
+                <h3>Datos Personales</h3>
+                <div class="form-group row justify-content-center">
+                    @Html.Label("Apellido", "Apellido (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
+                    <div class="col-md-8">
+                        @Html.TextBox("Apellido", null, new { @class = "form-control input-sm text-center" })
+                    </div>
+                </div>
+                <div class="form-group row justify-content-center">
+                    @Html.Label("Nombre", "Nombre (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
+                    <div class="col-md-8">
+                        @Html.TextBox("Nombre", null, new { @class = "form-control input-sm text-center" })
+                    </div>
+                </div>
+                <div class="form-group row justify-content-center">
+                    @Html.Label("DNI", "DNI (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
+                    <div class="col-md-8">
+                        @Html.TextBox("DNI", null, new { @class = "form-control input-sm text-center" })
+                    </div>
+                </div>
+                <hr class="custom-hr" />
+                <h3>Datos de Tarjeta</h3>
+                <div class="form-group row justify-content-center">
+                    @Html.Label("NumeroTarjeta", "Número de Tarjeta (*)", htmlAttributes: new { @class = "control-label col-md-4 text-center" })
+                    <div class="col-md-8">
+                        @Html.TextBox("NumeroTarjeta", null, new { @class = "form-control input-sm text-center" })
+                    </div>
+                </div>
+                <div class="form-group row justify-content-center">
+                    @Html.Label("FechaExpiracion", "Fecha de Expiración (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
+                    <div class="col-md-8">
+                        @Html.TextBox("FechaExpiracion", null, new { @class = "form-control input-sm text-center" })
+                    </div>
+                </div>
+                <div class="form-group row justify-content-center">
+                    @Html.Label("CodigoSeguridad", "Código de Seguridad (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
+                    <div class="col-md-8">
+                        @Html.TextBox("CodigoSeguridad", null, new { @class = "form-control input-sm text-center" })
+                    </div>
+                </div>
+                <!--vemos luego a donde redifirigen estos botones-->
+                <div class="form-group row justify-content-center">
+                    <div class="col-md-12 text-center">
+                        <a href="@Url.Action("Index", "Pedido")" class="btn btn-danger">Cancelar</a>
+                        <input type="submit" value="Pagar" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
                 }
             </div>
         </div>

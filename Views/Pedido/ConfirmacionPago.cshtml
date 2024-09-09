@@ -25,14 +25,14 @@
                     <tr>
                         <td>@TempData["Producto"]</td>
                         <td>@TempData["Cantidad"]</td>
-                        <td>@TempData["PrecioUnitario"]</td>
-                        <td>@TempData["Subtotal"]</td>
+                        <td>$ @TempData["PrecioUnitario"]</td>
+                        <td>$ @TempData["Subtotal"]</td>
                     </tr>
                 </tbody>
             </table>
 
-            <p><strong>Subtotal:</strong> @TempData["Subtotal"]</p>
-            <p><strong>Total:</strong> @TempData["Total"]</p>
+            <p><strong>Subtotal:</strong> $ @TempData["Subtotal"]</p>
+            <p><strong>Total:</strong> $ @TempData["Total"]</p>
 
             <h4>Código de Pedido: @TempData["NumeroPedido"]</h4>
             <h4>Número de Factura: @TempData["NumeroFactura"]</h4>
@@ -40,7 +40,7 @@
             <h5>Condiciones de compra:</h5>
             <p><strong>Fecha de Compra:</strong> @TempData["FechaFactura"]</p>
             <p><strong>Medio de Pago:</strong> @TempData["MedioPago"]</p>
-            <p><strong>Importe de Factura:</strong> @TempData["MontoFactura"]</p>
+            <p><strong>Importe de Factura:</strong> $ @TempData["MontoFactura"]</p>
 
             <h5>Datos de la entrega:</h5>
             <p><strong>Tipo de Entrega:</strong> Retiro en sucursal Avenida Córdoba 877, Capital Federal</p>

@@ -30,8 +30,10 @@ namespace TechSolutions.Data
         {
             var db = new ApiDbContext();
             return db.EncabezadosFacturas
-                           .Include(e => e.DetallesFacturas)
-                           .FirstOrDefault(e => e.Numero == numeroFactura);
+             .Include(e => e.DetallesFacturas.Select(d => d.Producto)) // Incluye el producto relacionado
+             .Include(e => e.Usuario)             // Incluye el usuario
+             .Include(e => e.Pedido)              // Incluye el pedido
+             .FirstOrDefault(e => e.Numero == numeroFactura);
         }
 
         public void Insert(EncabezadoFactura entity)

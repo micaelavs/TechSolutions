@@ -16,6 +16,7 @@ using iText.IO.Image;
 using iText.Layout.Properties;
 using iText.Kernel.Colors;
 using System.IO;
+using iText.Kernel.Pdf.Canvas.Draw;
 
 namespace TechSolutions.Controllers
 {
@@ -30,12 +31,10 @@ namespace TechSolutions.Controllers
         [HttpGet]
         public ActionResult GenerarFactura(int numeroFactura)
         {
-            // Obtener los datos de la factura desde la base de datos
             var factura = _facturaRepository.GetByNumero(numeroFactura);
 
             if (factura == null)
             {
-                // Mostrar mensaje de error si la factura no se encuentra
                 return HttpNotFound("Factura no encontrada");
             }
 
@@ -47,36 +46,132 @@ namespace TechSolutions.Controllers
                 PdfDocument pdf = new PdfDocument(writer);
                 Document document = new Document(pdf);
 
-                // Añadir contenido al PDF
-                document.Add(new Paragraph($"Factura #{factura.Numero}")
-                    .SetFontSize(20)
+                // Definir estilos
+                Style headerStyle = new Style()
+                    .SetFontSize(24)
                     .SetFontColor(ColorConstants.BLUE)
-                    .SetBold());
+                    .SetBold();
 
-                document.Add(new Paragraph($"Fecha de la factura: {factura.Fecha.ToString("dd/MM/yyyy")}"));
-                document.Add(new Paragraph($"Cliente: {factura.Usuario.Nombre}"));
+                Style subHeaderStyle = new Style()
+                    .SetFontSize(12)
+                    .SetFontColor(ColorConstants.BLACK);
 
-                // Crear una tabla para los detalles de los productos
-                Table table = new Table(4, true);
-                table.AddHeaderCell("Producto");
-                table.AddHeaderCell("Cantidad");
-                table.AddHeaderCell("Precio Unitario");
-                table.AddHeaderCell("Subtotal");
+                Style tableHeaderStyle = new Style()
+                    .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+                    .SetBold();
 
-                foreach (var item in factura.DetallesFacturas)
+                // Agregar logo de la empresa (si tienes uno)
+                // Asumiendo que tienes una imagen en el directorio 'wwwroot/images/logo.png'
+                string logoPath = Server.MapPath("~/Content/Images/logo.jpg");
+                if (System.IO.File.Exists(logoPath))
                 {
-                    table.AddCell(item.Producto.Nombre); // Asegúrate de que 'Nombre' esté presente en Producto
-                    table.AddCell(item.Cantidad.ToString());
-                    table.AddCell(item.PrecioUnitario.ToString("C"));
-                    table.AddCell((item.Cantidad * item.PrecioUnitario).ToString("C"));
+                    Image logo = new Image(ImageDataFactory.Create(logoPath));
+                    logo.SetHeight(50);
+                    document.Add(logo);
                 }
 
+                // Agregar detalles de la empresa
+                Paragraph companyDetails = new Paragraph()
+                    .Add("Tech Solutions\n")
+                    .Add("Avenida Córdoba 877, Capital Federal\n")
+                    .Add("CABA, Buenos Aires, AC4511l\n")
+                    .Add("Teléfono: 123-456-7890\n")
+                    .Add("Correo electrónico: info@techsolutions.com.ar\n")
+                    .Add("CUIT: 30-12345678-9")
+                    .AddStyle(subHeaderStyle);
+
+                document.Add(companyDetails);
+
+                // Título de la factura
+                Paragraph invoiceTitle = new Paragraph($"Factura {factura.TipoFactura} N° {factura.Numero}")
+                    .AddStyle(headerStyle)
+                    .SetTextAlignment(TextAlignment.CENTER);
+
+                document.Add(invoiceTitle);
+
+                // Línea separadora
+                document.Add(new LineSeparator(new SolidLine()));
+
+                // Información del cliente
+                Paragraph clientDetails = new Paragraph()
+                    .Add($"Fecha de emisión: {factura.Fecha.ToString("dd/MM/yyyy")}\n")
+                    .Add($"Cliente: {factura.Usuario.Nombre} {factura.Usuario.Apellido}\n")
+                    .Add($"Correo electrónico: {factura.Usuario.Email}\n")
+                    .AddStyle(subHeaderStyle);
+
+                document.Add(clientDetails);
+
+                // Espacio antes de la tabla
+                document.Add(new Paragraph("\n"));
+
+                // Crear una tabla para los detalles de los productos
+                float[] columnWidths = { 4, 1, 2, 2 };
+                Table table = new Table(UnitValue.CreatePercentArray(columnWidths)).UseAllAvailableWidth();
+
+                // Encabezados de la tabla
+                table.AddHeaderCell(new Cell().Add(new Paragraph("Producto").AddStyle(tableHeaderStyle)));
+                table.AddHeaderCell(new Cell().Add(new Paragraph("Cantidad").AddStyle(tableHeaderStyle)));
+                table.AddHeaderCell(new Cell().Add(new Paragraph("Precio Unitario").AddStyle(tableHeaderStyle)));
+                table.AddHeaderCell(new Cell().Add(new Paragraph("Subtotal").AddStyle(tableHeaderStyle)));
+
+                // Añadir filas a la tabla
+                decimal total = 0;
+                foreach (var item in factura.DetallesFacturas)
+                {
+                    if (item.Producto != null)
+                    {
+                        decimal subtotal = item.Cantidad * (decimal)item.PrecioUnitario;
+                        total += subtotal;
+
+                        table.AddCell(new Cell().Add(new Paragraph(item.Producto.Nombre)));
+                        table.AddCell(new Cell().Add(new Paragraph(item.Cantidad.ToString())).SetTextAlignment(TextAlignment.CENTER));
+                        table.AddCell(new Cell().Add(new Paragraph(Convert.ToString("$ "+item.PrecioUnitario))).SetTextAlignment(TextAlignment.RIGHT));
+                        table.AddCell(new Cell().Add(new Paragraph(Convert.ToString("$ "+subtotal))).SetTextAlignment(TextAlignment.RIGHT));
+                    }
+                    else
+                    {
+                        // Manejar el caso donde Producto es null
+                        table.AddCell(new Cell().Add(new Paragraph("Producto no disponible")));
+                        table.AddCell(new Cell().Add(new Paragraph(item.Cantidad.ToString())).SetTextAlignment(TextAlignment.CENTER));
+                        table.AddCell(new Cell().Add(new Paragraph(Convert.ToString("$" + item.PrecioUnitario))).SetTextAlignment(TextAlignment.RIGHT));
+                        table.AddCell(new Cell().Add(new Paragraph(Convert.ToString("$ " + item.Cantidad * (decimal)item.PrecioUnitario))).SetTextAlignment(TextAlignment.RIGHT));
+                    }
+                }
+
+                // Añadir la tabla al documento
                 document.Add(table);
 
-                // Total
-                document.Add(new Paragraph($"Total: {factura.Monto.ToString("C")}")
-                    .SetFontSize(16)
-                    .SetBold());
+                // Espacio antes de los totales
+                document.Add(new Paragraph("\n"));
+
+                // Calcular impuestos (por ejemplo, IVA 21%)
+                //decimal iva = total * 0.21m;
+                //decimal totalConIva = total + iva;
+
+                // Mostrar los totales
+                Paragraph totals = new Paragraph()
+                    .Add($"Subtotal: $ {total}\n")
+                    /*.Add($"IVA (21%): $ {iva}\n")*/
+                    //.Add($"Total: $ {totalConIva}\n")
+                    .Add($"Total: $ {total}\n")
+                    .SetTextAlignment(TextAlignment.RIGHT)
+                    .SetFontSize(12)
+                    .SetBold();
+
+                document.Add(totals);
+
+                // Línea separadora
+                document.Add(new LineSeparator(new SolidLine()));
+
+                // Información adicional o términos y condiciones
+                Paragraph footer = new Paragraph()
+                    .Add("Gracias por su compra.\n")
+                    .Add("Esta factura es un comprobante legal de su transacción.\n")
+                    .Add("Por favor, conserve este documento para sus registros.\n")
+                    .SetTextAlignment(TextAlignment.CENTER)
+                    .SetFontSize(10);
+
+                document.Add(footer);
 
                 // Cerrar el documento PDF
                 document.Close();
@@ -86,7 +181,8 @@ namespace TechSolutions.Controllers
                 return File(file, "application/pdf", $"Factura_{numeroFactura}.pdf");
             }
         }
-    
+
+
 
 
 
