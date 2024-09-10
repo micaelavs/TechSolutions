@@ -1,8 +1,13 @@
-﻿@{
+﻿@using Newtonsoft.Json
+@{
     ViewBag.Title = "Confirmación de Pago";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@{
+    var productosComprados = TempData["ProductosComprados"] != null
+        ? JsonConvert.DeserializeObject<List<dynamic>>(TempData["ProductosComprados"].ToString())
+        : new List<dynamic>();
+}
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="confirmation-container">
@@ -22,16 +27,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>@TempData["Producto"]</td>
-                        <td>@TempData["Cantidad"]</td>
-                        <td>$ @TempData["PrecioUnitario"]</td>
-                        <td>$ @TempData["Subtotal"]</td>
-                    </tr>
+
+                    @foreach (var producto in productosComprados)
+                    {
+                        <tr>
+                            <td>@producto.Nombre</td>
+                            <td>@producto.Cantidad</td>
+                            <td>$ @producto.PrecioUnitario</td>
+                            <td>$ @producto.Subtotal</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
 
-            <p><strong>Subtotal:</strong> $ @TempData["Subtotal"]</p>
+            <!--<p><strong>Subtotal:</strong> $ @TempData["Subtotal"]</p>-->
             <p><strong>Total:</strong> $ @TempData["Total"]</p>
 
             <h4>Código de Pedido: @TempData["NumeroPedido"]</h4>
@@ -47,15 +56,17 @@
             <p><strong>Promesa de Entrega:</strong> 1 día hábil a partir de la fecha de compra.</p>
 
             <div class="button-container">
-                <!--<a href="/Pedido/MisCompras" class="btn btn-secondary custom-btn">Mis Compras</a>-->
                 <a href="/EncabezadoFactura/ComprasUsuario?idUsuario=@TempData["UserId"]" class="btn btn-secondary custom-btn">Mis Compras</a>
+                <!--<a href="/Pedido/MisCompras" class="btn btn-secondary custom-btn">Mis Compras</a>-->
                 <a href="/Producto/Listado" class="btn btn-primary custom-btn">Volver</a>
                 <a href="/EncabezadoFactura/GenerarFactura?numeroFactura=@TempData["NumeroFactura"]" class="btn btn-success custom-btn">Descargar Factura</a>
             </div>
         </div>
     </div>
 </div>
-
+<script type="text/javascript">// Borrar el carrito del localStorage
+    localStorage.removeItem('carrito');
+    console.log("Carrito eliminado.");</script>
 
 <style>
     body {

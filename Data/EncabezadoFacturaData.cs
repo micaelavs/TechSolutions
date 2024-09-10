@@ -36,6 +36,15 @@ namespace TechSolutions.Data
              .FirstOrDefault(e => e.Numero == numeroFactura);
         }
 
+        public IEnumerable<EncabezadoFactura> GetAll()
+        {
+            var db = new ApiDbContext();
+            return db.EncabezadosFacturas
+                .Include(f => f.DetallesFacturas.Select(d => d.Producto))
+                .Include(f => f.Usuario)
+                .ToList();
+        }
+
         public void Insert(EncabezadoFactura entity)
         {
             var db = new ApiDbContext();

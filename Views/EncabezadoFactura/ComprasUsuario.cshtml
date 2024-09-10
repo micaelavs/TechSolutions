@@ -1,0 +1,74 @@
+﻿@model IEnumerable<TechSolutions.Models.EncabezadoFactura>
+
+@{
+    ViewBag.Title = "Mis Compras";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Mis Compras</h2>
+
+    @foreach (var factura in Model)
+    {
+        <div class="details-container">
+            <h4>Factura @factura.TipoFactura N° @factura.Numero</h4>
+            <p><strong>Fecha de emisión:</strong> @factura.Fecha.ToString("dd/MM/yyyy")</p>
+            <p><strong>Monto total:</strong> $@factura.Monto</p>
+            <hr />
+
+            <h5>Detalles de la compra:</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var detalle in factura.DetallesFacturas)
+                    {
+                        <tr>
+                            <td>@detalle.Producto.Nombre</td>
+                            <td>@detalle.Cantidad</td>
+                            <td>$@detalle.PrecioUnitario</td>
+                            <td>$@(detalle.Cantidad * detalle.PrecioUnitario)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <p><strong>Total:</strong> $@factura.Monto</p>
+        </div>
+        <br />
+    }
+</div>
+<style>
+    body {
+        background-color: #93C47D;
+    }
+
+    .details-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table, th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+</style>

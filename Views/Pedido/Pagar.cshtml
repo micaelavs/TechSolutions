@@ -1,6 +1,6 @@
 ﻿@model TechSolutions.Models.PagoViewModel
 @{
-    ViewBag.Title = "Pagar";
+    ViewBag.Title = "Resumen de compra";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @using TechSolutions.Models
@@ -8,7 +8,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="payment-container">
-                <h2>Pagar</h2>
+                <h2>Resumen de compra</h2>
                 <p>Todos los datos marcados con (*) son obligatorios</p>
                 <hr class="custom-hr" />
 
@@ -23,33 +23,35 @@
                         <tr>
                             <th>Nombre</th>
                             <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>@Model.Producto.Nombre</td>
                             <td>$@Model.Producto.Precio</td>
+                            <td>@Model.Cantidad</td>
+                            <td>@Model.Subtotal</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div class="form-group">
-                    <label>Cantidad:</label>
                     <input type="hidden" name="Cantidad" value="@Model.Cantidad" />
                     <input type="hidden" name="ProductoId" value="@Model.ProductoId" />
-                    <p>@Model.Cantidad</p>
                 </div>
                 <div class="form-group">
-                    <label>Subtotal:</label>
                     <input type="hidden" name="Subtotal" value="@Model.Subtotal" />
-                    <p>$@Model.Subtotal</p>
                 </div>
                 <div class="form-group">
-                    <label>Total:</label>
+                    <h4>Total: $@Model.Total</h4>
                     <input type="hidden" name="Total" value="@Model.Total" />
-                    <p>$@Model.Total</p>
                 </div>
+
                 <hr class="custom-hr" />
+
+                <h3>Datos del Pago</h3>
                 <div class="form-group">
                     @Html.Label("Medio de Pago", "Medio de Pago")
                     @Html.DropDownList("MediodePago", (IEnumerable<SelectListItem>)ViewBag.MediodePago, "--Seleccione--", new { @class = "form-control select-sm", style = "width: auto; display: inline-block;" })
@@ -124,7 +126,7 @@
                 <!--vemos luego a donde redifirigen estos botones-->
                 <div class="form-group row justify-content-center">
                     <div class="col-md-12 text-center">
-                        <a href="@Url.Action("Index", "Pedido")" class="btn btn-danger">Cancelar</a>
+                        <a href="@Url.Action("Listado", "Producto")" class="btn btn-danger">Cancelar</a>
                         <input type="submit" value="Pagar" class="btn btn-success" />
                     </div>
                 </div>

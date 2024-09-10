@@ -58,7 +58,24 @@
         <button id="checkoutButton" class="btn btn-success btn-custom btn-disabled" onclick="iniciarCompra()">Iniciar Compra</button>
     </div>
 </div>
-
+<!--modal para confirmacion oinformacion de compra antes de comprar o si el carrito esta vacio -->
+<div class="modal fade" id="compraModal" tabindex="-1" aria-labelledby="compraModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="compraModalLabel">Atención:</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body-content">
+                <!-- El contenido del mensaje se actualizará dinámicamente -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" id="confirmarCompraBtn" class="btn btn-success" onclick="confirmarCompra()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     // Obtener carrito desde localStorage
     var carrito = JSON.parse(localStorage.getItem('carrito')) || [];
@@ -121,7 +138,7 @@
     }
 
     // Función para iniciar la compra
-    function iniciarCompra() {
+    /*function iniciarCompra() { //esta era la q etaba antes cuando mostraba alerts,ahora muesta un modal de confirmacion
         if (carrito.length > 0) {
             alert('Iniciando el proceso de compra...');
             var carritoJson = JSON.stringify(carrito);
@@ -132,8 +149,41 @@
         } else {
             alert('Tu carrito está vacío.');
         }
-    }
+    }*/
+    function iniciarCompra() {
+        var carritoValido = carrito.length > 0;
+        var modalBodyContent = document.getElementById('modal-body-content');
+        var confirmarCompraBtn = document.getElementById('confirmarCompraBtn');
 
+        if (carritoValido) {
+            // Actualiza el contenido del modal
+            modalBodyContent.innerHTML = '¿Estás seguro de que deseas iniciar la compra?';
+            confirmarCompraBtn.style.display = 'inline-block'; // Mostrar el botón de confirmar
+
+            // Mostrar el modal
+            var compraModal = new bootstrap.Modal(document.getElementById('compraModal'), {
+                keyboard: false
+            });
+            compraModal.show();
+        } else {
+            // Si el carrito está vacío, muestra otro mensaje
+            modalBodyContent.innerHTML = 'Tu carrito está vacío.';
+            confirmarCompraBtn.style.display = 'none'; // Ocultar el botón de confirmar
+
+            // Mostrar el modal
+            var compraModal = new bootstrap.Modal(document.getElementById('compraModal'), {
+                keyboard: false
+            });
+            compraModal.show();
+        }
+    }
+    function confirmarCompra() {
+        var carritoJson = JSON.stringify(carrito);
+        document.getElementById('carritoInput').value = carritoJson;
+
+        // Envía el formulario
+        document.getElementById('formCompra').submit();
+    }
     // Función para actualizar el estado del botón de checkout
     function actualizarEstadoBotonCheckout() {
         var botonCheckout = document.getElementById('checkoutButton');

@@ -249,11 +249,16 @@
         var productoPrecio = '@Model.Precio';
         var productoStock = '@Model.Stock';
         var Cantidad = parseInt($('#Cantidad').val(), 10);
+        var $errorMessage = $('#error-message'); // Referencia al mensaje de error
 
         if (isNaN(Cantidad) || Cantidad < 1 || Cantidad > productoStock) {
-            alert('Por favor, elija una cantidad válida.');
+            //alert('Por favor, elija una cantidad válida.');
+            $errorMessage.text('Por favor, complete la cantidad para comprar.');
+            $errorMessage.show(); 
             return;
         }
+            // Ocultar el mensaje de error si la cantidad es válida
+        $errorMessage.hide();
         // Llamar a la función para agregar al carrito
         agregarAlCarrito(productoId, productoNombre, productoPrecio, productoStock, Cantidad);
     });

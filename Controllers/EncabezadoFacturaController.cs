@@ -181,6 +181,20 @@ namespace TechSolutions.Controllers
                 return File(file, "application/pdf", $"Factura_{numeroFactura}.pdf");
             }
         }
+        [HttpGet]
+        public ActionResult ComprasUsuario(int idUsuario)
+        {
+            var facturas = _facturaRepository.GetAll()
+                .Where(f => f.IdUsuario == idUsuario)
+                .ToList();
+
+            if (!facturas.Any())
+            {
+                return HttpNotFound("No se encontraron facturas para este usuario.");
+            }
+
+            return View(facturas);
+        }
 
 
 

@@ -1,71 +1,132 @@
-﻿@model TechSolutions.Models.PagoViewModel
+﻿@using Newtonsoft.Json
+@model TechSolutions.Models.PagoViewModel
 @{
     ViewBag.Title = "Resumen de Compra";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="payment-container">
                 <h2>Resumen de Compra</h2>
+                <p>Todos los datos marcados con (*) son obligatorios</p>
                 <hr class="custom-hr" />
 
                 <h3>Detalle de Productos</h3>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Precio</th>
-                            <th>Cantidad</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var kvp in Model.Productos)
-                        {
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td>@kvp.Value.Nombre</td>
-                                <td>$@kvp.Value.Precio</td>
-                                <td>@kvp.Key</td>
-                                <td>$@Model.Subtotales[kvp.Key]</td>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Subtotal</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var producto in Model.Productos)
+                            {
+                                <tr>
+                                    <td>@producto.Nombre</td>
+                                    <td>$@producto.Precio</td>
+                                    <td>@Model.Cantidades[producto.Id]</td>
+                                    <td>$@Model.Subtotales[producto.Id]</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4>Subtotal General: $@Model.Total</h4>
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center">
+                        <h4>Total: $@Model.Total</h4>
                     </div>
                 </div>
 
                 <hr class="custom-hr" />
 
                 <h3>Datos del Pago</h3>
-                @using (Html.BeginForm("ConfirmarPago", "Pedido", FormMethod.Post))
+                @using (Html.BeginForm("ConfirmarPagoCarrito", "Pedido", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
-
                     <div class="form-group">
-                        <label for="medioPago">Medio de Pago:</label>
-                        @Html.DropDownList("medioPago", (IEnumerable<SelectListItem>)ViewBag.MediodePago, "Seleccione un medio de pago", new { @class = "form-control" })
+                        <input type="hidden" id="Cantidades" name="Cantidades"/>
+                        <input type="hidden" id="Productos" name="Productos"/>
+                        <input type="hidden" id="Subtotales" name="Subtotales" />
+                        <input type="hidden" name="Total" value="@Model.Total" />
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Medio de Pago", "Medio de Pago")
+                        @Html.DropDownList("MediodePago", (IEnumerable<SelectListItem>)ViewBag.MediodePago, "--Seleccione--", new { @class = "form-control select-sm", style = "width: auto; display: inline-block;" })
+                    </div>
+                    <div class="radio-options">
+                        @foreach (var item in ViewBag.TiposTarjeta as IEnumerable<SelectListItem>)
+                        {
+                            <div>
+                                @Html.RadioButton("TipoTarjeta", item.Value, new { id = "tipoTarjeta" + item.Value })
+                                @Html.Label("tipoTarjeta" + item.Value, item.Text)
+                            </div>
+                        }
+                    </div>
+                    <hr class="custom-hr" />
+                    <div class="form-group">
+                        <label>Cuotas:</label><br />
+                        <small>Sin itereses</small>
+                        <div class="radio-options">
+                            @foreach (var item in ViewBag.CuotasList as IEnumerable<SelectListItem>)
+                            {
+                                <div>
+                                    @Html.RadioButton("Cuotas", item.Value, new { id = "cuotas" + item.Value })
+                                    @Html.Label("cuotas" + item.Value, item.Text)<br />
+                                </div>
+                            }
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="tipoTarjeta">Tipo de Tarjeta:</label>
-                        @Html.DropDownList("tipoTarjeta", (IEnumerable<SelectListItem>)ViewBag.TiposTarjeta, "Seleccione un tipo de tarjeta", new { @class = "form-control" })
+                    <hr class="custom-hr" />
+                    <h3>Datos Personales</h3>
+                    <div class="form-group row justify-content-center">
+                        @Html.Label("Apellido", "Apellido (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
+                        <div class="col-md-8">
+                            @Html.TextBox("Apellido", null, new { @class = "form-control input-sm text-center" })
+                        </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="cuotas">Cantidad de Cuotas:</label>
-                        @Html.DropDownList("cuotas", (IEnumerable<SelectListItem>)ViewBag.CuotasList, "Seleccione una cantidad de cuotas", new { @class = "form-control" })
+                    <div class="form-group row justify-content-center">
+                        @Html.Label("Nombre", "Nombre (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
+                        <div class="col-md-8">
+                            @Html.TextBox("Nombre", null, new { @class = "form-control input-sm text-center" })
+                        </div>
                     </div>
-
+                    <div class="form-group row justify-content-center">
+                        @Html.Label("DNI", "DNI (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
+                        <div class="col-md-8">
+                            @Html.TextBox("DNI", null, new { @class = "form-control input-sm text-center" })
+                        </div>
+                    </div>
+                    <hr class="custom-hr" />
+                    <h3>Datos de Tarjeta</h3>
+                    <div class="form-group row justify-content-center">
+                        @Html.Label("NumeroTarjeta", "Número de Tarjeta (*)", htmlAttributes: new { @class = "control-label col-md-4 text-center" })
+                        <div class="col-md-8">
+                            @Html.TextBox("NumeroTarjeta", null, new { @class = "form-control input-sm text-center" })
+                        </div>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        @Html.Label("FechaExpiracion", "Fecha de Expiración (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
+                        <div class="col-md-8">
+                            @Html.TextBox("FechaExpiracion", null, new { @class = "form-control input-sm text-center" })
+                        </div>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        @Html.Label("CodigoSeguridad", "Código de Seguridad (*)", htmlAttributes: new { @class = "control-label col-md-4 text-right" })
+                        <div class="col-md-8">
+                            @Html.TextBox("CodigoSeguridad", null, new { @class = "form-control input-sm text-center" })
+                        </div>
+                    </div>
                     <div class="form-group row justify-content-center">
                         <div class="col-md-12 text-center">
                             <a href="@Url.Action("Index", "Pedido")" class="btn btn-danger">Cancelar</a>
-                            <input type="submit" value="Confirmar Pago" class="btn btn-success" />
+                            <input type="submit" value="Pagar" class="btn btn-success" />
                         </div>
                     </div>
                 }
@@ -73,6 +134,86 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var cantidades = @Html.Raw(JsonConvert.SerializeObject(Model.Cantidades));
+            var productos = @Html.Raw(JsonConvert.SerializeObject(Model.Productos));
+            var subtotales = @Html.Raw(JsonConvert.SerializeObject(Model.Subtotales));
+
+            $('#Cantidades').val(JSON.stringify(cantidades));
+            $('#Productos').val(JSON.stringify(productos));
+            $('#Subtotales').val(JSON.stringify(subtotales));
+
+            $("form").on("submit", function (e) {
+
+                let isValid = true;
+
+                $(".error-message").remove();
+
+                if ($("select[name='MediodePago']").val() === "") {
+                    isValid = false;
+                    $('<br /><span class="error-message" style="color: red;">Seleccione un medio de pago</span>').insertAfter("select[name='MediodePago']");
+                }
+
+                $("input[type='text']").each(function () {
+                    if ($(this).val().trim() === "") {
+                        isValid = false;
+                        $(this).after('<span class="error-message" style="color: red;">Este campo es obligatorio.</span>');
+                    }
+                });
+
+                if ($("input[name='TipoTarjeta']:checked").length === 0) {
+                    isValid = false;
+                    $("input[name='TipoTarjeta']").last().closest('.radio-options').after('<span class="error-message" style="color: red; display:block;">Seleccione un tipo de tarjeta</span>');
+                }
+
+                if ($("input[name='Cuotas']:checked").length === 0) {
+                    isValid = false;
+                    $("input[name='Cuotas']").last().closest('.radio-options').after('<span class="error-message" style="color: red; display:block;">Seleccione una opción de cuotas</span>');
+                }
+
+                let numeroTarjeta = $("input[name='NumeroTarjeta']").val().replace(/\s+/g, ''); // Remover espacios
+                if (!/^\d{13,19}$/.test(numeroTarjeta)) {
+                    isValid = false;
+                    $("input[name='NumeroTarjeta']").after('<span class="error-message" style="color: red;">El número de tarjeta debe tener entre 13 y 19 dígitos.</span>');
+                }
+
+                let fechaExpiracion = $("input[name='FechaExpiracion']").val();
+                if (!/^(0[1-9]|1[0-2])\/?([0-9]{2}|[0-9]{4})$/.test(fechaExpiracion)) {
+                    isValid = false;
+                    $("input[name='FechaExpiracion']").after('<span class="error-message" style="color: red;">Formato de fecha inválido. Use MM/YY o MM/YYYY.</span>');
+                } else {
+                    // Validar que la fecha sea futura
+                    let today = new Date();
+                    let currentYear = today.getFullYear() % 100; // Obtener los últimos 2 dígitos del año
+                    let currentMonth = today.getMonth() + 1;
+
+                    let parts = fechaExpiracion.split('/');
+                    let expMonth = parseInt(parts[0], 10);
+                    let expYear = parseInt(parts[1].length === 4 ? parts[1].slice(2) : parts[1], 10); // Si es YYYY, usar los últimos dos dígitos
+
+                    if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
+                        isValid = false;
+                        $("input[name='FechaExpiracion']").after('<span class="error-message" style="color: red;">La fecha de expiración debe ser futura.</span>');
+                    }
+                }
+
+                //Validar código de seguridad (3 o 4 dígitos)
+                let codigoSeguridad = $("input[name='CodigoSeguridad']").val();
+                if (!/^\d{3,4}$/.test(codigoSeguridad)) {
+                    isValid = false;
+                    $("input[name='CodigoSeguridad']").after('<span class="error-message" style="color: red;">El código de seguridad debe tener 3 o 4 dígitos.</span>');
+                }
+
+                if (!isValid) {
+                    e.preventDefault(); // Evita el envío del formulario
+                }
+            });
+        });
+    </script>
+}
 
 <style>
     .payment-container {
@@ -92,14 +233,6 @@
         margin: 20px auto;
     }
 
-    .table {
-        margin-bottom: 20px;
-    }
-
-        .table th, .table td {
-            text-align: center;
-        }
-
     .form-group {
         margin-bottom: 15px;
     }
@@ -112,15 +245,5 @@
     .btn-danger, .btn-success {
         width: 120px;
         margin: 10px;
-    }
-
-    .btn-danger {
-        background-color: #e3342f;
-        border-color: #e3342f;
-    }
-
-    .btn-success {
-        background-color: #38c172;
-        border-color: #38c172;
     }
 </style>

@@ -10,14 +10,16 @@ namespace TechSolutions.Models
     {
         public PagoViewModel()
         {
-            Productos = new Dictionary<int, Producto>();
+            Productos = new List<Producto>();
             Subtotales = new Dictionary<int, float>();
+            Cantidades = new Dictionary<int, int>();
 
         }
         public Producto Producto { get; set; }
         public int ProductoId { get; set; }
-        public Dictionary<int, Producto> Productos { get; private set; }
-        public Dictionary<int,float> Subtotales     { get; private set; }
+        public List<Producto> Productos { get; private set; }
+        public Dictionary<int,float> Subtotales { get; private set; }
+        public Dictionary<int, int> Cantidades { get; private set; }
         public int Cantidad { get; set; }
         public float Subtotal { get; set; }
         public float Total { get; set; }
