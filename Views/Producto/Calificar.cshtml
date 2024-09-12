@@ -4,7 +4,7 @@
     ViewBag.Title = "Calificar Producto";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<br>
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="login-container">
@@ -12,7 +12,7 @@
             <hr class="custom-hr" />
 
             <div class="product-info">
-                <img src="@Model.Producto.Foto" alt="@Model.Producto.Nombre" class="product-image" />
+                <img src="@Url.Content("~/Uploads/" + Model.Producto.Foto)" alt="@Model.Producto.Nombre" class="product-image" />
                 <h3>@Model.Producto.Nombre</h3>
                 <p>@Model.Producto.Descripcion</p>
             </div>
@@ -96,12 +96,25 @@
     .product-info {
         text-align: center;
         margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #ccc; /* Borde sutil */
+        border-radius: 10px; /* Bordes redondeados */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+        background-color: #f9f9f9; /* Fondo claro */
     }
 
     .product-image {
         max-width: 100%;
         height: auto;
+        border-radius: 10px; /* Bordes redondeados en la imagen */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra más suave */
+        margin-bottom: 15px;
+        transition: transform 0.3s ease; /* Transición para animación */
     }
+
+        .product-image:hover {
+            transform: scale(1.05); /* Efecto zoom al pasar el cursor */
+        }
 
     .star-rating {
         display: flex;
@@ -141,5 +154,11 @@
         max-width: 300px; /* Establece un ancho máximo que se ajuste a tu diseño */
         max-height: 200px; /* Ajusta la altura según necesites */
         margin: auto; /* Centra la imagen */
+    }
+    .custom-hr {
+        border: none;
+        border-top: 3px solid #085394;
+        width: 80%;
+        margin: 20px auto;
     }
 </style>

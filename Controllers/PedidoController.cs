@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using TechSolutions.Data;
 using TechSolutions.Models;
+using TechSolutions.Servicios;
 using TechSolutions.SharedKernel;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
@@ -167,6 +168,14 @@ namespace TechSolutions.Controllers
 
                         transaction.Commit();
 
+
+                        //para envio de mail
+                        // Crear una lista con el producto
+                        var productos = new List<Producto> { producto };
+                        var cantidades = new Dictionary<int, int> { { producto.Id, pago.Cantidad } };
+                        EnviarCorreoConfirmacionCompra(productos, cantidades, pedido, factura, pago, (string)Session["Email"]);
+
+
                         // Pasar datos a la vista usando TempData
                         TempData["Producto"] = producto.Nombre;
                         TempData["Cantidad"] = pago.Cantidad;
@@ -193,6 +202,37 @@ namespace TechSolutions.Controllers
             // Si el modelo no es válido
             return View(pago);
         }
+
+        private void EnviarCorreoConfirmacionCompra(List<Producto> productos, Dictionary<int, int> cantidades, Pedido pedido, EncabezadoFactura factura, PagoViewModel pago, string emailUsuario)
+        {
+            var emailBody = new StringBuilder();
+            emailBody.AppendLine("<h1>Confirmación de tu compra</h1>");
+            emailBody.AppendLine("<p>Gracias por tu compra. Aquí te enviamos el resumen:</p>");
+            emailBody.AppendLine($"<p>Número de Pedido: {pedido.Numero}</p>");
+            emailBody.AppendLine($"<p>Número de Factura: {factura.Numero}</p>");
+            emailBody.AppendLine("<ul>");
+
+            foreach (var producto in productos)
+            {
+                if (producto != null && cantidades.ContainsKey(producto.Id))
+                {
+                    var cantidad = cantidades[producto.Id];
+                    emailBody.AppendLine($"<li>Producto: {producto.Nombre} - Cantidad: {cantidad} - Precio Unitario: {producto.Precio}</li>");
+                }
+            }
+
+            emailBody.AppendLine("</ul>");
+            emailBody.AppendLine($"<p>Total: {pago.Total}</p>");
+            emailBody.AppendLine($"<p>Fecha: {factura.Fecha.ToString("dd/MM/yyyy")}</p>");
+
+            string ultimosDigitosTarjeta = factura.Nrotarjeta.Substring(factura.Nrotarjeta.Length - 4);
+            emailBody.AppendLine($"<p>Medio de Pago: {pago.TipoTarjeta} terminada en {ultimosDigitosTarjeta} - {pago.Cuotas} cuotas</p>");
+            emailBody.AppendLine("<p>Gracias por confiar en Tech Solutions!</p>");
+
+            var emailService = new EmailService();
+            emailService.SendEmail(emailUsuario, "Confirmación de tu compra", emailBody.ToString());
+        }
+
 
         //get mustra la vista confirmacion de pago de un tipo de prodcto
         public ActionResult ConfirmacionPago()
@@ -399,6 +439,8 @@ namespace TechSolutions.Controllers
 
                         }
 
+                    //para el envio del correo
+                    EnviarCorreoConfirmacionCompra(productos, cantidades, pedido, factura, pago, (string)Session["Email"]);
 
                     // Pasar datos a la vista usando TempData
                     TempData["ProductosComprados"] = JsonConvert.SerializeObject(productosComprados);

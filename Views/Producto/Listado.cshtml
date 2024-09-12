@@ -84,11 +84,7 @@
     </div>
 </div>
 
-<script>
-    // JavaScript para filtrar productos por nombre
-    document.getElementById("searchInput").addEventListener("keyup", function () {
-        var searchValue = this.value.toLowerCase();
-        var productItems = document.querySelectorAll(".product-item");
+<script> 
 
         productItems.forEach(function (item) {
             var productName = item.querySelector("h5").innerText.toLowerCase();

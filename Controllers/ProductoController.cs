@@ -210,8 +210,8 @@ namespace TechSolutions.Controllers
             if (ModelState.IsValid)
             {
                 _calificacionProductoRepository.Insert(calificacion);
-                //vemos despues a donde redirije
-                return RedirectToAction("Index");
+                var idUsuario = Session["UserId"];
+                return RedirectToAction("ComprasUsuario", "EncabezadoFactura", new { idUsuario = idUsuario });
             }
 
             var producto = _productoRepository.GetById(calificacion.IdProducto);

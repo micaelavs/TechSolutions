@@ -13,7 +13,15 @@
         <div class="details-container">
             <h4>Factura @factura.TipoFactura N° @factura.Numero</h4>
             <p><strong>Fecha de emisión:</strong> @factura.Fecha.ToString("dd/MM/yyyy")</p>
-            <p><strong>Monto total:</strong> $@factura.Monto</p>
+            <p><strong>Monto total de la factura:</strong> $@factura.Monto</p>
+
+            <!-- Información del Pedido -->
+            <hr />
+            <h5>Información del Pedido:</h5>
+            <p><strong>Número de Pedido:</strong> @factura.Pedido.Numero</p>
+            <p><strong>Estado del Pedido:</strong> @factura.Pedido.Estado</p>
+            <p><strong>Fecha de la Operación del Pedido:</strong> @factura.Pedido.FechaOperacion.ToString("dd/MM/yyyy")</p>
+            <p><strong>Monto Total del Pedido:</strong> $@factura.Pedido.MontoTotal</p>
             <hr />
 
             <h5>Detalles de la compra:</h5>
@@ -24,6 +32,7 @@
                         <th>Cantidad</th>
                         <th>Precio Unitario</th>
                         <th>Subtotal</th>
+                        <th>Acciones</th> <!-- Nueva columna para botones -->
                     </tr>
                 </thead>
                 <tbody>
@@ -34,16 +43,24 @@
                             <td>@detalle.Cantidad</td>
                             <td>$@detalle.PrecioUnitario</td>
                             <td>$@(detalle.Cantidad * detalle.PrecioUnitario)</td>
+                            <td>
+                                <!-- Botón Devolver -->
+                                <a href="@Url.Action("Devolver", "Producto", new { id = detalle.Producto.Id })" class="btn btn-danger">Devolver</a>
+
+                                <!-- Botón Calificar -->
+                                <a href="@Url.Action("Calificar", "Producto", new { id = detalle.Producto.Id })" class="btn btn-primary">Calificar</a>
+                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
 
-            <p><strong>Total:</strong> $@factura.Monto</p>
+            <p><strong>Total de la Factura:</strong> $@factura.Monto</p>
         </div>
         <br />
     }
 </div>
+
 <style>
     body {
         background-color: #93C47D;
@@ -70,5 +87,9 @@
     th {
         background-color: #f2f2f2;
         font-weight: bold;
+    }
+
+    .btn {
+        margin-right: 5px;
     }
 </style>

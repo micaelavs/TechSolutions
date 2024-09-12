@@ -185,8 +185,9 @@ namespace TechSolutions.Controllers
         public ActionResult ComprasUsuario(int idUsuario)
         {
             var facturas = _facturaRepository.GetAll()
-                .Where(f => f.IdUsuario == idUsuario)
-                .ToList();
+            .Where(f => f.IdUsuario == idUsuario)
+            .OrderByDescending(f => f.Fecha) // Or any other property you want to sort by
+            .ToList();
 
             if (!facturas.Any())
             {
@@ -195,11 +196,7 @@ namespace TechSolutions.Controllers
 
             return View(facturas);
         }
-
-
-
-
-
+   
 
     }
 }
