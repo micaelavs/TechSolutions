@@ -36,6 +36,12 @@
             @TempData["SuccessMessage"]
         </div>
     }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div id="successMessage" class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
     <div class="row">
         <div class="col-12">
             <div class="table-responsive">
@@ -114,6 +120,14 @@
         if ($successMessage.length) {
             setTimeout(function () {
                 $successMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
+            }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
+        }
+
+        var $errorMessage = $('#ErrorMessage');
+
+        if ($errorMessage.length) {
+            setTimeout(function () {
+                $errorMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
             }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
         }
     });

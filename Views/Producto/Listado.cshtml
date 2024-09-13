@@ -45,6 +45,7 @@
         margin-top: 30px;
         margin-bottom: 20px;
     }
+
     .product-item:hover {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         transform: scale(1.05);
@@ -55,6 +56,13 @@
 <div class="container">
     <br>
     <h2>Listado de Productos</h2>
+    <!--mensaje q viene del login-->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div id="successMessage" class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
     <label><strong>Compra de la forma más simple y segura, compra con confianza!</strong></label>
     <!-- Buscador -->
     <div class="row search-bar">
@@ -83,16 +91,33 @@
         @Html.ActionLink("Volver al Inicio", "Index", "Home", null, new { @class = "btn btn-primary" })
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        // Desvanecer el mensaje de éxito
+        var $successMessage = $('#successMessage');
+        if ($successMessage.length) {
+            setTimeout(function () {
+                $successMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
+            }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
+        }
 
-<script> 
+        // Filtrar productos basado en la búsqueda
+        var $searchInput = $('#searchInput');
+        var $productItems = $('.product-item');
 
-        productItems.forEach(function (item) {
-            var productName = item.querySelector("h5").innerText.toLowerCase();
-            if (productName.includes(searchValue)) {
-                item.parentElement.style.display = "block";
-            } else {
-                item.parentElement.style.display = "none";
-            }
+        $searchInput.on('input', function () {
+            var searchValue = $searchInput.val().toLowerCase();
+
+            $productItems.each(function () {
+                var $item = $(this);
+                var productName = $item.find('h5').text().toLowerCase();
+                if (productName.includes(searchValue)) {
+                    $item.parent().show();
+                } else {
+                    $item.parent().hide();
+                }
+            });
         });
     });
 </script>
+

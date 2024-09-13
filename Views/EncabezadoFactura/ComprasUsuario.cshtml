@@ -7,7 +7,12 @@
 
 <div class="container">
     <h2>Mis Compras</h2>
-
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div id="successMessage" class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
     @foreach (var factura in Model)
     {
         <div class="details-container">
@@ -60,6 +65,18 @@
         <br />
     }
 </div>
+<script>
+    $(document).ready(function () {
+        var $successMessage = $('#successMessage');
+
+        if ($successMessage.length) {
+            setTimeout(function () {
+                $successMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
+            }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
+        }
+    });
+    
+</script>
 
 <style>
     body {

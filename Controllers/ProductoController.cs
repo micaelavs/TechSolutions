@@ -19,12 +19,16 @@ namespace TechSolutions.Controllers
         private readonly ProductoData _productoRepository;
         private readonly CategoriaProductoData _categoriaProductoData;
         private readonly CalificacionProductoData _calificacionProductoRepository;
+        private readonly DetallePedidoData _detallePedidoRepository;
+        private readonly DetalleFacturaData _detalleFacturaRepository;
 
         public ProductoController()
         {
             _productoRepository = new ProductoData();
             _categoriaProductoData = new CategoriaProductoData();
             _calificacionProductoRepository = new CalificacionProductoData();
+            _detalleFacturaRepository = new DetalleFacturaData();
+            _detallePedidoRepository = new DetallePedidoData();
         }
         // GET este es listado del abm
         public ActionResult Index()
@@ -169,6 +173,16 @@ namespace TechSolutions.Controllers
         {
          
             Producto producto = _productoRepository.GetById(id);
+            // Validar si el producto está asociado a algún pedido o factura
+            var detallesPedidos = _detallePedidoRepository.List().Where(dp => dp.IdProducto == producto.Id).ToList();
+            var detallesFacturas = _detalleFacturaRepository.List().Where(df => df.IdProducto == producto.Id).ToList();
+
+            if (detallesPedidos.Any() || detallesFacturas.Any())
+            {
+                TempData["ErrorMessage"] = "No se puede eliminar el producto, está asociado a una compra.";
+                return RedirectToAction("Index");
+            }
+
             if (producto.Stock > 1)
             {
                 producto.Stock -= 1;
@@ -210,7 +224,9 @@ namespace TechSolutions.Controllers
             if (ModelState.IsValid)
             {
                 _calificacionProductoRepository.Insert(calificacion);
+                TempData["SuccessMessage"] = "Calificación cargada correctamente.";
                 var idUsuario = Session["UserId"];
+                //redirige a la vista de compras de es usuario...porque califica desdeahi
                 return RedirectToAction("ComprasUsuario", "EncabezadoFactura", new { idUsuario = idUsuario });
             }
 
