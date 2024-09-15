@@ -23,7 +23,11 @@ namespace TechSolutions.Data
         public Pedido GetById(int id)
         {
             var db = new ApiDbContext();
-            return db.Pedidos.Find(id);
+            return db.Pedidos
+                .Include(p => p.Usuario)
+                .Include(p => p.DetallesPedidos.Select(d => d.Producto)) // Incluye Producto
+                .Include(p => p.HistorialPedidos)
+                .FirstOrDefault(p => p.Id == id);
 
         }
 
@@ -47,7 +51,11 @@ namespace TechSolutions.Data
         public IEnumerable<Pedido> List()
         {
             var db = new ApiDbContext();
-            var pedidos = db.Pedidos.ToList();
+            var pedidos = db.Pedidos
+                   .Include(p => p.Usuario)
+                   .Include(p => p.DetallesPedidos) 
+                   .Include(p => p.HistorialPedidos)
+                   .ToList();
             return pedidos;
 
 

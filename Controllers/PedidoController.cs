@@ -2,6 +2,8 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +24,7 @@ namespace TechSolutions.Controllers
         private readonly ProductoData _productoRepository;
         private readonly EncabezadoFacturaData _encabezadoFacturaRepository;
         private readonly DetalleFacturaData _detallefacturaRepository;
+        private readonly HistorialPedidoData _historialPedidoRepository;
         public PedidoController()
         {
 
@@ -30,6 +33,19 @@ namespace TechSolutions.Controllers
             _pedidoRepository = new PedidoData();
             _encabezadoFacturaRepository = new EncabezadoFacturaData();
             _detallefacturaRepository = new DetalleFacturaData();
+            _historialPedidoRepository = new HistorialPedidoData();
+        }
+       
+        public ActionResult Details(int id)
+        {
+            Pedido pedido = _pedidoRepository.GetById(id);
+
+            if (pedido == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(pedido);
         }
         // Acción para cargar la vista de pago con una lista de productos
         //vista previa de pagar 1 tipo de producto
@@ -100,11 +116,27 @@ namespace TechSolutions.Controllers
                         };
 
                         int idPedido = _pedidoRepository.InsertReturnId(pedido);
+                        
                         if (idPedido <= 0)
                         {
                             throw new Exception("Error al crear el pedido.");
                         }
+                        //logueo el estado del pedido.
+                        HistorialPedido historialPedido = new HistorialPedido
+                        {
+                            IdPedido = idPedido,
+                            EstadoPedido = EstadoPedido.Pago_aprobado,
+                            FechaOperacion = DateTime.Now
+                        };
 
+                        // Insertar el historial del pedido
+                        int historialPedidoId= _historialPedidoRepository.InsertReturnId(historialPedido);
+                        
+                        if (historialPedidoId<=0)
+                        {
+                            throw new Exception("Error al crear el historial pedido.");
+                        }
+                        
                         // Crear detalle del pedido
                         DetallePedido detallePedido = new DetallePedido
                         {
@@ -190,10 +222,17 @@ namespace TechSolutions.Controllers
                         TempData["UserId"] = Session["UserId"];
                         return RedirectToAction("ConfirmacionPago");
                     }
-                    catch (Exception ex)
+                    catch (DbEntityValidationException ex)
                     {
+                        foreach (var validationErrors in ex.EntityValidationErrors)
+                        {
+                            foreach (var validationError in validationErrors.ValidationErrors)
+                            {
+                                ModelState.AddModelError("", $"Error de validación en la entidad {validationErrors.Entry.Entity.GetType().Name}, propiedad {validationError.PropertyName}: {validationError.ErrorMessage}");
+                            }
+                        }
+
                         transaction.Rollback();
-                        ModelState.AddModelError("", $"Hubo un error procesando el pago: {ex.Message}");
                         return View(pago);
                     }
                 }
@@ -235,6 +274,7 @@ namespace TechSolutions.Controllers
 
 
         //get mustra la vista confirmacion de pago de un tipo de prodcto
+        [HttpGet]
         public ActionResult ConfirmacionPago()
         {
             return View();
@@ -338,8 +378,25 @@ namespace TechSolutions.Controllers
                             throw new Exception("Error al crear el pedido.");
                         }
 
-                        // Crear encabezado de factura una sola vez
-                        EncabezadoFactura factura = new EncabezadoFactura
+                        //loguear estado de pedido
+                        HistorialPedido historialPedido = new HistorialPedido
+                        {
+                            IdPedido = idPedido,
+                            EstadoPedido = EstadoPedido.Pago_aprobado,
+                            FechaOperacion = DateTime.Now
+                        };
+
+                        // Insertar el historial del pedido
+                        int historialPedidoId = _historialPedidoRepository.InsertReturnId(historialPedido);
+
+                        if (historialPedidoId <= 0)
+                        {
+                            throw new Exception("Error al crear el historial pedido.");
+                        }
+
+
+                    // Crear encabezado de factura una sola vez
+                    EncabezadoFactura factura = new EncabezadoFactura
                         {
                             Numero = GenerarNumeroPedido(),
                             TipoFactura = TipoFactura.A,
@@ -466,18 +523,81 @@ namespace TechSolutions.Controllers
            // return View(pago);
         }
         //vista de confirmacion del carrito
+        [HttpGet]
         public ActionResult ConfirmacionPagoCarrito()
         {
             return View();
         }
-        
-
 
         //mustra el carrito
-        public ActionResult Index()
+        public ActionResult Carrito()
         {
             return View();
         }
+        public ActionResult Index()
+        {
+            var pedidos = _pedidoRepository.List();
+            return View(pedidos);
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            var pedido =_pedidoRepository.GetById(id);
+            if (pedido == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Estados = Enum.GetValues(typeof(TechSolutions.SharedKernel.EstadoPedido))
+                          .Cast<TechSolutions.SharedKernel.EstadoPedido>()
+                          .Select(e => new SelectListItem
+                          {
+                              Value = ((int)e).ToString(),
+                              Text = e.ToString()
+                          }).ToList();
+            return View(pedido);
+
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Pedido pedido)
+        {
+      
+                // Solo actualizar el estado del pedido
+                using (var db = new ApiDbContext())
+                {
+                    // Crear una instancia de Pedido con solo el ID
+                    var pedidoToUpdate = new Pedido { Id = pedido.Id };
+
+                    // Adjuntar el pedido al contexto
+                    db.Pedidos.Attach(pedidoToUpdate);
+
+                    // Modificar solo el estado
+                    pedidoToUpdate.Estado = pedido.Estado;
+
+                    // Indicar que solo el campo Estado ha sido modificado
+                    db.Entry(pedidoToUpdate).Property(p => p.Estado).IsModified = true;
+
+                    db.SaveChanges();
+
+                    //aca hay que loguear tambien el estado del pedido en hsitorial
+                    //loguear estado de pedido
+                    HistorialPedido historialPedido = new HistorialPedido
+                    {
+                        IdPedido = pedido.Id,
+                        EstadoPedido = pedido.Estado,
+                        FechaOperacion = DateTime.Now
+                    };
+
+                    _historialPedidoRepository.Insert(historialPedido);
+                }
+
+                TempData["SuccessMessage"] = "Estado de Pedido actualizado exitosamente";
+                return RedirectToAction("Index");
+           
+        }
+
+
 
         public ActionResult Devolver()//id
         {

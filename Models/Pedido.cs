@@ -30,10 +30,12 @@ namespace TechSolutions.Models
         [Required]
         public int IdUsuario { get; set; }
         public Usuario Usuario { get; set; }
+        [Required]
         public EstadoPedido Estado { get; set; }
 
         public float MontoTotal { get; set; }
-        public DateTime FechaOperacion { get; set; } = DateTime.Now;
+        [Required]
+        public DateTime FechaOperacion { get; set; }
 
         public IList<DetallePedido> DetallesPedidos { get; private set; }
 

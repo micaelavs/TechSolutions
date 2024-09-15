@@ -16,7 +16,7 @@ namespace TechSolutions.Models
         [Column(Order = 1)]
         [Required]
         public int Id { get; set; }
-        [Required]
+      
         public Pedido Pedido { get; set; }
         [ForeignKey("Pedido")]
         [Column(Order = 2)]

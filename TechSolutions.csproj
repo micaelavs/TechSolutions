@@ -247,6 +247,22 @@
     <Compile Include="Migrations\202409081958398_CambioTipodeDatosEncabezadoFactura.Designer.cs">
       <DependentUpon>202409081958398_CambioTipodeDatosEncabezadoFactura.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202409140530164_quitorequireHistorialPedido.cs" />
+    <Compile Include="Migrations\202409140530164_quitorequireHistorialPedido.Designer.cs">
+      <DependentUpon>202409140530164_quitorequireHistorialPedido.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202409141923107_cambiofechaPEdio.cs" />
+    <Compile Include="Migrations\202409141923107_cambiofechaPEdio.Designer.cs">
+      <DependentUpon>202409141923107_cambiofechaPEdio.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202409141925537_cambiofechaPEdio2.cs" />
+    <Compile Include="Migrations\202409141925537_cambiofechaPEdio2.Designer.cs">
+      <DependentUpon>202409141925537_cambiofechaPEdio2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202409141927069_cambiofechaPEdio3.cs" />
+    <Compile Include="Migrations\202409141927069_cambiofechaPEdio3.Designer.cs">
+      <DependentUpon>202409141927069_cambiofechaPEdio3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CalificacionProducto.cs" />
     <Compile Include="Models\DetalleDevolucion.cs" />
@@ -383,7 +399,7 @@
     <Content Include="Views\Producto\Detalle.cshtml" />
     <Content Include="Views\Usuario\MiPerfil.cshtml" />
     <Content Include="Views\Pedido\Pagar.cshtml" />
-    <Content Include="Views\Pedido\Index.cshtml" />
+    <Content Include="Views\Pedido\Carrito.cshtml" />
     <Content Include="Views\Pedido\Devolver.cshtml" />
     <Content Include="Views\Recupero\Confirmacion.cshtml" />
     <Content Include="Views\Recupero\Error.cshtml" />
@@ -391,9 +407,13 @@
     <Content Include="Views\Pedido\PagarCarrito.cshtml" />
     <Content Include="Views\Pedido\ConfirmacionPagoCarrito.cshtml" />
     <Content Include="Views\EncabezadoFactura\ComprasUsuario.cshtml" />
+    <Content Include="Views\Pedido\Index.cshtml" />
+    <Content Include="Views\Pedido\Edit.cshtml" />
+    <Content Include="Views\Pedido\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\HistorialPedido\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202407250226234_Initial_create.resx">
@@ -401,6 +421,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202409081958398_CambioTipodeDatosEncabezadoFactura.resx">
       <DependentUpon>202409081958398_CambioTipodeDatosEncabezadoFactura.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202409140530164_quitorequireHistorialPedido.resx">
+      <DependentUpon>202409140530164_quitorequireHistorialPedido.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202409141923107_cambiofechaPEdio.resx">
+      <DependentUpon>202409141923107_cambiofechaPEdio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202409141925537_cambiofechaPEdio2.resx">
+      <DependentUpon>202409141925537_cambiofechaPEdio2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202409141927069_cambiofechaPEdio3.resx">
+      <DependentUpon>202409141927069_cambiofechaPEdio3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

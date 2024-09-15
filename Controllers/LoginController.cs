@@ -48,6 +48,7 @@ namespace TechSolutions.Controllers
             // Autenticación exitosa, establecer sesión o cookie
             Session["UserId"] = usuario.Id; // O usar un mecanismo de autenticación más seguro como una cookie de autenticación
             Session["Email"] = usuario.Email;
+            Session["Rol"] = usuario.Rol;
 
             TempData["SuccessMessage"] = "Inicio de sesión exitoso.";
             return RedirectToAction("Listado", "Producto");
