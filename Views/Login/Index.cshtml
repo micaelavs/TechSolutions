@@ -75,6 +75,9 @@
                 errorMessage.fadeOut('slow');
             }, 5000); // 5000 milisegundos = 5 segundos
         }
+        //como el logout redirige al login aca borro el carito
+        localStorage.removeItem('carrito');
+        console.log('Carrito limpiado en el logout.');
     });
 </script>
 <style>

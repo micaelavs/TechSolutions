@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using TechSolutions.Data;
 using TechSolutions.Servicios;
+using TechSolutions.SharedKernel;
 
 namespace TechSolutions.Controllers
 {
@@ -51,7 +52,19 @@ namespace TechSolutions.Controllers
             Session["Rol"] = usuario.Rol;
 
             TempData["SuccessMessage"] = "Inicio de sesión exitoso.";
-            return RedirectToAction("Listado", "Producto");
+
+            //Redirigir según el rol del usuario
+            if (usuario.Rol == Rol.Cliente)
+            {
+                return RedirectToAction("Listado", "Producto");
+            }
+            else if (usuario.Rol == Rol.Administrador)
+            {
+                return RedirectToAction("Index", "Pedido");
+            }
+
+            //Redirigir a una página predeterminada si el rol no coincide con los esperados
+            return RedirectToAction("Index", "Home");
         }
 
     }

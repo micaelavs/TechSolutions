@@ -85,6 +85,10 @@
                             <li>@Html.ActionLink("Listado de Productos", "Listado", "Producto", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Mis Compras", "ComprasUsuario", "EncabezadoFactura", new { idUsuario = Session["UserId"] }, new { @class = "nav-link" })</li>
                         }
+
+                        // Agregar el enlace para cerrar sesión
+                        <li>@Html.ActionLink("Cerrar Sesión", "Logout", "Usuario", new { area = "" }, new { @class = "nav-link" })</li>
+
                     }
 
                 </ul>
