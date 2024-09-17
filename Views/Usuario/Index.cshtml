@@ -26,7 +26,18 @@
 <div class="container">
     <br>
     <h2>Listado de Usuarios</h2>
-
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success" id="successMessage">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger" id="errorMessage">
+            @TempData["ErrorMessage"]
+        </div>
+    }
     <div class="row">
         <div class="col-12">
             <div class="table-responsive">
@@ -74,3 +85,22 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        var $successMessage = $('#successMessage');
+        var $errorMessage = $('#errorMessage');
+
+        if ($successMessage.length) {
+            setTimeout(function () {
+                $successMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
+            }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
+        }
+
+        if ($errorMessage.length) {
+            setTimeout(function () {
+                $errorMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
+            }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
+        }
+    });
+    
+</script>

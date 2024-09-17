@@ -1,4 +1,4 @@
-﻿@model TechSolutions.Models.Usuario
+﻿@model TechSolutions.Models.UsuarioEditViewModel
 
 @{
     ViewBag.Title = "Perfil";
@@ -11,59 +11,69 @@
             <h2>Información de Perfil</h2>
             <hr class="custom-hr" />
 
-            @using (Html.BeginForm("Edit", "Usuario", FormMethod.Post))
+            @using (Html.BeginForm("MiPerfil", "Usuario", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.HiddenFor(model => model.Id)
 
-                <div class="form-horizontal">
-                    <div class="form-group row justify-content-center">
-                        @Html.LabelFor(model => model.Email, "Email (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
-                        <div class="col-md-6">
-                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <br />
-                    <!-- si no se ingresa nada en el campo contraseña se mantendrá la misma -->
-                    <div class="form-group row justify-content-center">
-                        @Html.LabelFor(model => model.Password, "Contraseña", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
-                        <div class="col-md-6">
-                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group row justify-content-center">
-                        @Html.LabelFor(model => model.Nombre, "Nombre (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
-                        <div class="col-md-6">
-                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group row justify-content-center">
-                        @Html.LabelFor(model => model.Apellido, "Apellido (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
-                        <div class="col-md-6">
-                            @Html.EditorFor(model => model.Apellido, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Apellido, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group row justify-content-center">
-                        <div class="col-md-12 text-center">
-                            <p>Si desea cambiar la contraseña, coloque una nueva. De lo contrario, deje el campo en blanco.</p>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group row justify-content-center">
-                        <div class="col-md-12 d-flex justify-content-center">
-                            <a href="@Url.Action("Listado", "Producto")" class="btn btn-danger mx-2">Cancelar</a>
-                            <input type="submit" value="Guardar" class="btn btn-success mx-2" />
-                        </div>
-                    </div>
+        <div class="form-horizontal">
+            <div class="form-group row justify-content-center">
+                @Html.LabelFor(model => model.Email, "Email (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                 </div>
+            </div>
+            <br />
+            <!-- si no se ingresa nada en el campo contraseña se mantendrá la misma -->
+            <div class="form-group row justify-content-center">
+                @Html.LabelFor(model => model.Password, "Contraseña", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    <br />
+                    <small class="form-text text-muted">Utilice al menos una letra, un número y siete caracteres.</small>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row justify-content-center">
+                @Html.LabelFor(model => model.Rol, "Rol", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                <div class="col-md-6">
+                    @Html.TextBoxFor(model => model.Rol, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="form-group row justify-content-center">
+                @Html.LabelFor(model => model.Nombre, "Nombre (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+            <div class="form-group row justify-content-center">
+                @Html.LabelFor(model => model.Apellido, "Apellido (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.Apellido, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Apellido, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+            <div class="form-group row justify-content-center">
+                <div class="col-md-12 text-center">
+                    <p>Si desea cambiar la contraseña, coloque una nueva. De lo contrario, deje el campo en blanco.</p>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row justify-content-center">
+                <div class="col-md-12 d-flex justify-content-center">
+                    <a href="@Url.Action("Listado", "Producto")" class="btn btn-danger mx-2">Cancelar</a>
+                    <input type="submit" value="Guardar" class="btn btn-success mx-2" />
+                </div>
+            </div>
+        </div>
             }
         </div>
     </div>

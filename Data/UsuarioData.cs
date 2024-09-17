@@ -31,7 +31,16 @@ namespace TechSolutions.Data
             var db = new ApiDbContext();
             return db.Usuarios.FirstOrDefault(u => u.Email == Email);
         }
-     
+
+        public Usuario FindByEmailExcludingId(string email, int UserId)
+        {
+            using (var db = new ApiDbContext())
+            {
+                return db.Usuarios
+                    .FirstOrDefault(u => u.Email == email && u.Id != UserId);
+            }
+        }
+
 
         public void Insert(Usuario entity)
         {
