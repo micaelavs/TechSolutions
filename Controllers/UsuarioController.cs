@@ -67,6 +67,11 @@ namespace TechSolutions.Controllers
                     ModelState.AddModelError("Apellido", "El campo Apellido es obligatorio.");
                 }
 
+                if (usuario.Rol == 0)
+                {
+                    ModelState.AddModelError("Rol", "El campo Rol es obligatorio.");
+                }
+
                 if (string.IsNullOrWhiteSpace(usuario.Password))
                 {
                     ModelState.AddModelError("Password", "La contraseña es obligatoria.");
@@ -109,6 +114,14 @@ namespace TechSolutions.Controllers
                 if (usuarioExistente != null)
                 {
                     ModelState.AddModelError("Email", "El correo electrónico ya está en uso.");
+                }
+
+                //usuario ya ingresado pero inactivo
+                var usuarioExistenteInactivo = _usuarioRepository.FindByEmailInactivo(usuario.Email);
+
+                if (usuarioExistenteInactivo != null)
+                {
+                    ModelState.AddModelError("Email", "El usuario con el Email ingresado ya está en el sistema pero Inactivo.");
                 }
 
                 if (!ModelState.IsValid)
@@ -419,6 +432,39 @@ namespace TechSolutions.Controllers
 
             // Si el modelo no es válido, devuelve la vista con los errores
             return View(usuarioViewModel);
+        }
+        public ActionResult Reactivar(int id)
+        {
+            Usuario usuario = _usuarioRepository.GetById(id);
+            if (usuario == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (usuario.Activo)
+            {
+                TempData["ErrorMessage"] = "El usuario ya está activo.";
+                return RedirectToAction("Index");
+            }
+
+            return View(usuario);
+        }
+
+        [HttpPost, ActionName("Reactivar")]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReactivarConfirmed(int id)
+        {
+            Usuario usuario = _usuarioRepository.GetById(id);
+            if (usuario == null)
+            {
+                return HttpNotFound();
+            }
+
+            usuario.Activo = true;
+            _usuarioRepository.Update(usuario);
+
+            TempData["SuccessMessage"] = "El usuario se ha reactivado correctamente.";
+            return RedirectToAction("Index");
         }
 
         public ActionResult Logout()

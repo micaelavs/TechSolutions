@@ -46,6 +46,14 @@ namespace TechSolutions.Controllers
                 return View("Index");
             }
 
+            // Verifica si el usuario está activo
+            if (!usuario.Activo)
+            {
+                TempData["ErrorMessage"] = "El usuario está dado de baja. Contáctese con el Administrador del sistema.";
+                return RedirectToAction("Contact", "Home");
+            }
+
+
             // Autenticación exitosa, establecer sesión o cookie
             Session["UserId"] = usuario.Id; // O usar un mecanismo de autenticación más seguro como una cookie de autenticación
             Session["Email"] = usuario.Email;

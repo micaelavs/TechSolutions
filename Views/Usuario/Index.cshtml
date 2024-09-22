@@ -48,6 +48,7 @@
                             <th>@Html.DisplayNameFor(model => model.Rol)</th>
                             <th>@Html.DisplayNameFor(model => model.Nombre)</th>
                             <th>@Html.DisplayNameFor(model => model.Apellido)</th>
+                            <th>@Html.DisplayNameFor(model => model.Activo)</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -59,16 +60,26 @@
                                 <td>@Html.DisplayFor(modelItem => item.Rol)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Activo)</td>
                                 <td>
-                                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-secondary btn-sm btn-action">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm btn-action">
-                                        <i class="fas fa-info-circle"></i>
-                                    </a>
-                                    <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm btn-action">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
+                                    @if (item.Activo)
+                                    {
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-secondary btn-sm btn-action">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm btn-action">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+                                        <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm btn-action">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Reactivar", new { id = item.Id })" class="btn btn-warning btn-sm btn-action">
+                                            <i class="fas fa-sync-alt"></i> Reactivar
+                                        </a>
+                                    }
                                 </td>
                             </tr>
                         }
@@ -84,7 +95,9 @@
             </a>
         </div>
     </div>
+    <br />
 </div>
+
 <script>
     $(document).ready(function () {
         var $successMessage = $('#successMessage');
@@ -102,5 +115,4 @@
             }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
         }
     });
-    
 </script>

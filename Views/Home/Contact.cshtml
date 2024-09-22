@@ -84,7 +84,12 @@
     <div class="section">
         <h2>@ViewBag.Title</h2>
         <p>@ViewBag.Message</p>
-
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger" id="errorMessage">
+                @TempData["ErrorMessage"]
+            </div>
+        }
         <div class="contact-info">
             <address>
                 <strong>Trabajamos en toda la Argentina</strong><br />
@@ -122,7 +127,17 @@
         <p>¿No te gusta? ¡Devolvelo! En Tech Solutions, no hay nada que no puedas hacer, porque estás siempre protegido.</p>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        var $errorMessage = $('#errorMessage');
 
+        if ($errorMessage.length) {
+            setTimeout(function () {
+                $errorMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
+            }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
+        }
+    });
+</script>
 <!-- Vinculando Bootstrap JS y dependencias -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

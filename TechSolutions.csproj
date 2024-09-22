@@ -374,7 +374,7 @@
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Registro\Create.cshtml" />
     <Content Include="Views\Producto\Create.cshtml" />
-    <Content Include="Views\Producto\Delete.cshtml" />
+    <Content Include="Views\Producto\Descontar.cshtml" />
     <Content Include="Views\Producto\Details.cshtml" />
     <Content Include="Views\Producto\Edit.cshtml" />
     <Content Include="Views\Producto\Index.cshtml" />
@@ -407,6 +407,8 @@
     <Content Include="Views\Pedido\Index.cshtml" />
     <Content Include="Views\Pedido\Edit.cshtml" />
     <Content Include="Views\Pedido\Details.cshtml" />
+    <Content Include="Views\Usuario\Reactivar.cshtml" />
+    <Content Include="Views\Producto\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

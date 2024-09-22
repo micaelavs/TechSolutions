@@ -29,7 +29,13 @@ namespace TechSolutions.Data
         public Usuario FindByEmail(string Email)
         {
             var db = new ApiDbContext();
-            return db.Usuarios.FirstOrDefault(u => u.Email == Email);
+            return db.Usuarios.FirstOrDefault(u => u.Email == Email && u.Activo);
+        }
+
+        public Usuario FindByEmailInactivo(string Email)
+        {
+            var db = new ApiDbContext();
+            return db.Usuarios.FirstOrDefault(u => u.Email == Email && u.Activo == false);
         }
 
         public Usuario FindByEmailExcludingId(string email, int UserId)
@@ -37,7 +43,7 @@ namespace TechSolutions.Data
             using (var db = new ApiDbContext())
             {
                 return db.Usuarios
-                    .FirstOrDefault(u => u.Email == email && u.Id != UserId);
+                    .FirstOrDefault(u => u.Email == email && u.Id != UserId && u.Activo);
             }
         }
 

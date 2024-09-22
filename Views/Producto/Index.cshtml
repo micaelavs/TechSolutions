@@ -23,7 +23,8 @@
     }
     /* Ancho fijo para la columna de acciones */
     .action-column {
-        width: 180px; /* Puedes ajustar el valor según sea necesario */
+        width: 250px; /* Ajusta el valor según sea necesario */
+        white-space: nowrap; /* Evita que los botones se dividan en varias líneas */
     }
 </style>
 
@@ -78,6 +79,9 @@
                                     <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm btn-action">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
+                                    <a href="@Url.Action("Descontar", new { id = item.Id })" class="btn btn-danger btn-sm btn-action">
+                                        <i class="fas fa-minus"></i>
+                                    </a>
                                     <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm btn-action">
                                         <i class="fas fa-trash"></i>
                                     </a>
@@ -96,6 +100,7 @@
             </a>
         </div>
     </div>
+    <br />
 </div>
 <!--para visualizar las imagens -->
 <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">

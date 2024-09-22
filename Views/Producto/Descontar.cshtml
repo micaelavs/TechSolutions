@@ -1,7 +1,7 @@
 ﻿@model TechSolutions.Models.Producto
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Descontar";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -47,19 +47,18 @@
         text-decoration: none;
     }
 
-    /*.form-actions a:hover {
+        /*.form-actions a:hover {
             text-decoration: underline;
         }*/
 </style>
 
 <div class="container">
     <br>
-    <h2>Eliminar Producto</h2>
+    <h2>Descontar Producto</h2>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="delete-container">
-                <!--aca seria dar debaja producto cuando das de baja restas 1 producto d stock-->
-                <h4>¿Está seguro que quiere eliminar el producto <strong>@Html.DisplayFor(model => model.Nombre)</strong>?</h4>
+            <div class="delete-container"> <!--aca seria dar debaja producto cuando das de baja restas 1 producto d stock-->
+                <h4>¿Está seguro que quiere descontar una unidad del producto <strong>@Html.DisplayFor(model => model.Nombre)</strong>?</h4>
                 <p>Presione <strong>Borrar</strong> para confirmar o <strong>Cancelar</strong> para volver al listado.</p>
                 <hr />
                 <dl class="dl-horizontal">

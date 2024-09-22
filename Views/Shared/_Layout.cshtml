@@ -11,26 +11,61 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* Cambia el color de fondo del navbar a verde */
         .navbar-custom {
             background-color: #206329; /* Verde oscuro personalizado */
         }
 
-            .navbar-custom .nav-link,
-            .navbar-custom .navbar-brand,
-            .navbar-custom .navbar-toggler-icon {
-                color: white; /* Cambia el color del texto a blanco */
-            }
+        .navbar-custom .navbar-brand, .navbar-custom .nav-link {
+            color: white;
+            text-align: center; /* Asegura que el texto esté centrado */
+        }
 
-            .navbar-custom .navbar-toggler {
-                border-color: white; /* Cambia el color del borde del botón toggle a blanco */
-            }
+        .navbar-custom .nav-link {
+            margin-left: 15px;
+            margin-right: 15px;
+            text-transform: uppercase; /* Mayúsculas para un look más moderno */
+        }
 
-        /* Estilos para el footer fijo */
+        .navbar-custom .navbar-toggler {
+            border-color: white;
+        }
+
+        .navbar-custom .navbar-toggler-icon {
+            color: white;
+        }
+
+        /* Centrando los elementos dentro del navbar usando flexbox */
+        .navbar-collapse {
+            display: flex;
+            justify-content: space-between; /* Para distribuir los elementos */
+            align-items: center; /* Centra verticalmente */
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Asegura que esté centrado */
+            background-color: #34495e; /* Fondo azul oscuro */
+            color: white;
+            font-size: 1.1rem;
+            padding: 8px 15px;
+            border-radius: 25px; /* Borde redondeado */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para resaltar */
+        }
+
+        .user-info i {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .user-info p {
+            margin: 0;
+            font-weight: bold;
+        }
         .footer-custom {
-            background-color: #206329; /* Mismo verde oscuro */
-            color: white; /* Texto en blanco */
-            padding: 2px 5px; /* Reducir el padding en la parte superior e inferior */
+            background-color: #206329;
+            color: white;
+            padding: 10px 5px; /* Aumenta el padding superior e inferior */
             text-align: center;
             width: 100%;
             position: fixed;
@@ -38,36 +73,46 @@
             left: 0;
         }
 
-        /* Para asegurar que el contenido no quede oculto debajo del footer */
+        .footer-custom a {
+            color: white; /* Color inicial del enlace */
+            text-decoration: none; /* Quitar subrayado */
+        }
+
+        .footer-custom a:hover {
+            color: #4a90e2; /* Azul claro al pasar el mouse */
+            text-decoration: underline; /* Opcional: añade subrayado al pasar el mouse */
+        }
+
         .body-content {
-            margin-bottom: 50px; /* Ajusta según la altura del footer */
+            margin-bottom: 50px;
         }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark navbar-custom">
         <div class="container">
-            @Html.ActionLink("Tech Solutions", "Index", "Login", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("Tech Solutions", "Index", "Login", new { area = "" }, new { @class = "navbar-brand mx-auto" }) <!-- Centra el logo -->
+
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar navegación" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
+
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-center">
+                <ul class="navbar-nav flex-grow-1 justify-content-center">
+                    <!-- Centramos el contenido del menú -->
                     <li>@Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Sobre Nosotros", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Contáctanos", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
 
                     @if (Session["UserId"] == null)
                     {
-                        // Si el usuario NO está logueado
                         <li>@Html.ActionLink("Registro", "Create", "Registro", new { area = "" }, new { @class = "nav-link" })</li>
                         <li>@Html.ActionLink("Ingreso", "Index", "Login", new { area = "" }, new { @class = "nav-link" })</li>
                         <li>@Html.ActionLink("Recuperar cuenta", "Index", "Recupero", new { area = "" }, new { @class = "nav-link" })</li>
                     }
                     else
                     {
-                        // Si el usuario está logueado, mostrar opciones según el rol
                         var rolUsuario = (Rol)Enum.Parse(typeof(Rol), Session["Rol"].ToString());
 
                         if (rolUsuario == Rol.Administrador)
@@ -86,20 +131,31 @@
                             <li>@Html.ActionLink("Mis Compras", "ComprasUsuario", "EncabezadoFactura", new { idUsuario = Session["UserId"] }, new { @class = "nav-link" })</li>
                         }
 
-                        // Agregar el enlace para cerrar sesión
                         <li>@Html.ActionLink("Cerrar Sesión", "Logout", "Usuario", new { area = "" }, new { @class = "nav-link" })</li>
-
                     }
-
                 </ul>
+
+                @if (Session["UserId"] != null)
+                {
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <p>@Session["Email"] - @Enum.Parse(typeof(Rol), Session["Rol"].ToString())</p>
+                    </div>
+                }
             </div>
         </div>
     </nav>
+
     <div class="container body-content">
         @RenderBody()
     </div>
+
     <footer class="footer-custom">
-        <p>&copy; @DateTime.Now.Year - Tech Solutions todos los derechos reservados</p>
+        <p>
+            &copy; @DateTime.Now.Year - Tech Solutions todos los derechos reservados -
+            Por dudas o consultas contacte al administrador del sistema
+            [<a href="mailto:soporte@techsolutions.com.ar">soporte@techsolutions.com.ar</a>]
+        </p>
     </footer>
 
     @Scripts.Render("~/bundles/jquery")

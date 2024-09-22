@@ -1,0 +1,19 @@
+﻿@model TechSolutions.Models.Usuario
+
+<h2>Reactivar Usuario</h2>
+
+<div>
+    <h4>¿Estás seguro de que deseas reactivar a @Model.Nombre @Model.Apellido?</h4>
+    <div>
+        <strong>Email:</strong> @Model.Email<br />
+        <strong>Estado:</strong> @(Model.Activo ? "Activo" : "Inactivo")
+    </div>
+    <br />
+
+    @using (Html.BeginForm("Reactivar", "Usuario", new { id = Model.Id }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <input type="submit" value="Reactivar" class="btn btn-success" />
+        @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-danger" })
+    }
+</div>

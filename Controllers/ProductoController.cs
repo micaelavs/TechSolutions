@@ -154,7 +154,52 @@ namespace TechSolutions.Controllers
             return View(producto);*/
         }
 
+        /*descontar unidades de producto*/
+        // GET: Productoes/Descontar/5
+        public ActionResult Descontar(int id)
+        {
+            Producto producto = _productoRepository.GetById(id);
+            if (producto == null)
+            {
+                return HttpNotFound();
+            }
+            return View(producto);
+        }
 
+        // POST: Productoes/Descontar/5
+        [HttpPost, ActionName("Descontar")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DescontarConfirmed(int id)
+        {
+         
+            Producto producto = _productoRepository.GetById(id);
+            // Validar si el producto está asociado a algún pedido o factura
+            var detallesPedidos = _detallePedidoRepository.List().Where(dp => dp.IdProducto == producto.Id).ToList();
+            var detallesFacturas = _detalleFacturaRepository.List().Where(df => df.IdProducto == producto.Id).ToList();
+
+            if (detallesPedidos.Any() || detallesFacturas.Any())
+            {
+                TempData["ErrorMessage"] = "No se puede eliminar el producto, está asociado a una compra.";
+                return RedirectToAction("Index");
+            }
+
+            if (producto.Stock >= 1)
+            {
+                producto.Stock -= 1;
+            }
+            else
+            {
+                producto.Stock = 0;
+                producto.Activo = false;
+            }
+
+            _productoRepository.Update(producto);
+            TempData["SuccessMessage"] = "Unidad de Producto eliminada exitosamente!";
+            return RedirectToAction("Index");
+        }
+
+
+        /*eliminar producto por completo*/
         // GET: Productoes/Delete/5
         public ActionResult Delete(int id)
         {
@@ -171,7 +216,7 @@ namespace TechSolutions.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-         
+
             Producto producto = _productoRepository.GetById(id);
             // Validar si el producto está asociado a algún pedido o factura
             var detallesPedidos = _detallePedidoRepository.List().Where(dp => dp.IdProducto == producto.Id).ToList();
@@ -183,13 +228,8 @@ namespace TechSolutions.Controllers
                 return RedirectToAction("Index");
             }
 
-            if (producto.Stock > 1)
+            if (producto.Activo)
             {
-                producto.Stock -= 1;
-            }
-            else
-            {
-                producto.Stock = 0;
                 producto.Activo = false;
             }
 
@@ -197,6 +237,7 @@ namespace TechSolutions.Controllers
             TempData["SuccessMessage"] = "Producto eliminado exitosamente!";
             return RedirectToAction("Index");
         }
+
         //get para mostrar la pantalla
         // GET: Producto/Calificar/5
         public ActionResult Calificar(int id)
