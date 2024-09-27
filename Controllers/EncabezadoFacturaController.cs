@@ -17,16 +17,19 @@ using iText.Layout.Properties;
 using iText.Kernel.Colors;
 using System.IO;
 using iText.Kernel.Pdf.Canvas.Draw;
+using TechSolutions.Models;
 
 namespace TechSolutions.Controllers
 {
     public class EncabezadoFacturaController : Controller
     {
         private readonly EncabezadoFacturaData _facturaRepository;
+        private readonly CalificacionProductoData _calificacionRepository;
 
         public EncabezadoFacturaController()
         {
             _facturaRepository = new EncabezadoFacturaData();
+            _calificacionRepository = new CalificacionProductoData();
         }
         [HttpGet]
         public ActionResult GenerarFactura(int numeroFactura)
@@ -186,15 +189,23 @@ namespace TechSolutions.Controllers
         {
             var facturas = _facturaRepository.GetAll()
             .Where(f => f.IdUsuario == idUsuario)
-            .OrderByDescending(f => f.Fecha) // Or any other property you want to sort by
+            .OrderByDescending(f => f.Fecha) 
             .ToList();
+
+            var calificacionesUsuario = _calificacionRepository.GetCalificacionesByUsuario(idUsuario);
+
+            var model = new MisComprasViewModel
+            {
+                Facturas = facturas,
+                CalificacionesUsuario = calificacionesUsuario
+            };
 
             if (!facturas.Any())
             {
                 return HttpNotFound("No se encontraron facturas para este usuario.");
             }
 
-            return View(facturas);
+            return View(model);
         }
    
 

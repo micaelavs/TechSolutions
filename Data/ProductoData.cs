@@ -23,10 +23,15 @@ namespace TechSolutions.Data
         public Producto GetById(int id)
         {
             var db = new ApiDbContext();
-            return db.Productos
+            /*return db.Productos
                  .Include(p => p.CategoriaProducto)
                  .Include(p => p.Calificaciones)
-                 .SingleOrDefault(p => p.Id == id);
+                 .SingleOrDefault(p => p.Id == id);*/
+
+            return db.Productos
+          .Include(p => p.CategoriaProducto)
+          .Include(p => p.Calificaciones.Select(c => c.Usuario)) // Incluye el usuario de cada calificación
+          .SingleOrDefault(p => p.Id == id);
 
         }
 

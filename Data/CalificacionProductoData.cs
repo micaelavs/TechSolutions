@@ -50,5 +50,20 @@ namespace TechSolutions.Data
             db.Entry(entity).State = EntityState.Modified;
             db.SaveChanges();
         }
+
+        //dado un usuario traer todas sus calificaciones
+        public IEnumerable<CalificacionProducto> GetCalificacionesByUsuario(int idUsuario)
+        {
+            var db = new ApiDbContext();
+
+            // Obtener todas las calificaciones del usuario
+            var calificaciones = db.CalificacionesProductos
+                .Include(c => c.Producto) 
+                .Where(c => c.IdUsuario == idUsuario)
+                .ToList();
+
+            return calificaciones;
+        }
+
     }
 }

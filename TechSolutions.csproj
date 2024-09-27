@@ -263,6 +263,10 @@
     <Compile Include="Migrations\202409141927069_cambiofechaPEdio3.Designer.cs">
       <DependentUpon>202409141927069_cambiofechaPEdio3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202409270009030_UsuarioCalificacion.cs" />
+    <Compile Include="Migrations\202409270009030_UsuarioCalificacion.Designer.cs">
+      <DependentUpon>202409270009030_UsuarioCalificacion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CalificacionProducto.cs" />
     <Compile Include="Models\DetalleDevolucion.cs" />
@@ -270,6 +274,7 @@
     <Compile Include="Models\EncabezadoFactura.cs" />
     <Compile Include="Models\DetalleFactura.cs" />
     <Compile Include="Models\HistorialPedido.cs" />
+    <Compile Include="Models\MisComprasViewModel.cs" />
     <Compile Include="Models\PagoViewModel.cs" />
     <Compile Include="Models\Persona.cs" />
     <Compile Include="Models\Pedido.cs" />
@@ -409,6 +414,7 @@
     <Content Include="Views\Pedido\Details.cshtml" />
     <Content Include="Views\Usuario\Reactivar.cshtml" />
     <Content Include="Views\Producto\Delete.cshtml" />
+    <Content Include="Views\Producto\ModificarCalificacion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -432,6 +438,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202409141927069_cambiofechaPEdio3.resx">
       <DependentUpon>202409141927069_cambiofechaPEdio3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202409270009030_UsuarioCalificacion.resx">
+      <DependentUpon>202409270009030_UsuarioCalificacion.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

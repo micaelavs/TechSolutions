@@ -65,6 +65,7 @@
                     {
                         <div class="review-container">
                             <p><strong>Puntaje:</strong> @((int)calificacion.Puntaje) / 5</p>
+                            <p><strong>Calificado por:</strong> @calificacion.Usuario.Email</p>
                             <p>@calificacion.Comentario</p>
                         </div>
                     }
@@ -78,7 +79,7 @@
     </div>
 
     <br>
-    <div class="text-center">
+    <div class="text-center"><!-- revisar este botonm -->
         @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-primary" })
     </div>
 </div>

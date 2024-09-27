@@ -1,0 +1,131 @@
+﻿@using TechSolutions.SharedKernel
+@model TechSolutions.Models.CalificacionProducto
+
+@{
+    ViewBag.Title = "Modificar Calificación";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="login-container">
+            <h2>Modificar Calificación</h2>
+            <hr class="custom-hr" />
+
+            <div class="product-info">
+                <img src="@Url.Content("~/Uploads/" + Model.Producto.Foto)" alt="@Model.Producto.Nombre" class="product-image" />
+                <h3>@Model.Producto.Nombre</h3>
+                <p>@Model.Producto.Descripcion</p>
+            </div>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.IdProducto)
+                @Html.HiddenFor(model => model.IdUsuario)
+                <div class="form-group row justify-content-center">
+                    <label class="control-label col-md-12 text-center">¿Qué te pareció tu producto?</label>
+                    <div class="col-md-12 text-center">
+                        <div class="star-rating">
+                            @for (int i = 5; i >= 1; i--)
+                            {
+                                var valorPuntaje = (Puntaje)i; // Convierte el entero a enum
+                                <input type="radio" id="star-@i" name="Puntaje" value="@i" @(Model.Puntaje == valorPuntaje ? "checked" : "") />
+                                <label for="star-@i" aria-label="@i estrellas"></label>
+                            }
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Puntaje, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row justify-content-center">
+                    @Html.LabelFor(model => model.Comentario, htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                    <div class="col-md-6">
+                        @Html.TextAreaFor(model => model.Comentario, new { @class = "form-control", placeholder = "Contanos más acerca de tu producto..." })
+                        @Html.ValidationMessageFor(model => model.Comentario, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <br />
+                <div class="form-group row justify-content-center">
+                    <div class="col-md-12 text-center">
+                        <input type="submit" value="Guardar cambios" class="btn btn-primary btn-block custom-btn" />
+                        <a href="@Url.Action("ComprasUsuario", "EncabezadoFactura", new { idUsuario = Model.IdUsuario })" class="btn btn-danger btn-block">Cancelar</a>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<style>
+    body {
+        background-color: #93C47D; /* Fondo verde suave */
+    }
+
+    .product-info {
+        text-align: center;
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #ccc; /* Borde sutil */
+        border-radius: 10px; /* Bordes redondeados */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+        background-color: #f9f9f9; /* Fondo claro */
+    }
+
+    .product-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px; /* Bordes redondeados en la imagen */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra más suave */
+        margin-bottom: 15px;
+        transition: transform 0.3s ease; /* Transición para animación */
+    }
+
+        .product-image:hover {
+            transform: scale(1.05); /* Efecto zoom al pasar el cursor */
+        }
+
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        gap: 0.5em; /* Espacio entre estrellas */
+    }
+
+        .star-rating input[type="radio"] {
+            display: none; /* Oculta los radio buttons */
+        }
+
+        .star-rating label {
+            font-size: 1.5em; /* Tamaño más pequeño para ser más discreto */
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+            .star-rating label:before {
+                content: "★"; /* Icono de estrella */
+                display: inline-block;
+            }
+
+            .star-rating input[type="radio"]:checked ~ label:before,
+            .star-rating label:hover:before,
+            .star-rating label:hover ~ label:before {
+                color: #ffcc00; /* Color de estrellas seleccionadas y al pasar el cursor */
+            }
+
+    .custom-hr {
+        border: none;
+        border-top: 3px solid #085394;
+        width: 80%;
+        margin: 20px auto;
+    }
+</style>

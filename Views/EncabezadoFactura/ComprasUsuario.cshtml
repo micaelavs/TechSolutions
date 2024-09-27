@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TechSolutions.Models.EncabezadoFactura>
+﻿@model TechSolutions.Models.MisComprasViewModel
 
 @{
     ViewBag.Title = "Mis Compras";
@@ -13,7 +13,8 @@
             @TempData["SuccessMessage"]
         </div>
     }
-    @foreach (var factura in Model)
+
+    @foreach (var factura in Model.Facturas) // Itera sobre las facturas
     {
         <div class="details-container">
             <h4>Factura @factura.TipoFactura N° @factura.Numero</h4>
@@ -43,6 +44,10 @@
                 <tbody>
                     @foreach (var detalle in factura.DetallesFacturas)
                     {
+                        // Verifica si el producto está calificado por el usuario
+                        var calificacion = Model.CalificacionesUsuario
+                            .FirstOrDefault(c => c.IdProducto == detalle.Producto.Id);
+
                         <tr>
                             <td>@detalle.Producto.Nombre</td>
                             <td>@detalle.Cantidad</td>
@@ -52,8 +57,16 @@
                                 <!-- Botón Devolver -->
                                 <a href="@Url.Action("Devolver", "Producto", new { id = detalle.Producto.Id })" class="btn btn-danger">Devolver</a>
 
-                                <!-- Botón Calificar -->
-                                <a href="@Url.Action("Calificar", "Producto", new { id = detalle.Producto.Id })" class="btn btn-primary">Calificar</a>
+                                @if (calificacion != null)
+                                {
+                                    <!-- Botón Modificar Calificación -->
+                                    <a href="@Url.Action("ModificarCalificacion", "Producto", new { id = calificacion.Id })" class="btn btn-warning">Editar Calificación</a>
+                                }
+                                else
+                                {
+                                    <!-- Botón Calificar -->
+                                    <a href="@Url.Action("Calificar", "Producto", new { id = detalle.Producto.Id, idUsuario = factura.IdUsuario })" class="btn btn-primary">Calificar</a>
+                                }
                             </td>
                         </tr>
                     }
@@ -65,6 +78,7 @@
         <br />
     }
 </div>
+
 <script>
     $(document).ready(function () {
         var $successMessage = $('#successMessage');
@@ -75,7 +89,6 @@
             }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
         }
     });
-    
 </script>
 
 <style>

@@ -240,7 +240,7 @@ namespace TechSolutions.Controllers
 
         //get para mostrar la pantalla
         // GET: Producto/Calificar/5
-        public ActionResult Calificar(int id)
+        public ActionResult Calificar(int id,int idUsuario)
         {
             var producto = _productoRepository.GetById(id);
             if (producto == null)
@@ -251,7 +251,8 @@ namespace TechSolutions.Controllers
             var calificacion = new CalificacionProducto
             {
                 IdProducto = id,
-                Producto = producto
+                Producto = producto,
+                IdUsuario = idUsuario
             };
 
             return View(calificacion);
@@ -260,21 +261,66 @@ namespace TechSolutions.Controllers
         // POST: Producto/Calificar/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Calificar([Bind(Include = "IdProducto,Puntaje,Comentario")] CalificacionProducto calificacion)
+        public ActionResult Calificar([Bind(Include = "IdProducto,IdUsuario,Puntaje,Comentario")] CalificacionProducto calificacion)
         {
             if (ModelState.IsValid)
             {
                 _calificacionProductoRepository.Insert(calificacion);
                 TempData["SuccessMessage"] = "Calificación cargada correctamente.";
-                var idUsuario = Session["UserId"];
+                //var idUsuario = Session["UserId"];
                 //redirige a la vista de compras de es usuario...porque califica desdeahi
-                return RedirectToAction("ComprasUsuario", "EncabezadoFactura", new { idUsuario = idUsuario });
+                return RedirectToAction("ComprasUsuario", "EncabezadoFactura", new { idUsuario = calificacion.IdUsuario });
             }
 
             var producto = _productoRepository.GetById(calificacion.IdProducto);
             calificacion.Producto = producto;
             return View(calificacion);
         }
+
+        // GET: Producto/ModificarCalificacion/5
+        //el id es del registro de calificacion
+        public ActionResult ModificarCalificacion(int id)
+        {
+            var calificacion = _calificacionProductoRepository.GetById(id);
+
+            if (calificacion == null)
+            {
+                return HttpNotFound();
+            }
+
+            var producto = _productoRepository.GetById(calificacion.IdProducto);
+            if (producto == null)
+            {
+                return HttpNotFound();
+            }
+
+            //Asignamos el producto a la calificación para mostrar información del producto en la vista.
+            calificacion.Producto = producto;
+
+            return View(calificacion);
+        }
+
+        // POST: Producto/ModificarCalificacion/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ModificarCalificacion([Bind(Include = "Id,IdProducto,IdUsuario,Puntaje,Comentario")] CalificacionProducto calificacion)
+        {
+            if (ModelState.IsValid)
+            {
+                _calificacionProductoRepository.Update(calificacion);  // Actualizamos la calificación existente.
+                TempData["SuccessMessage"] = "Calificación modificada correctamente.";
+
+                //Redirige nuevamente a la vista de compras del usuario.
+                return RedirectToAction("ComprasUsuario", "EncabezadoFactura", new { idUsuario = calificacion.IdUsuario });
+            }
+
+            //Si hay errores, volvemos a cargar el producto para mostrar la vista con datos completos.
+            var producto = _productoRepository.GetById(calificacion.IdProducto);
+            calificacion.Producto = producto;
+
+            return View(calificacion);
+        }
+
         //get
         public ActionResult VerCalificaciones(int id)
         {

@@ -23,6 +23,12 @@ namespace TechSolutions.Models
         [Column(Order = 2)]
         [Required]
         public int IdProducto { get; set; }
+        public Usuario Usuario { get; set; }
+
+        [ForeignKey("Usuario")]
+        [Column(Order = 3)]
+        [Required]
+        public int IdUsuario { get; set; }
         [Required]
         public Puntaje Puntaje { get; set; }
         public string Comentario { get; set; } = null;
