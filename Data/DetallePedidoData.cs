@@ -58,5 +58,16 @@ namespace TechSolutions.Data
             db.Entry(entity).State = EntityState.Modified;
             db.SaveChanges();
         }
+
+        public IEnumerable<DetallePedido> GetDetallesByPedidoId(int idPedido)
+        {
+            using (var db = new ApiDbContext())
+            {
+                return db.DetallesPedidos
+                    .Include(d => d.Producto) 
+                    .Where(d => d.IdPedido == idPedido)
+                    .ToList();
+            }
+        }
     }
 }

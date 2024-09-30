@@ -267,10 +267,15 @@
     <Compile Include="Migrations\202409270009030_UsuarioCalificacion.Designer.cs">
       <DependentUpon>202409270009030_UsuarioCalificacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202409300142426_CambioDescipcNULL.cs" />
+    <Compile Include="Migrations\202409300142426_CambioDescipcNULL.Designer.cs">
+      <DependentUpon>202409300142426_CambioDescipcNULL.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CalificacionProducto.cs" />
     <Compile Include="Models\DetalleDevolucion.cs" />
     <Compile Include="Models\DetallePedido.cs" />
+    <Compile Include="Models\DevolucionViewModel.cs" />
     <Compile Include="Models\EncabezadoFactura.cs" />
     <Compile Include="Models\DetalleFactura.cs" />
     <Compile Include="Models\HistorialPedido.cs" />
@@ -415,6 +420,7 @@
     <Content Include="Views\Usuario\Reactivar.cshtml" />
     <Content Include="Views\Producto\Delete.cshtml" />
     <Content Include="Views\Producto\ModificarCalificacion.cshtml" />
+    <Content Include="Views\EncabezadoFactura\SinCompras.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -441,6 +447,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202409270009030_UsuarioCalificacion.resx">
       <DependentUpon>202409270009030_UsuarioCalificacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202409300142426_CambioDescipcNULL.resx">
+      <DependentUpon>202409300142426_CambioDescipcNULL.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

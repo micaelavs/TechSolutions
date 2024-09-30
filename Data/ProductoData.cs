@@ -44,7 +44,7 @@ namespace TechSolutions.Data
                      .Where(p => ids.Contains(p.Id) && p.Activo)
                      .ToList();
         }
-
+        
         public void Insert(Producto entity)
         {
             var db = new ApiDbContext();

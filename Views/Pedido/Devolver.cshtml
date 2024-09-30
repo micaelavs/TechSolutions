@@ -1,96 +1,123 @@
-﻿@model TechSolutions.Models.DetallePedido
+﻿@using Newtonsoft.Json
+@model TechSolutions.Models.DevolucionViewModel
 
 @{
-    ViewBag.Title = "Devolución del Producto";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Asegúrate de que el layout esté correctamente configurado
+    ViewBag.Title = "Solicitud de Devolución de Productos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="login-container">
+            <h2 class="text-center">Solicitud de Devolución de Productos</h2>
+            <hr class="custom-hr" />
+            <h5 class="text-center">Número de Pedido: <strong>@Model.NumeroPedido</strong></h5>
+
+            <form method="post" action="@Url.Action("ConfirmarDevolucion", "Pedido")">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="NumeroPedido" value="@Model.NumeroPedido" />
+                <input type="hidden" name="IdFactura" value="@Model.IdFactura" />
+                <input type="hidden" name="IdUsuario" value="@Model.IdUsuario" />
+
+                <h5>Productos a devolver:</h5>
+                <div id="productosContainer">
+                    @foreach (var producto in Model.ProductosADevolver)
+                    {
+                        <div class="form-group text-center mb-4">
+                            <label class="font-weight-bold">@producto.Nombre</label>
+                            <br />
+                            <label>Motivo:</label>
+                            <select class="form-control motivo d-inline-block" name="Motivos[@producto.Id]" required style="width: auto;">
+                                <option value="">Seleccione un motivo</option>
+                                @foreach (var motivo in ViewBag.Motivos)
+                                {
+                                    <option value="@motivo.Value">@motivo.Text</option>
+                                }
+                            </select>
+                            <br />
+                            <div class="descripcionContainer" id="descripcionContainer-@producto.Id" style="display: none; margin-top: 10px;">
+                                <label>Descripción:</label>
+                                <textarea name="Descripciones[@producto.Id]" class="form-control" style="width: 100%; height: 100px; resize: none;" placeholder="Escriba aquí su descripción..."></textarea>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <input type="hidden" id="Productos" name="Productos" />
+                <input type="hidden" id="Motivos" name="Motivos" />
+                <input type="hidden" id="Descripciones" name="Descripciones" />
+
+                <div class="text-center mt-4">
+                    <button type="button" class="btn btn-secondary" onclick="window.history.back();">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Serializar productos
+            var productos = @Html.Raw(JsonConvert.SerializeObject(Model.ProductosADevolver));
+            $('#Productos').val(JSON.stringify(productos));
+
+            // Inicializar motivos y descripciones
+            var motivos = {};
+            var descripciones = {};
+
+            // Manejar cambios en los motivos
+            $('.motivo').change(function () {
+                var productoId = $(this).attr('name').split('[')[1].split(']')[0];
+                var descripcionContainer = $('#descripcionContainer-' + productoId);
+
+                // Guardar el motivo seleccionado
+                motivos[productoId] = $(this).val();
+                $('#Motivos').val(JSON.stringify(motivos));
+
+                if ($(this).val() === '4') { // Si el motivo es "Otros"
+                    descripcionContainer.show();
+                    descripcionContainer.find('textarea').prop('required', true);
+                } else {
+                    descripcionContainer.hide();
+                    descripcionContainer.find('textarea').prop('required', false);
+                }
+            });
+
+            // Manejar cambios en las descripciones
+            $('textarea').on('input', function () {
+                var productoId = $(this).attr('name').split('[')[1].split(']')[0];
+                descripciones[productoId] = $(this).val();
+                $('#Descripciones').val(JSON.stringify(descripciones));
+            });
+        });
+    </script>
 }
 
 <style>
     body {
-        background-color: #93C47D; /* Mismo fondo que la página de detalles del producto */
+        background-color: #93C47D;
     }
 
-    .return-container {
+    .login-container {
         background-color: #f7f7f7;
         padding: 20px;
         border: 1px solid #ddd;
         border-radius: 5px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-top: 20px;
-    }
-
-    .product-info {
         text-align: center;
-    }
-
-    .form-horizontal {
-        margin-top: 20px;
+        margin: 0 auto;
     }
 
     .custom-hr {
-        border-top: 2px solid #ddd;
-        margin-bottom: 20px;
+        border: none;
+        border-top: 3px solid #085394;
+        width: 100%;
+        margin: 20px 0;
     }
 
-    .btn-success, .btn-primary {
-        width: 100%;
+    .form-control {
+        width: auto; /* Ajusta el ancho del select */
     }
 </style>
-
-<<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="return-container">
-            <h2>Devolución del Producto</h2>
-            <hr class="custom-hr" />
-
-            <div class="product-info">
-                <h3>@*@Model.Producto.Nombre*@ Soporte monitor</h3> <!-- Nombre del producto -->
-                <p>Todos los campos son obligatorios (*)</p>
-            </div>
-
-            @using (Html.BeginForm("DevolverProducto", "Pedido", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
-                @Html.HiddenFor(model => model.Id) <!-- ID del detalle del pedido -->
-
-                <div class="form-horizontal">
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                    <div class="form-group row">
-                        <label class="control-label col-md-4">Indique el motivo de su devolución</label>
-                    </div>
-                    <div class="form-group row">
-                        <label class="control-label col-md-4">Motivo (*)</label>
-                        <!--<div class="col-md-6">
-                            @*@Html.DropDownListFor(
-                                model => model.Motivo, // Asegúrate de que `Motivo` esté en el modelo `DetallePedido`
-                                (SelectList)ViewBag.MotivoList,
-                                "Seleccione un motivo",
-                                new { @class = "form-control", required = "required" }
-                            )
-                            @Html.ValidationMessageFor(model => model.Motivo, "", new { @class = "text-danger" })*@
-                        </div>-->
-                    </div>
-                    <div class="form-group row">
-                        <label class="control-label col-md-4">Descripción (*)</label>
-                        <div class="col-md-6">
-                            @Html.TextArea("Descripcion", null, new { @class = "form-control", placeholder = "Indique el motivo de su devolución...", rows = 4, required = "required" })
-                        </div>
-                    </div>
-                    <br />
-                    <div class="form-group row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-3 d-flex justify-content-center">
-                            <!-- Centrar los botones -->
-                            <button type="submit" class="btn btn-success me-2">Confirmar</button> <!-- Margen derecho para separación -->
-
-                        </div>
-                        <div class="col-md-3 d-flex justify-content-center">
-                            <a href="@(Url.Action("Index", "Pedido"))" class="btn btn-primary">Cancelar</a> <!-- Botón de cancelar -->
-                        </div>
-                        </div>
-                    </div>
-            }
-        </div>
-    </div>
-</div>

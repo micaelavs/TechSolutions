@@ -1,4 +1,5 @@
-﻿@model TechSolutions.Models.MisComprasViewModel
+﻿@using TechSolutions.SharedKernel
+@model TechSolutions.Models.MisComprasViewModel
 
 @{
     ViewBag.Title = "Mis Compras";
@@ -7,6 +8,12 @@
 
 <div class="container">
     <h2>Mis Compras</h2>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div id="errorMessage" class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
     @if (TempData["SuccessMessage"] != null)
     {
         <div id="successMessage" class="alert alert-success">
@@ -14,79 +21,104 @@
         </div>
     }
 
-    @foreach (var factura in Model.Facturas) // Itera sobre las facturas
-    {
-        <div class="details-container">
-            <h4>Factura @factura.TipoFactura N° @factura.Numero</h4>
-            <p><strong>Fecha de emisión:</strong> @factura.Fecha.ToString("dd/MM/yyyy")</p>
-            <p><strong>Monto total de la factura:</strong> $@factura.Monto</p>
+    <form id="devolucionForm" method="post" action="@Url.Action("Devolver", "Pedido")">
+        @foreach (var factura in Model.Facturas) // Itera sobre las facturas
+        {
+            <div class="details-container">
+                <h4>Factura @factura.TipoFactura N° @factura.Numero</h4>
+                <p><strong>Fecha de emisión:</strong> @factura.Fecha.ToString("dd/MM/yyyy")</p>
+                <p><strong>Monto total de la factura:</strong> $@factura.Monto</p>
 
-            <!-- Información del Pedido -->
-            <hr />
-            <h5>Información del Pedido:</h5>
-            <p><strong>Número de Pedido:</strong> @factura.Pedido.Numero</p>
-            <p><strong>Estado del Pedido:</strong> @factura.Pedido.Estado</p>
-            <p><strong>Fecha de la Operación del Pedido:</strong> @factura.Pedido.FechaOperacion.ToString("dd/MM/yyyy")</p>
-            <p><strong>Monto Total del Pedido:</strong> $@factura.Pedido.MontoTotal</p>
-            <hr />
+                <!-- Información del Pedido -->
+                <hr />
+                <h5>Información del Pedido:</h5>
+                <p><strong>Número de Pedido:</strong> @factura.Pedido.Numero</p>
+                <p><strong>Estado del Pedido:</strong> @factura.Pedido.Estado</p>
+                <p><strong>Fecha de la Operación del Pedido:</strong> @factura.Pedido.FechaOperacion.ToString("dd/MM/yyyy")</p>
+                <p><strong>Monto Total del Pedido:</strong> $@factura.Pedido.MontoTotal</p>
+                <hr />
 
-            <h5>Detalles de la compra:</h5>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unitario</th>
-                        <th>Subtotal</th>
-                        <th>Acciones</th> <!-- Nueva columna para botones -->
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var detalle in factura.DetallesFacturas)
-                    {
-                        // Verifica si el producto está calificado por el usuario
-                        var calificacion = Model.CalificacionesUsuario
-                            .FirstOrDefault(c => c.IdProducto == detalle.Producto.Id);
+                <!-- Campo oculto para el número de pedido -->
+                <input type="hidden" name="idPedido" value="@factura.Pedido.Id" />
+                <input type="hidden" name="idFactura" value="@factura.Id" />
+                <input type="hidden" name="idUsuario" value="@factura.IdUsuario" />
 
-                        <tr>
-                            <td>@detalle.Producto.Nombre</td>
-                            <td>@detalle.Cantidad</td>
-                            <td>$@detalle.PrecioUnitario</td>
-                            <td>$@(detalle.Cantidad * detalle.PrecioUnitario)</td>
-                            <td>
-                                <!-- Botón Devolver -->
-                                <a href="@Url.Action("Devolver", "Producto", new { id = detalle.Producto.Id })" class="btn btn-danger">Devolver</a>
+                <h5>Detalles de la compra:</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Seleccionar</th>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unitario</th>
+                                <th>Subtotal</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detalle in factura.DetallesFacturas)
+                            {
+                                // Verifica si el producto está calificado por el usuario
+                                var calificacion = Model.CalificacionesUsuario
+                                    .FirstOrDefault(c => c.IdProducto == detalle.Producto.Id);
 
-                                @if (calificacion != null)
-                                {
-                                    <!-- Botón Modificar Calificación -->
-                                    <a href="@Url.Action("ModificarCalificacion", "Producto", new { id = calificacion.Id })" class="btn btn-warning">Editar Calificación</a>
-                                }
-                                else
-                                {
-                                    <!-- Botón Calificar -->
-                                    <a href="@Url.Action("Calificar", "Producto", new { id = detalle.Producto.Id, idUsuario = factura.IdUsuario })" class="btn btn-primary">Calificar</a>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="productos[]" value="@detalle.Producto.Id" />
+                                    </td>
+                                    <td>@detalle.Producto.Nombre</td>
+                                    <td>@detalle.Cantidad</td>
+                                    <td>$@detalle.PrecioUnitario</td>
+                                    <td>$@(detalle.Cantidad * detalle.PrecioUnitario)</td>
+                                    <td>
+                                        @if (calificacion != null)
+                                        {
+                                            <!-- Botón Modificar Calificación -->
+                                            <a href="@Url.Action("ModificarCalificacion", "Producto", new { id = calificacion.Id })" class="btn btn-warning">Editar Calificación</a>
+                                        }
+                                        else
+                                        {
+                                            <!-- Botón Calificar -->
+                                            <a href="@Url.Action("Calificar", "Producto", new { id = detalle.Producto.Id, idUsuario = factura.IdUsuario })" class="btn btn-primary">Calificar</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
 
-            <p><strong>Total de la Factura:</strong> $@factura.Monto</p>
-        </div>
-        <br />
-    }
+                <p><strong>Total de la Factura:</strong> $@factura.Monto</p>
+
+                <!-- Mostrar el botón solo si el estado del pedido es "Entregado" -->
+                @if (factura.Pedido.Estado == EstadoPedido.Entregado)
+                {
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-danger">Devolver Productos</button>
+                    </div>
+                }
+                <br />
+            </div>
+            <br />
+        }
+    </form>
 </div>
 
 <script>
     $(document).ready(function () {
+        var $errorMessage = $('#errorMessage');
         var $successMessage = $('#successMessage');
 
         if ($successMessage.length) {
             setTimeout(function () {
                 $successMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
             }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
+        }
+        if ($errorMessage.length) {
+            setTimeout(function () {
+                $errorMessage.fadeOut(500);
+            }, 3000);
         }
     });
 </script>
@@ -102,6 +134,10 @@
         border: 1px solid #ddd;
         border-radius: 5px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-responsive {
+        overflow-x: auto;
     }
 
     table {

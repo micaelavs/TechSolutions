@@ -67,5 +67,16 @@ namespace TechSolutions.Data
             db.Entry(entity).State = EntityState.Modified;
             db.SaveChanges();
         }
+
+        public int GetIdByNumeroPedido(int numeroPedido)
+        {
+            using (var db = new ApiDbContext())
+            {
+                var pedido = db.Pedidos
+                    .FirstOrDefault(p => p.Numero == numeroPedido);
+
+                return pedido.Id;
+            }
+        }
     }
 }

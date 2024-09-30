@@ -202,12 +202,17 @@ namespace TechSolutions.Controllers
 
             if (!facturas.Any())
             {
-                return HttpNotFound("No se encontraron facturas para este usuario.");
+                return RedirectToAction("SinCompras");
             }
 
             return View(model);
         }
-   
+
+        public ActionResult SinCompras()
+        {
+            return View();
+        }
+
 
     }
 }

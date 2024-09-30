@@ -25,6 +25,8 @@ namespace TechSolutions.Controllers
         private readonly EncabezadoFacturaData _encabezadoFacturaRepository;
         private readonly DetalleFacturaData _detallefacturaRepository;
         private readonly HistorialPedidoData _historialPedidoRepository;
+        private readonly SolicitudDevolucionData _solicitudDevolucionRepository;
+        private readonly DetalleDevolucionData _detalleDevolucionRepository;
         public PedidoController()
         {
 
@@ -34,6 +36,8 @@ namespace TechSolutions.Controllers
             _encabezadoFacturaRepository = new EncabezadoFacturaData();
             _detallefacturaRepository = new DetalleFacturaData();
             _historialPedidoRepository = new HistorialPedidoData();
+            _solicitudDevolucionRepository = new SolicitudDevolucionData();
+            _detalleDevolucionRepository = new DetalleDevolucionData();
         }
        
         public ActionResult Details(int id)
@@ -597,35 +601,163 @@ namespace TechSolutions.Controllers
            
         }
 
-
-
-        public ActionResult Devolver()//id
+        //pantalla devolucion de productos
+        [HttpPost]
+        public ActionResult Devolver(List<int> productos, int idPedido, int idFactura, int idUsuario)
         {
-            // Recuperar el detalle del pedido desde la base de datos
-            //var detallePedido = _detallepedidoRepository.GetById(id);
+            var motivos = Enum.GetValues(typeof(Motivo)).Cast<Motivo>()
+                .Select(m => new SelectListItem
+                {
+                    Value = ((int)m).ToString(),
+                    Text = m.ToString().Replace("_", " ")
+                })
+                .ToList();
 
-            // Preparar la lista de motivos
-            //ViewBag.MotivoList = new SelectList(Enum.GetValues(typeof(Motivo)), "Value", "DisplayName");
-            return View(/*detallePedido*/);
+            ViewBag.Motivos = motivos;
+
+            if (productos == null || !productos.Any())
+            {
+                TempData["ErrorMessage"] = "No se seleccionaron productos para devolver.";
+                return RedirectToAction("ComprasUsuario", "EncabezadoFactura", new { idUsuario });
+            }
+
+            var detalles = _detallepedidoRepository.GetDetallesByPedidoId(idPedido);
+            var pedido = _pedidoRepository.GetById(idPedido);
+
+            if (pedido == null)
+            {
+                TempData["ErrorMessage"] = "El pedido no se encontró.";
+                return RedirectToAction("ComprasUsuario", "EncabezadoFactura", new { idUsuario });
+            }
+
+            var productosADevolver = detalles
+                .Where(d => productos.Contains(d.IdProducto))
+                .Select(d => d.Producto)
+                .ToList();
+
+            var model = new DevolucionViewModel
+            {
+                ProductosADevolver = productosADevolver,
+                NumeroPedido = pedido.Numero,
+                IdFactura = idFactura,
+                IdUsuario = idUsuario,
+            };
+
+            return View("Devolver", model);
         }
+
+
 
         [HttpPost]
-        public ActionResult DevolverProducto(DetallePedido detallePedido, string descripcion, Motivo motivo)
+        public ActionResult ConfirmarDevolucion(DevolucionViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                // Lógica para procesar la devolución del producto
-                var detalle = _detallepedidoRepository.GetById(detallePedido.Id);
-                if (detalle != null)
-                {
-                    // Actualiza el detalle del pedido según el motivo de la devolución
-                    // Añade lógica específica para manejar devoluciones aquí
+            var db = new ApiDbContext();
+            // Deserializar los datos serializados
+            var productosJson = Request.Form["Productos"];
+            var motivosJson = Request.Form["Motivos"];
+            var descripcionesJson = Request.Form["Descripciones"];
 
-                    //ver a donde redirige despues
-                    return RedirectToAction("Index"); // Redirige a la página que consideres apropiada
+            var productosADevolver = JsonConvert.DeserializeObject<List<Producto>>(productosJson);
+            var motivos = JsonConvert.DeserializeObject<Dictionary<int, int>>(motivosJson);
+            var descripciones = JsonConvert.DeserializeObject<Dictionary<int, string>>(descripcionesJson);
+
+            // Crear una nueva solicitud de devolución
+            SolicitudDevolucion solicitudDevolucion = new SolicitudDevolucion
+            {
+                NumeroDevolucion = GenerarNumeroDevolucion(),
+                IdPedido = _pedidoRepository.GetIdByNumeroPedido(model.NumeroPedido),
+                IdFactura = model.IdFactura,
+                IdIUsuario = model.IdUsuario,
+                FechaOperacion = DateTime.Now,
+                EstadoSolicitud = EstadoSolicitud.Abierta,
+                Monto = 0 // Inicializar en 0 y actualizar después
+            };
+
+            var detallesPedido = _detallepedidoRepository.GetDetallesByPedidoId(solicitudDevolucion.IdPedido);
+
+            // Calcular el monto total
+            float montoTotal = 0;
+
+            foreach (var producto in productosADevolver)
+            {
+                var detallePedido = detallesPedido.FirstOrDefault(d => d.IdProducto == producto.Id);
+                if (detallePedido != null)
+                {
+                    montoTotal += detallePedido.PrecioUnitario * detallePedido.Cantidad;
                 }
             }
-            return View(detallePedido); // Devuelve a la vista en caso de error
+
+            // Asignar el monto total a la solicitud de devolución
+            solicitudDevolucion.Monto = montoTotal;
+
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    // Insertar la solicitud de devolución
+                    int solicitudId = _solicitudDevolucionRepository.InsertReturnId(solicitudDevolucion);
+                    //traigo el pedido, para buscar dentro del pedido los detallespedido que coincidan cn esos prod
+                    var pedido = _pedidoRepository.GetById(solicitudDevolucion.IdPedido);
+
+                    // Insertar el detalle de devolución
+                    foreach (var producto in productosADevolver)
+                    {
+                        if (motivos.TryGetValue(producto.Id, out var motivoId))
+                        {
+                            var descripcion = descripciones.TryGetValue(producto.Id, out var desc) ? desc : null;
+                            var detallePedido = pedido.DetallesPedidos.FirstOrDefault(d => d.IdProducto == producto.Id);
+
+                            if (detallePedido != null)
+                            {
+                                var detalleDevolucion = new DetalleDevolucion
+                                {   IdSolicitudDevolucion = solicitudId,
+                                    IdProducto = producto.Id,
+                                    Cantidad = detallePedido.Cantidad,
+                                    PrecioUnitario = detallePedido.PrecioUnitario,
+                                    Motivo = (Motivo)motivoId,
+                                    Descripcion = descripcion
+                                };
+
+                                _detalleDevolucionRepository.Insert(detalleDevolucion);
+                            }
+                        }
+                    }
+
+                    // Actualizar el estado del pedido
+                    pedido.Estado = EstadoPedido.En_proceso_devolucion;
+                    _pedidoRepository.Update(pedido); // Asegúrate de tener un método para actualizar el pedido
+
+                    // Loguear en historial de pedido
+                    var historialPedido = new HistorialPedido
+                    {
+                        IdPedido = pedido.Id,
+                        EstadoPedido = pedido.Estado,
+                        FechaOperacion = DateTime.Now
+                    };
+
+                    _historialPedidoRepository.Insert(historialPedido);
+
+                    // Confirmar la transacción
+                    transaction.Commit();
+
+                    TempData["SuccessMessage"] = "Devolución procesada con éxito.";
+                    return RedirectToAction("MisCompras");
+                }
+                catch (Exception ex)
+                {
+                    // Rollback si ocurre un error
+                    transaction.Rollback();
+                    TempData["ErrorMessage"] = "Error al procesar la devolución: " + ex.Message;
+                    return RedirectToAction("MisCompras");
+                }
+            }
         }
+
+        private int GenerarNumeroDevolucion()
+        {
+            Random random = new Random();
+            return random.Next(100000, 999999); // Genera un número entre 100000 y 999999
+        }
+
     }   
 }

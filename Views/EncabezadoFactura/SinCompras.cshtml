@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "No Hay Compras";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Include Font Awesome if not already included -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+<style>
+    body {
+        background-color: #93C47D; /* Fondo verde suave */
+    }
+
+    .container {
+        margin-top: 30px;
+    }
+
+    .message-container {
+        background-color: #f7f7f7; /* Fondo claro para el mensaje */
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center; /* Centrar texto */
+    }
+
+    .btn {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <h2>No hay compras para mostrar</h2>
+    <div class="message-container">
+        <p>No has realizado ninguna compra hasta el momento.</p>
+        <button type="button" class="btn btn-primary" onclick="window.location.href='@Url.Action("Listado", "Producto")'">Volver a la página principal</button>
+    </div>
+</div>

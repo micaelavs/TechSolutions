@@ -34,8 +34,8 @@ namespace TechSolutions.Models
         public float PrecioUnitario { get; set; }
         [Required]
         public Motivo Motivo { get; set; }
-        [Required]
-        public string Descripcion   { get; set; }
+
+        public string Descripcion { get; set; } = null;
 
 
 
