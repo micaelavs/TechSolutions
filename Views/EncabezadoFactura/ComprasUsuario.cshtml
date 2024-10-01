@@ -21,24 +21,24 @@
         </div>
     }
 
-    <form id="devolucionForm" method="post" action="@Url.Action("Devolver", "Pedido")">
-        @foreach (var factura in Model.Facturas) // Itera sobre las facturas
-        {
-            <div class="details-container">
-                <h4>Factura @factura.TipoFactura N° @factura.Numero</h4>
-                <p><strong>Fecha de emisión:</strong> @factura.Fecha.ToString("dd/MM/yyyy")</p>
-                <p><strong>Monto total de la factura:</strong> $@factura.Monto</p>
+    @foreach (var factura in Model.Facturas) // Itera sobre las facturas
+    {
+        <div class="details-container">
+            <h4>Factura @factura.TipoFactura N° @factura.Numero</h4>
+            <p><strong>Fecha de emisión:</strong> @factura.Fecha.ToString("dd/MM/yyyy")</p>
+            <p><strong>Monto total de la factura:</strong> $@factura.Monto</p>
 
-                <!-- Información del Pedido -->
-                <hr />
-                <h5>Información del Pedido:</h5>
-                <p><strong>Número de Pedido:</strong> @factura.Pedido.Numero</p>
-                <p><strong>Estado del Pedido:</strong> @factura.Pedido.Estado</p>
-                <p><strong>Fecha de la Operación del Pedido:</strong> @factura.Pedido.FechaOperacion.ToString("dd/MM/yyyy")</p>
-                <p><strong>Monto Total del Pedido:</strong> $@factura.Pedido.MontoTotal</p>
-                <hr />
+            <!-- Información del Pedido -->
+            <hr />
+            <h5>Información del Pedido:</h5>
+            <p><strong>Número de Pedido:</strong> @factura.Pedido.Numero</p>
+            <p><strong>Estado del Pedido:</strong> @factura.Pedido.Estado</p>
+            <p><strong>Fecha de la Operación del Pedido:</strong> @factura.Pedido.FechaOperacion.ToString("dd/MM/yyyy")</p>
+            <p><strong>Monto Total del Pedido:</strong> $@factura.Pedido.MontoTotal</p>
+            <hr />
 
-                <!-- Campo oculto para el número de pedido -->
+            <!-- Cada factura tiene su propio formulario -->
+            <form method="post" action="@Url.Action("Devolver", "Pedido")">
                 <input type="hidden" name="idPedido" value="@factura.Pedido.Id" />
                 <input type="hidden" name="idFactura" value="@factura.Id" />
                 <input type="hidden" name="idUsuario" value="@factura.IdUsuario" />
@@ -99,10 +99,10 @@
                     </div>
                 }
                 <br />
-            </div>
-            <br />
-        }
-    </form>
+            </form>
+        </div>
+        <br />
+    }
 </div>
 
 <script>

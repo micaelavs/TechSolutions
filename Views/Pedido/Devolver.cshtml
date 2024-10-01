@@ -58,40 +58,40 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            // Serializar productos
-            var productos = @Html.Raw(JsonConvert.SerializeObject(Model.ProductosADevolver));
-            $('#Productos').val(JSON.stringify(productos));
+    $(document).ready(function () {
+        // Serializar productos
+        var productos = @Html.Raw(JsonConvert.SerializeObject(Model.ProductosADevolver));
+        $('#Productos').val(JSON.stringify(productos));
 
-            // Inicializar motivos y descripciones
-            var motivos = {};
-            var descripciones = {};
+        // Inicializar motivos y descripciones
+        var motivos = {};
+        var descripciones = {};
 
-            // Manejar cambios en los motivos
-            $('.motivo').change(function () {
-                var productoId = $(this).attr('name').split('[')[1].split(']')[0];
-                var descripcionContainer = $('#descripcionContainer-' + productoId);
+        // Manejar cambios en los motivos
+        $('.motivo').change(function () {
+            var productoId = $(this).attr('name').split('[')[1].split(']')[0];
+            var descripcionContainer = $('#descripcionContainer-' + productoId);
 
-                // Guardar el motivo seleccionado
-                motivos[productoId] = $(this).val();
-                $('#Motivos').val(JSON.stringify(motivos));
+            // Guardar el motivo seleccionado
+            motivos[productoId] = $(this).val();
+            $('#Motivos').val(JSON.stringify(motivos));
 
-                if ($(this).val() === '4') { // Si el motivo es "Otros"
-                    descripcionContainer.show();
-                    descripcionContainer.find('textarea').prop('required', true);
-                } else {
-                    descripcionContainer.hide();
-                    descripcionContainer.find('textarea').prop('required', false);
-                }
-            });
-
-            // Manejar cambios en las descripciones
-            $('textarea').on('input', function () {
-                var productoId = $(this).attr('name').split('[')[1].split(']')[0];
-                descripciones[productoId] = $(this).val();
-                $('#Descripciones').val(JSON.stringify(descripciones));
-            });
+            if ($(this).val() === '4') { // Si el motivo es "Otros"
+                descripcionContainer.show();
+                descripcionContainer.find('textarea').prop('required', true);
+            } else {
+                descripcionContainer.hide();
+                descripcionContainer.find('textarea').prop('required', false);
+            }
         });
+
+        // Manejar cambios en las descripciones
+        $('textarea').on('input', function () {
+            var productoId = $(this).attr('name').split('[')[1].split(']')[0];
+            descripciones[productoId] = $(this).val();
+            $('#Descripciones').val(JSON.stringify(descripciones));
+        });
+    });
     </script>
 }
 
@@ -119,5 +119,19 @@
 
     .form-control {
         width: auto; /* Ajusta el ancho del select */
+    }
+    .btn {
+        width: auto; /* Ajusta el ancho de los botones */
+        font-size: 16px;
+    }
+
+    .descripcionContainer textarea {
+        text-align: center; /* Centra el texto en el campo de descripción */
+    }
+
+    .font-weight-bold {
+        font-weight: bold; /* Destaca el nombre del producto */
+        font-size: 1.2em; /* Aumenta el tamaño del texto */
+        color: #085394; /* Color del texto destacado */
     }
 </style>

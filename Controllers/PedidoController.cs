@@ -646,8 +646,6 @@ namespace TechSolutions.Controllers
             return View("Devolver", model);
         }
 
-
-
         [HttpPost]
         public ActionResult ConfirmarDevolucion(DevolucionViewModel model)
         {
@@ -660,7 +658,11 @@ namespace TechSolutions.Controllers
             var productosADevolver = JsonConvert.DeserializeObject<List<Producto>>(productosJson);
             var motivos = JsonConvert.DeserializeObject<Dictionary<int, int>>(motivosJson);
             var descripciones = JsonConvert.DeserializeObject<Dictionary<int, string>>(descripcionesJson);
-
+            // Verifica que descripciones no sea null
+            if (descripciones == null)
+            {
+                descripciones = new Dictionary<int, string>(); // Inicializa si es null
+            }
             // Crear una nueva solicitud de devolución
             SolicitudDevolucion solicitudDevolucion = new SolicitudDevolucion
             {
@@ -704,6 +706,7 @@ namespace TechSolutions.Controllers
                     {
                         if (motivos.TryGetValue(producto.Id, out var motivoId))
                         {
+
                             var descripcion = descripciones.TryGetValue(producto.Id, out var desc) ? desc : null;
                             var detallePedido = pedido.DetallesPedidos.FirstOrDefault(d => d.IdProducto == producto.Id);
 
@@ -741,14 +744,14 @@ namespace TechSolutions.Controllers
                     transaction.Commit();
 
                     TempData["SuccessMessage"] = "Devolución procesada con éxito.";
-                    return RedirectToAction("MisCompras");
+                    return RedirectToAction("ComprasUsuario", "EncabezadoFactura", new { model.IdUsuario });
                 }
                 catch (Exception ex)
                 {
                     // Rollback si ocurre un error
                     transaction.Rollback();
                     TempData["ErrorMessage"] = "Error al procesar la devolución: " + ex.Message;
-                    return RedirectToAction("MisCompras");
+                    return RedirectToAction("ComprasUsuario", "EncabezadoFactura", new { model.IdUsuario });
                 }
             }
         }
