@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Hierarchy;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,11 @@ namespace TechSolutions.Data
         public DbSet<DetalleDevolucion> DetallesDevoluciones { get; set; }
         public DbSet<CalificacionProducto> CalificacionesProductos { get; set; }
         public DbSet<CategoriaProducto> Categorias { get; set; }
+
+        public DbSet<NotaDeCredito> NotasCreditos { get; set; }
+
+        public DbSet<DetalleNotaCredito> DetallesNotasCreditos { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -70,6 +76,34 @@ namespace TechSolutions.Data
                 .HasRequired(sd => sd.Usuario)
                 .WithMany()
                 .HasForeignKey(sd => sd.IdIUsuario)
+                .WillCascadeOnDelete(false); // Desactiva la eliminación en cascada
+
+            // Configuración de la relación entre NotaDeCredito y SolicitudDevolucion
+            modelBuilder.Entity<NotaDeCredito>()
+                .HasRequired(nc => nc.SolicitudDevolucion)
+                .WithMany()
+                .HasForeignKey(nc => nc.IdSolicitudDevolucion)
+                .WillCascadeOnDelete(false); // Desactiva la eliminación en cascada
+
+            // Configuración de la relación entre NotaDeCredito y EncabezadoFactura
+            modelBuilder.Entity<NotaDeCredito>()
+                .HasRequired(nc => nc.EncabezadoFactura)
+                .WithMany()
+                .HasForeignKey(nc => nc.IdFactura)
+                .WillCascadeOnDelete(false); // Desactiva la eliminación en cascada
+
+            // Configuración de la relación entre DetalleNotaCredito y NotaDeCredito
+            modelBuilder.Entity<DetalleNotaCredito>()
+                .HasRequired(dnc => dnc.NotaDeCredito)
+                .WithMany()
+                .HasForeignKey(dnc => dnc.IdNotaCredito)
+                .WillCascadeOnDelete(false); // Desactiva la eliminación en cascada
+
+            // Configuración de la relación entre DetalleNotaCredito y Producto
+            modelBuilder.Entity<DetalleNotaCredito>()
+                .HasRequired(dnc => dnc.Producto)
+                .WithMany()
+                .HasForeignKey(dnc => dnc.IdProducto)
                 .WillCascadeOnDelete(false); // Desactiva la eliminación en cascada
 
             base.OnModelCreating(modelBuilder);

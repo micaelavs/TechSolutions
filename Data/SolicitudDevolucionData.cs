@@ -23,9 +23,22 @@ namespace TechSolutions.Data
         public SolicitudDevolucion GetById(int id)
         {
             var db = new ApiDbContext();
-            return db.SolicitudesDevoluciones.Find(id);
+            return db.SolicitudesDevoluciones
+           .Include(sd => sd.DetallesDevoluciones) // Incluye los detalles de la devolución
+           .FirstOrDefault(sd => sd.Id == id); // Filtra por ID
 
         }
+
+        public SolicitudDevolucion GetSolicitudByPedidoId(int idPedido)
+        {
+            var db = new ApiDbContext();
+            return db.SolicitudesDevoluciones
+                .Include(sd => sd.DetallesDevoluciones.Select(dd => dd.Producto))
+                .FirstOrDefault(sd => sd.IdPedido == idPedido); 
+        }
+
+
+
 
         public void Insert(SolicitudDevolucion entity)
         {
@@ -47,8 +60,10 @@ namespace TechSolutions.Data
         public IEnumerable<SolicitudDevolucion> List()
         {
             var db = new ApiDbContext();
-            var solicitudesdevolucion = db.SolicitudesDevoluciones.ToList();
-            return solicitudesdevolucion;
+            return db.SolicitudesDevoluciones
+            .Include(p => p.Usuario)
+            .Include(sd => sd.DetallesDevoluciones.Select(dd => dd.Producto)) // Incluir Producto dentro de DetallesDevoluciones
+            .ToList();
 
 
         }

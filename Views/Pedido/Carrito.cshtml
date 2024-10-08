@@ -81,7 +81,7 @@
     var carrito = JSON.parse(localStorage.getItem('carrito')) || [];
     console.log(carrito);
 
-    // Función para cargar los productos en la tabla del carrito
+    //paracargar los productos en la tabla del carrito
     function cargarCarrito() {
         var cartItemsContainer = document.getElementById('cartItems');
         cartItemsContainer.innerHTML = '';
@@ -111,7 +111,7 @@
         actualizarEstadoBotonCheckout();
     }
 
-    // Función para actualizar la cantidad de un producto en el carrito
+    //para actualizar la cantidad de un producto en el carrito
     function actualizarCantidad(index, cambio) {
         var cantidadActual = carrito[index].cantidad;
         var nuevaCantidad = cantidadActual + cambio;
@@ -126,13 +126,11 @@
         cargarCarrito();
     }
 
-    // Función para eliminar un producto del carrito
     function eliminarProducto(index) {
         carrito.splice(index, 1);
         cargarCarrito();
     }
 
-    // Función para volver a la página de productos
     function volverAProductos() {
         window.location.href = '@Url.Action("Listado", "Producto")'; // Cambia a la acción y el controlador que corresponda
     }

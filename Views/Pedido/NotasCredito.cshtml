@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TechSolutions.Models.NotaDeCredito>
+
+<div class="container">
+    <h2>Notas de Crédito Asociadas</h2>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Fecha de Emisión</th>
+                <th>Monto</th>
+                <th>Estado</th>
+                <th>Detalles</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var nota in Model)
+            {
+                <tr>
+                    <td>@nota.Numero</td>
+                    <td>@nota.Fecha_emision.ToString("dd/MM/yyyy")</td>
+                    <td>$@nota.Monto</td>
+                    <td>@nota.EstadoNota</td>
+                    <td>
+                        <ul>
+                            @foreach (var detalle in nota.DetallesNotasCreditos)
+                            {
+                                <li>@detalle.Producto.Nombre: Cantidad @detalle.Cantidad, Precio Unitario $@detalle.PrecioUnitario</li>
+                            }
+                        </ul>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

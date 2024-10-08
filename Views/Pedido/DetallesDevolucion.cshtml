@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "Detalles de la Devolución";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model TechSolutions.Models.SolicitudDevolucion
+<style>
+    body {
+        background-color: #93C47D;
+    }
+
+    .details-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    dt {
+        font-weight: bold;
+    }
+
+    dd {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .table {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <br>
+    <h2>Detalles de la solicitud de Devolución</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="details-container">
+                <h4>Devolución Número: @Html.DisplayFor(Model => Model.NumeroDevolucion)</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>Usuario</dt>
+                    <dd>@Html.DisplayFor(Model => Model.Usuario.Email)</dd>
+
+                    <dt>Fecha de Operación</dt>
+                    <dd>@Html.DisplayFor(Model => Model.FechaOperacion)</dd>
+
+                    <dt>Monto Total</dt>
+                    <dd>$@Html.DisplayFor(Model => Model.Monto)</dd>
+
+                    <dt>Estado de la Solicitud</dt>
+                    <dd>@Html.DisplayFor(Model => Model.EstadoSolicitud)</dd>
+                </dl>
+
+                <h4>Productos a devolver</h4>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detalle in Model.DetallesDevoluciones)
+                        {
+                            <tr>
+                                <td>@detalle.Producto.Nombre</td>
+                                <td>@detalle.Cantidad</td>
+                                <td>$@detalle.PrecioUnitario</td>
+                                <td>$@(detalle.Cantidad * detalle.PrecioUnitario)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="text-center">
+        @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-secondary" })
+        @Html.ActionLink("Listado de Devoluciones", "Index", null, new { @class = "btn btn-primary" })
+    </div>
+</div>

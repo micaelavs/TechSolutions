@@ -76,5 +76,16 @@ namespace TechSolutions.Data
             db.Entry(entity).State = EntityState.Modified;
             db.SaveChanges();
         }
+
+        public EncabezadoFactura GetFacturaPorPedidoId(int pedidoId)
+        {
+            using (var db = new ApiDbContext())
+            {
+                return db.EncabezadosFacturas
+                    .Include(f => f.DetallesFacturas.Select(d => d.Producto)) 
+                    .Include(f => f.Usuario)                                 
+                    .FirstOrDefault(f => f.IdPedido == pedidoId);           
+            }
+        }
     }
 }

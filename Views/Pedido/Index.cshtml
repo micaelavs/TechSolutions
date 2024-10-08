@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<TechSolutions.Models.Pedido>
 
 @{
-    ViewBag.Title = "Adminsitración de Pedidos";
+    ViewBag.Title = "Administración de Pedidos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -22,6 +22,16 @@
     .action-column {
         width: 180px;
     }
+
+    .btn-custom {
+        background-color: #28a745; /* Color personalizado */
+        color: white;
+    }
+
+        .btn-custom:hover {
+            background-color: #218838; /* Color al pasar el ratón */
+            color: white;
+        }
 </style>
 
 <div class="container">
@@ -63,12 +73,31 @@
                                 <td>@Html.DisplayFor(modelItem => item.FechaOperacion)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Estado)</td>
                                 <td>
-                                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-secondary btn-sm btn-action">
+                                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-secondary btn-sm btn-action" title="Cambiar Estado">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm btn-action">
+                                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm btn-action" title="Ver Detalle Pedido">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
+                                    <a href="@Url.Action("Detalle", "EncabezadoFactura", new { id = item.Id })" class="btn btn-warning btn-sm btn-action" title="Ver Factura">
+                                        <i class="fas fa-file-invoice"></i>
+                                    </a>
+                                    @if (item.Estado == TechSolutions.SharedKernel.EstadoPedido.En_proceso_devolucion ||
+                                          item.Estado == TechSolutions.SharedKernel.EstadoPedido.Parcialmente_devuelto ||
+                                          item.Estado == TechSolutions.SharedKernel.EstadoPedido.Devuelto)
+                                    {
+                                        <a href="@Url.Action("DetallesDevolucion", new { id = item.Id })" class="btn btn-info btn-sm btn-action" title="Ver Detalles Devolución">
+                                            <i class="fas fa-reply"></i> <!-- Cambiado a ícono de solicitud de devolución -->
+                                        </a>
+                                    }
+                                    <!-- Nuevo botón para ver notas de crédito -->
+                                    @if (item.Estado == TechSolutions.SharedKernel.EstadoPedido.Parcialmente_devuelto ||
+                                          item.Estado == TechSolutions.SharedKernel.EstadoPedido.Devuelto)
+                                    {
+                                        <a href="@Url.Action("NotasCredito", new { id = item.Id })" class="btn btn-success btn-sm btn-action" title="Ver Notas de Crédito">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </a>
+                                    }
                                 </td>
                             </tr>
                         }
@@ -85,20 +114,23 @@
         </div>
     </div>-->
 </div>
-<script>$(document).ready(function () {
-            var $successMessage = $('#successMessage');
 
-            if ($successMessage.length) {
-                setTimeout(function () {
-                    $successMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
-                }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
-            }
+<script>
+    $(document).ready(function () {
+        var $successMessage = $('#successMessage');
 
-            var $errorMessage = $('#errorMessage');
+        if ($successMessage.length) {
+            setTimeout(function () {
+                $successMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
+            }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
+        }
 
-            if ($errorMessage.length) {
-                setTimeout(function () {
-                    $errorMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
-                }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
-            }
-        });</script>
+        var $errorMessage = $('#errorMessage');
+
+        if ($errorMessage.length) {
+            setTimeout(function () {
+                $errorMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
+            }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
+        }
+    });
+</script>

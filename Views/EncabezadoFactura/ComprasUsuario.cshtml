@@ -65,7 +65,14 @@
 
                                 <tr>
                                     <td>
-                                        <input type="checkbox" name="productos[]" value="@detalle.Producto.Id" />
+                                        @if (factura.Pedido.Estado == EstadoPedido.Entregado) // Mostrar checkbox solo si el estado es "Entregado"
+                                        {
+                                            <input type="checkbox" name="productos[]" value="@detalle.Producto.Id" />
+                                        }
+                                        else
+                                        {
+                                            <span>No se puede devolver</span>
+                                        }
                                     </td>
                                     <td>@detalle.Producto.Nombre</td>
                                     <td>@detalle.Cantidad</td>

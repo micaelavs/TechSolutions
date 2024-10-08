@@ -27,6 +27,9 @@ namespace TechSolutions.Controllers
         private readonly HistorialPedidoData _historialPedidoRepository;
         private readonly SolicitudDevolucionData _solicitudDevolucionRepository;
         private readonly DetalleDevolucionData _detalleDevolucionRepository;
+        private readonly NotaDeCreditoData _notaDeCreditoRepository;
+        private readonly DetalleNotaCreditoData _detalleNotaCreditoRepository;
+
         public PedidoController()
         {
 
@@ -38,6 +41,8 @@ namespace TechSolutions.Controllers
             _historialPedidoRepository = new HistorialPedidoData();
             _solicitudDevolucionRepository = new SolicitudDevolucionData();
             _detalleDevolucionRepository = new DetalleDevolucionData();
+            _notaDeCreditoRepository = new NotaDeCreditoData();
+            _detalleNotaCreditoRepository = new DetalleNotaCreditoData();
         }
        
         public ActionResult Details(int id)
@@ -51,6 +56,28 @@ namespace TechSolutions.Controllers
 
             return View(pedido);
         }
+
+        public ActionResult DetallesDevolucion(int id)
+        {
+            // Obtiene el pedido por su ID
+            var pedido = _pedidoRepository.GetById(id);
+            if (pedido == null)
+            {
+                return HttpNotFound();
+            }
+
+            var solicitudDevolucion = _solicitudDevolucionRepository.List()
+            .FirstOrDefault(sd => sd.IdPedido == pedido.Id);
+
+            if (solicitudDevolucion == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(solicitudDevolucion);
+
+        }
+
         // Acción para cargar la vista de pago con una lista de productos
         //vista previa de pagar 1 tipo de producto
         [HttpGet]
@@ -161,7 +188,7 @@ namespace TechSolutions.Controllers
                         EncabezadoFactura factura = new EncabezadoFactura
                         {
                             Numero = GenerarNumeroPedido(),
-                            TipoFactura = TipoFactura.A,
+                            TipoFactura = TipoFactura.C,
                             IdPedido = idPedido,
                             IdUsuario = (int)Session["UserId"],
                             MedioPago = pago.MediodePago,
@@ -403,7 +430,7 @@ namespace TechSolutions.Controllers
                     EncabezadoFactura factura = new EncabezadoFactura
                         {
                             Numero = GenerarNumeroPedido(),
-                            TipoFactura = TipoFactura.A,
+                            TipoFactura = TipoFactura.C,
                             IdPedido = idPedido,
                             IdUsuario = (int)Session["UserId"],
                             MedioPago = pago.MediodePago,
@@ -566,40 +593,92 @@ namespace TechSolutions.Controllers
         [HttpPost]
         public ActionResult Edit(Pedido pedido)
         {
-      
-                // Solo actualizar el estado del pedido
-                using (var db = new ApiDbContext())
+            string successMessage = ""; // Variable para almacenar el mensaje de éxito
+
+            // Solo actualizar el estado del pedido
+            using (var db = new ApiDbContext())
+            {
+                // Crear una instancia de Pedido con solo el ID
+                var pedidoToUpdate = new Pedido { Id = pedido.Id };
+
+                // Adjuntar el pedido al contexto
+                db.Pedidos.Attach(pedidoToUpdate);
+
+                // Modificar solo el estado
+                pedidoToUpdate.Estado = pedido.Estado;
+
+                // Indicar que solo el campo Estado ha sido modificado
+                db.Entry(pedidoToUpdate).Property(p => p.Estado).IsModified = true;
+
+                db.SaveChanges();
+
+                // Loguear estado de pedido
+                HistorialPedido historialPedido = new HistorialPedido
                 {
-                    // Crear una instancia de Pedido con solo el ID
-                    var pedidoToUpdate = new Pedido { Id = pedido.Id };
+                    IdPedido = pedido.Id,
+                    EstadoPedido = pedido.Estado,
+                    FechaOperacion = DateTime.Now
+                };
 
-                    // Adjuntar el pedido al contexto
-                    db.Pedidos.Attach(pedidoToUpdate);
+                _historialPedidoRepository.Insert(historialPedido);
 
-                    // Modificar solo el estado
-                    pedidoToUpdate.Estado = pedido.Estado;
+                // Obtener el pedido actualizado
+                var pedidoResult = _pedidoRepository.GetById(pedido.Id);
 
-                    // Indicar que solo el campo Estado ha sido modificado
-                    db.Entry(pedidoToUpdate).Property(p => p.Estado).IsModified = true;
-
-                    db.SaveChanges();
-
-                    //aca hay que loguear tambien el estado del pedido en hsitorial
-                    //loguear estado de pedido
-                    HistorialPedido historialPedido = new HistorialPedido
+                if (pedidoResult.Estado == EstadoPedido.Parcialmente_devuelto || pedidoResult.Estado == EstadoPedido.Devuelto)
+                {
+                    var solicitudDevolucion = _solicitudDevolucionRepository.GetSolicitudByPedidoId(pedido.Id);
+                    if (solicitudDevolucion != null)
                     {
-                        IdPedido = pedido.Id,
-                        EstadoPedido = pedido.Estado,
-                        FechaOperacion = DateTime.Now
-                    };
+                        NotaDeCredito notaCredito = new NotaDeCredito
+                        {
+                            IdSolicitudDevolucion = solicitudDevolucion.Id,
+                            Numero = GenerarNumeroDevolucion(),
+                            IdFactura = solicitudDevolucion.IdFactura,
+                            Monto = solicitudDevolucion.Monto,
+                            EstadoNota = EstadoNotaCredito.Aplicada
+                        };
 
-                    _historialPedidoRepository.Insert(historialPedido);
+                        var IdNotaCredito = _notaDeCreditoRepository.InsertReturnId(notaCredito);
+
+                        foreach (var detalle in solicitudDevolucion.DetallesDevoluciones)
+                        {
+                            DetalleNotaCredito detalleNotaCredito = new DetalleNotaCredito
+                            {
+                                IdNotaCredito = IdNotaCredito,
+                                IdProducto = detalle.IdProducto,
+                                Cantidad = detalle.Cantidad,
+                                PrecioUnitario = detalle.PrecioUnitario
+                            };
+
+                            _detalleNotaCreditoRepository.Insert(detalleNotaCredito);
+
+                            var producto = db.Productos.Find(detalle.IdProducto);
+                            if (producto != null)
+                            {
+                                producto.Stock += detalle.Cantidad; // Aumentar el stock con la cantidad devuelta
+                                db.Entry(producto).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                        }
+
+                        solicitudDevolucion.EstadoSolicitud = EstadoSolicitud.Cerrada;
+                        _solicitudDevolucionRepository.Update(solicitudDevolucion);
+
+                        successMessage = "Estado de Pedido actualizado exitosamente y se ha generado la nota de crédito"; // Mensaje para el caso donde se genera la nota
+                    }
                 }
+                else
+                {
+                    successMessage = "Estado de Pedido actualizado exitosamente"; // Mensaje para el caso donde no se genera la nota
+                }
+            }
 
-                TempData["SuccessMessage"] = "Estado de Pedido actualizado exitosamente";
-                return RedirectToAction("Index");
-           
+            TempData["SuccessMessage"] = successMessage; // Asignar el mensaje al TempData
+
+            return RedirectToAction("Index");
         }
+
 
         //pantalla devolucion de productos
         [HttpPost]
@@ -754,6 +833,24 @@ namespace TechSolutions.Controllers
                     return RedirectToAction("ComprasUsuario", "EncabezadoFactura", new { model.IdUsuario });
                 }
             }
+        }
+        public ActionResult NotasCredito(int id) //id es del pedido
+        {
+            var pedido = _pedidoRepository.GetById(id);
+            if (pedido == null)
+            {
+                return HttpNotFound();
+            }
+
+            var solicitudesDevolucion = _solicitudDevolucionRepository.List()
+           .Where(s => s.IdPedido == id) // Filtra las solicitudes por el IdPedido
+           .ToList();
+
+            var notasCredito = _notaDeCreditoRepository.List()
+            .Where(n => solicitudesDevolucion.Any(s => s.Id == n.IdSolicitudDevolucion))
+            .ToList();
+
+            return View(notasCredito); 
         }
 
         private int GenerarNumeroDevolucion()

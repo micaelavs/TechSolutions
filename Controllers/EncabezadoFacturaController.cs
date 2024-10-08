@@ -213,6 +213,16 @@ namespace TechSolutions.Controllers
             return View();
         }
 
+        public ActionResult Detalle(int id) //id es del pedido
+        {
+            var factura = _facturaRepository.GetFacturaPorPedidoId(id);
+            if (factura == null)
+            {
+                return HttpNotFound();
+            }
+            return View(factura); 
+        }
+
 
     }
 }

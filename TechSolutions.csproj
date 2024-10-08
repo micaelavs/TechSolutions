@@ -227,9 +227,11 @@
     <Compile Include="Data\CategoriaProductoData.cs" />
     <Compile Include="Data\DetalleDevolucionData.cs" />
     <Compile Include="Data\DetalleFacturaData.cs" />
+    <Compile Include="Data\DetalleNotaCreditoData.cs" />
     <Compile Include="Data\DetallePedidoData.cs" />
     <Compile Include="Data\EncabezadoFacturaData.cs" />
     <Compile Include="Data\HistorialPedidoData.cs" />
+    <Compile Include="Data\NotaDeCreditoData.cs" />
     <Compile Include="Data\PedidoData.cs" />
     <Compile Include="Data\ProductoData.cs" />
     <Compile Include="Data\SolicitudDevolucionData.cs" />
@@ -271,15 +273,41 @@
     <Compile Include="Migrations\202409300142426_CambioDescipcNULL.Designer.cs">
       <DependentUpon>202409300142426_CambioDescipcNULL.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202410061459016_AgregoNotaCreditoYDetalle.cs" />
+    <Compile Include="Migrations\202410061459016_AgregoNotaCreditoYDetalle.Designer.cs">
+      <DependentUpon>202410061459016_AgregoNotaCreditoYDetalle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202410061505225_AgregoNotaCreditoYDetalle2.cs" />
+    <Compile Include="Migrations\202410061505225_AgregoNotaCreditoYDetalle2.Designer.cs">
+      <DependentUpon>202410061505225_AgregoNotaCreditoYDetalle2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202410061509461_NotaCredito.cs" />
+    <Compile Include="Migrations\202410061509461_NotaCredito.Designer.cs">
+      <DependentUpon>202410061509461_NotaCredito.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202410061919182_CambioCampoDetalleNota.cs" />
+    <Compile Include="Migrations\202410061919182_CambioCampoDetalleNota.Designer.cs">
+      <DependentUpon>202410061919182_CambioCampoDetalleNota.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202410072356100_RemoverError.cs" />
+    <Compile Include="Migrations\202410072356100_RemoverError.Designer.cs">
+      <DependentUpon>202410072356100_RemoverError.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202410080012423_UpdateNotaDeCredito.cs" />
+    <Compile Include="Migrations\202410080012423_UpdateNotaDeCredito.Designer.cs">
+      <DependentUpon>202410080012423_UpdateNotaDeCredito.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CalificacionProducto.cs" />
     <Compile Include="Models\DetalleDevolucion.cs" />
+    <Compile Include="Models\DetalleNotaCredito.cs" />
     <Compile Include="Models\DetallePedido.cs" />
     <Compile Include="Models\DevolucionViewModel.cs" />
     <Compile Include="Models\EncabezadoFactura.cs" />
     <Compile Include="Models\DetalleFactura.cs" />
     <Compile Include="Models\HistorialPedido.cs" />
     <Compile Include="Models\MisComprasViewModel.cs" />
+    <Compile Include="Models\NotaDeCredito.cs" />
     <Compile Include="Models\PagoViewModel.cs" />
     <Compile Include="Models\Persona.cs" />
     <Compile Include="Models\Pedido.cs" />
@@ -292,6 +320,7 @@
     <Compile Include="Servicios\EmailService.cs" />
     <Compile Include="Servicios\PasswordHelper.cs" />
     <Compile Include="SharedKernel\Cuotas.cs" />
+    <Compile Include="SharedKernel\EstadoNotaCredito.cs" />
     <Compile Include="SharedKernel\EstadoPedido.cs" />
     <Compile Include="SharedKernel\EstadoSolicitud.cs" />
     <Compile Include="SharedKernel\MedioPago.cs" />
@@ -421,6 +450,9 @@
     <Content Include="Views\Producto\Delete.cshtml" />
     <Content Include="Views\Producto\ModificarCalificacion.cshtml" />
     <Content Include="Views\EncabezadoFactura\SinCompras.cshtml" />
+    <Content Include="Views\Pedido\DetallesDevolucion.cshtml" />
+    <Content Include="Views\EncabezadoFactura\Detalle.cshtml" />
+    <Content Include="Views\Pedido\NotasCredito.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -450,6 +482,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202409300142426_CambioDescipcNULL.resx">
       <DependentUpon>202409300142426_CambioDescipcNULL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202410061459016_AgregoNotaCreditoYDetalle.resx">
+      <DependentUpon>202410061459016_AgregoNotaCreditoYDetalle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202410061505225_AgregoNotaCreditoYDetalle2.resx">
+      <DependentUpon>202410061505225_AgregoNotaCreditoYDetalle2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202410061509461_NotaCredito.resx">
+      <DependentUpon>202410061509461_NotaCredito.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202410061919182_CambioCampoDetalleNota.resx">
+      <DependentUpon>202410061919182_CambioCampoDetalleNota.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202410072356100_RemoverError.resx">
+      <DependentUpon>202410072356100_RemoverError.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202410080012423_UpdateNotaDeCredito.resx">
+      <DependentUpon>202410080012423_UpdateNotaDeCredito.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
