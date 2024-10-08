@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initial_create : DbMigration
+    public partial class InitialCreate : DbMigration
     {
         public override void Up()
         {
@@ -13,12 +13,15 @@
                     {
                         Id = c.Int(nullable: false, identity: true),
                         IdProducto = c.Int(nullable: false),
+                        IdUsuario = c.Int(nullable: false),
                         Puntaje = c.Int(nullable: false),
                         Comentario = c.String(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Productoes", t => t.IdProducto, cascadeDelete: true)
-                .Index(t => t.IdProducto);
+                .ForeignKey("dbo.Usuarios", t => t.IdUsuario, cascadeDelete: true)
+                .Index(t => t.IdProducto)
+                .Index(t => t.IdUsuario);
             
             CreateTable(
                 "dbo.Productoes",
@@ -49,6 +52,20 @@
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.Usuarios",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Email = c.String(nullable: false),
+                        Password = c.String(nullable: false),
+                        Rol = c.Int(nullable: false),
+                        Activo = c.Boolean(nullable: false),
+                        Nombre = c.String(),
+                        Apellido = c.String(),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.DetalleDevolucions",
                 c => new
                     {
@@ -58,7 +75,7 @@
                         Cantidad = c.Int(nullable: false),
                         PrecioUnitario = c.Single(nullable: false),
                         Motivo = c.Int(nullable: false),
-                        Descripcion = c.String(nullable: false),
+                        Descripcion = c.String(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Productoes", t => t.IdProducto, cascadeDelete: true)
@@ -100,8 +117,8 @@
                         TipoTarjeta = c.Int(nullable: false),
                         NombreTarjeta = c.String(nullable: false),
                         ApellidoTarjeta = c.String(nullable: false),
-                        DNI = c.Int(nullable: false),
-                        Nrotarjeta = c.Int(nullable: false),
+                        DNI = c.String(nullable: false),
+                        Nrotarjeta = c.String(nullable: false),
                         Cuota = c.Int(nullable: false),
                         Monto = c.Single(nullable: false),
                         Fecha = c.DateTime(nullable: false),
@@ -173,23 +190,47 @@
                 .Index(t => t.IdPedido);
             
             CreateTable(
-                "dbo.Usuarios",
+                "dbo.DetalleNotaCreditoes",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Email = c.String(nullable: false),
-                        Password = c.String(nullable: false),
-                        Rol = c.Int(nullable: false),
-                        Activo = c.Boolean(nullable: false),
-                        Nombre = c.String(),
-                        Apellido = c.String(),
+                        IdNotaCredito = c.Int(nullable: false),
+                        IdProducto = c.Int(nullable: false),
+                        Cantidad = c.Int(nullable: false),
+                        PrecioUnitario = c.Single(nullable: false),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.NotaDeCreditoes", t => t.IdNotaCredito)
+                .ForeignKey("dbo.Productoes", t => t.IdProducto)
+                .Index(t => t.IdNotaCredito)
+                .Index(t => t.IdProducto);
+            
+            CreateTable(
+                "dbo.NotaDeCreditoes",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        IdSolicitudDevolucion = c.Int(nullable: false),
+                        IdFactura = c.Int(nullable: false),
+                        Numero = c.Int(nullable: false),
+                        Fecha_emision = c.DateTime(nullable: false),
+                        Monto = c.Single(nullable: false),
+                        EstadoNota = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.EncabezadoFacturas", t => t.IdFactura)
+                .ForeignKey("dbo.SolicitudDevolucions", t => t.IdSolicitudDevolucion)
+                .Index(t => t.IdSolicitudDevolucion)
+                .Index(t => t.IdFactura);
             
         }
         
         public override void Down()
         {
+            DropForeignKey("dbo.DetalleNotaCreditoes", "IdProducto", "dbo.Productoes");
+            DropForeignKey("dbo.DetalleNotaCreditoes", "IdNotaCredito", "dbo.NotaDeCreditoes");
+            DropForeignKey("dbo.NotaDeCreditoes", "IdSolicitudDevolucion", "dbo.SolicitudDevolucions");
+            DropForeignKey("dbo.NotaDeCreditoes", "IdFactura", "dbo.EncabezadoFacturas");
             DropForeignKey("dbo.DetalleDevolucions", "IdSolicitudDevolucion", "dbo.SolicitudDevolucions");
             DropForeignKey("dbo.SolicitudDevolucions", "IdIUsuario", "dbo.Usuarios");
             DropForeignKey("dbo.SolicitudDevolucions", "IdPedido", "dbo.Pedidoes");
@@ -203,8 +244,13 @@
             DropForeignKey("dbo.DetalleFacturas", "IdProducto", "dbo.Productoes");
             DropForeignKey("dbo.DetalleFacturas", "IdFactura", "dbo.EncabezadoFacturas");
             DropForeignKey("dbo.DetalleDevolucions", "IdProducto", "dbo.Productoes");
+            DropForeignKey("dbo.CalificacionProductoes", "IdUsuario", "dbo.Usuarios");
             DropForeignKey("dbo.CalificacionProductoes", "IdProducto", "dbo.Productoes");
             DropForeignKey("dbo.Productoes", "IdCategoriaProducto", "dbo.CategoriaProductoes");
+            DropIndex("dbo.NotaDeCreditoes", new[] { "IdFactura" });
+            DropIndex("dbo.NotaDeCreditoes", new[] { "IdSolicitudDevolucion" });
+            DropIndex("dbo.DetalleNotaCreditoes", new[] { "IdProducto" });
+            DropIndex("dbo.DetalleNotaCreditoes", new[] { "IdNotaCredito" });
             DropIndex("dbo.HistorialPedidoes", new[] { "IdPedido" });
             DropIndex("dbo.DetallePedidoes", new[] { "IdPedido" });
             DropIndex("dbo.DetallePedidoes", new[] { "IdProducto" });
@@ -219,8 +265,10 @@
             DropIndex("dbo.DetalleDevolucions", new[] { "IdProducto" });
             DropIndex("dbo.DetalleDevolucions", new[] { "IdSolicitudDevolucion" });
             DropIndex("dbo.Productoes", new[] { "IdCategoriaProducto" });
+            DropIndex("dbo.CalificacionProductoes", new[] { "IdUsuario" });
             DropIndex("dbo.CalificacionProductoes", new[] { "IdProducto" });
-            DropTable("dbo.Usuarios");
+            DropTable("dbo.NotaDeCreditoes");
+            DropTable("dbo.DetalleNotaCreditoes");
             DropTable("dbo.HistorialPedidoes");
             DropTable("dbo.DetallePedidoes");
             DropTable("dbo.Pedidoes");
@@ -228,6 +276,7 @@
             DropTable("dbo.EncabezadoFacturas");
             DropTable("dbo.SolicitudDevolucions");
             DropTable("dbo.DetalleDevolucions");
+            DropTable("dbo.Usuarios");
             DropTable("dbo.CategoriaProductoes");
             DropTable("dbo.Productoes");
             DropTable("dbo.CalificacionProductoes");

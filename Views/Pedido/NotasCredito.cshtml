@@ -1,35 +1,102 @@
 ﻿@model IEnumerable<TechSolutions.Models.NotaDeCredito>
 
+@{
+    ViewBag.Title = "Notas de Crédito Asociadas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    body {
+        background-color: #93C47D; /* Mismo fondo que la otra vista */
+    }
+
+    .details-container {
+        background-color: #f7f7f7; /* Fondo de detalles */
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    dt {
+        font-weight: bold;
+    }
+
+    dd {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .table {
+        margin-top: 20px;
+    }
+
+    h2 {
+        text-align: center; /* Centrar título */
+    }
+</style>
+
 <div class="container">
+    <br>
     <h2>Notas de Crédito Asociadas</h2>
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>Número</th>
-                <th>Fecha de Emisión</th>
-                <th>Monto</th>
-                <th>Estado</th>
-                <th>Detalles</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var nota in Model)
-            {
-                <tr>
-                    <td>@nota.Numero</td>
-                    <td>@nota.Fecha_emision.ToString("dd/MM/yyyy")</td>
-                    <td>$@nota.Monto</td>
-                    <td>@nota.EstadoNota</td>
-                    <td>
-                        <ul>
-                            @foreach (var detalle in nota.DetallesNotasCreditos)
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="details-container">
+                <h4>Notas de Crédito</h4>
+                <hr />
+                @foreach (var nota in Model)
+                {
+                    <dl class="dl-horizontal">
+                        <dt>Número</dt>
+                        <dd>@nota.Numero</dd>
+
+                        <dt>Fecha de Emisión</dt>
+                        <dd>@nota.Fecha_emision</dd>
+
+                        <dt>Monto</dt>
+                        <dd>$@nota.Monto</dd>
+
+                        <dt>Estado</dt>
+                        <dd>@nota.EstadoNota</dd>
+
+                        <hr />
+                    </dl>
+                }
+
+                <h4>Detalles de Notas de Crédito</h4>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var nota in Model)
+                        {
+                            foreach (var detalle in nota.DetallesNotasCreditos)
                             {
-                                <li>@detalle.Producto.Nombre: Cantidad @detalle.Cantidad, Precio Unitario $@detalle.PrecioUnitario</li>
+                                <tr>
+                                    <td>@detalle.Producto.Nombre</td>
+                                    <td>@detalle.Cantidad</td>
+                                    <td>$@detalle.PrecioUnitario</td>
+                                </tr>
                             }
-                        </ul>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="text-center">
+        @Html.ActionLink("Listado de Pedidos", "Index", null, new { @class = "btn btn-primary" })
+    </div>
 </div>

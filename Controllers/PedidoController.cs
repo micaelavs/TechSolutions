@@ -846,6 +846,8 @@ namespace TechSolutions.Controllers
            .Where(s => s.IdPedido == id) // Filtra las solicitudes por el IdPedido
            .ToList();
 
+            var detalles = _detalleNotaCreditoRepository.List();
+
             var notasCredito = _notaDeCreditoRepository.List()
             .Where(n => solicitudesDevolucion.Any(s => s.Id == n.IdSolicitudDevolucion))
             .ToList();

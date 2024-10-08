@@ -95,7 +95,7 @@ namespace TechSolutions.Data
             // Configuración de la relación entre DetalleNotaCredito y NotaDeCredito
             modelBuilder.Entity<DetalleNotaCredito>()
                 .HasRequired(dnc => dnc.NotaDeCredito)
-                .WithMany()
+                .WithMany(nc => nc.DetallesNotasCreditos)
                 .HasForeignKey(dnc => dnc.IdNotaCredito)
                 .WillCascadeOnDelete(false); // Desactiva la eliminación en cascada
 

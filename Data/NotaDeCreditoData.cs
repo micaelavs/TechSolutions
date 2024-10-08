@@ -46,7 +46,7 @@ namespace TechSolutions.Data
         {
             var db = new ApiDbContext();
             var notasDeCreditos = db.NotasCreditos
-                .Include(n => n.DetallesNotasCreditos)
+                .Include(n => n.DetallesNotasCreditos.Select(d => d.Producto))
                 .Include(n => n.SolicitudDevolucion) 
                 .Include(n => n.EncabezadoFactura)
                 .ToList();
