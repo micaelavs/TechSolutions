@@ -61,5 +61,28 @@ namespace TechSolutions.Data
             db.Entry(entity).State = EntityState.Modified;
             db.SaveChanges();
         }
+
+        public NotaDeCredito GetByNumero(int numeroNotaCredito)
+        {
+            var db = new ApiDbContext();
+            return db.NotasCreditos
+                .Include(n => n.DetallesNotasCreditos.Select(d => d.Producto))
+                .Include(n => n.SolicitudDevolucion)
+                .Include(n => n.EncabezadoFactura)
+                .FirstOrDefault(n => n.Numero == numeroNotaCredito);
+            
+        }
+
+        public NotaDeCredito GetByFacturaId(int facturaId)
+        {
+            using (var db = new ApiDbContext())
+            {
+                return db.NotasCreditos
+                    .Include(n => n.DetallesNotasCreditos.Select(d => d.Producto))
+                    .Include(n => n.SolicitudDevolucion)
+                    .Include(n => n.EncabezadoFactura)
+                    .FirstOrDefault(n => n.IdFactura == facturaId);
+            }
+        }
     }
 }

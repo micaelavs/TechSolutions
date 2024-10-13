@@ -216,6 +216,7 @@
     <Compile Include="Controllers\HistorialPedidoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\NotaDeCreditoController.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\RecuperoController.cs" />
@@ -401,10 +402,13 @@
     <Content Include="Views\Pedido\DetallesDevolucion.cshtml" />
     <Content Include="Views\EncabezadoFactura\Detalle.cshtml" />
     <Content Include="Views\Pedido\NotasCredito.cshtml" />
+    <Content Include="Views\EncabezadoFactura\Index.cshtml" />
+    <Content Include="Views\EncabezadoFactura\Details.cshtml" />
+    <Content Include="Views\HistorialPedido\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\HistorialPedido\" />
+    <Folder Include="Views\NotaDeCredito\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202410080128497_InitialCreate.resx">

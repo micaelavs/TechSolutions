@@ -9,37 +9,44 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using TechSolutions.Data;
-using iText.Kernel.Pdf;
 using iText.Layout;
-using iText.Layout.Element;
 using iText.IO.Image;
 using iText.Layout.Properties;
-using iText.Kernel.Colors;
-using System.IO;
 using iText.Kernel.Pdf.Canvas.Draw;
 using TechSolutions.Models;
-using TechSolutions.Interfaces;
+
 
 namespace TechSolutions.Controllers
 {
-    public class EncabezadoFacturaController : Controller
+    public class NotaDeCreditoController : Controller
     {
-        private readonly EncabezadoFacturaData _facturaRepository;
-        private readonly CalificacionProductoData _calificacionRepository;
+        private readonly NotaDeCreditoData _notaCreditoRepository;
+        
+        public NotaDeCreditoController(){
+            _notaCreditoRepository = new NotaDeCreditoData();
 
-        public EncabezadoFacturaController()
-        {
-            _facturaRepository = new EncabezadoFacturaData();
-            _calificacionRepository = new CalificacionProductoData();
         }
-        [HttpGet]
-        public ActionResult GenerarFactura(int numeroFactura)
-        {
-            var factura = _facturaRepository.GetByNumero(numeroFactura);
 
-            if (factura == null)
+        [HttpGet]
+        public ActionResult GenerarNotaCredito(int? numeroNotaCredito, int? idFactura)
+        {
+            NotaDeCredito notaCredito = null;
+
+            if (numeroNotaCredito.HasValue)
             {
-                return HttpNotFound("Factura no encontrada");
+                // Si se pasa el número de nota de crédito, se obtiene de esa manera
+                notaCredito = _notaCreditoRepository.GetByNumero(numeroNotaCredito.Value);
+            }
+            else if (idFactura.HasValue)
+            {
+                // Si se pasa el ID de factura, se obtiene la nota de crédito asociada
+                notaCredito = _notaCreditoRepository.GetByFacturaId(idFactura.Value);
+                numeroNotaCredito = notaCredito.Numero;
+            }
+
+            if (notaCredito == null)
+            {
+                return HttpNotFound("Nota de crédito no encontrada");
             }
 
             // Crear un MemoryStream para almacenar el archivo PDF
@@ -50,7 +57,7 @@ namespace TechSolutions.Controllers
                 PdfDocument pdf = new PdfDocument(writer);
                 Document document = new Document(pdf);
 
-                // Definir estilos
+                // Definir estilos (similar a la factura)
                 Style headerStyle = new Style()
                     .SetFontSize(24)
                     .SetFontColor(ColorConstants.BLUE)
@@ -64,8 +71,7 @@ namespace TechSolutions.Controllers
                     .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
                     .SetBold();
 
-                // Agregar logo de la empresa (si tienes uno)
-                // Asumiendo que tienes una imagen en el directorio 'wwwroot/images/logo.png'
+                // Agregar logo de la empresa
                 string logoPath = Server.MapPath("~/Content/Images/logo.jpg");
                 if (System.IO.File.Exists(logoPath))
                 {
@@ -79,7 +85,7 @@ namespace TechSolutions.Controllers
                     .Add("Tech Solutions\n")
                     .Add("Avenida Córdoba 877, Capital Federal\n")
                     .Add("CABA, Buenos Aires, AC4511l\n")
-                     .Add("Sucursal: Casa Cental, Buenos Aires.\n")
+                    .Add("Sucursal: Casa Cental, Buenos Aires.\n")
                     .Add("Teléfono: 123-456-7890\n")
                     .Add("Correo electrónico: info@techsolutions.com.ar\n")
                     .Add("CUIT: 30-12345678-9")
@@ -87,24 +93,23 @@ namespace TechSolutions.Controllers
 
                 document.Add(companyDetails);
 
-                // Título de la factura
-                Paragraph invoiceTitle = new Paragraph($"Factura {factura.TipoFactura} N° {factura.Numero}")
+                // Título de la nota de crédito
+                Paragraph creditNoteTitle = new Paragraph($"Nota de Crédito N° {notaCredito.Numero}")
                     .AddStyle(headerStyle)
                     .SetTextAlignment(TextAlignment.CENTER);
 
-                document.Add(invoiceTitle);
+                document.Add(creditNoteTitle);
 
                 // Línea separadora
                 document.Add(new LineSeparator(new SolidLine()));
 
-                // Información del cliente
-                Paragraph clientDetails = new Paragraph()
-                    .Add($"Fecha de emisión: {factura.Fecha.ToString("dd/MM/yyyy")}\n")
-                    .Add($"Cliente: {factura.Usuario.Nombre} {factura.Usuario.Apellido}\n")
-                    .Add($"Correo electrónico: {factura.Usuario.Email}\n")
+                // Información de la factura original
+                Paragraph originalInvoiceDetails = new Paragraph()
+                    .Add($"Factura Original: N° {notaCredito.EncabezadoFactura.Numero}\n")
+                    .Add($"Fecha de emisión: {notaCredito.Fecha_emision.ToString("dd/MM/yyyy")}\n")
                     .AddStyle(subHeaderStyle);
 
-                document.Add(clientDetails);
+                document.Add(originalInvoiceDetails);
 
                 // Espacio antes de la tabla
                 document.Add(new Paragraph("\n"));
@@ -121,7 +126,7 @@ namespace TechSolutions.Controllers
 
                 // Añadir filas a la tabla
                 decimal total = 0;
-                foreach (var item in factura.DetallesFacturas)
+                foreach (var item in notaCredito.DetallesNotasCreditos)
                 {
                     if (item.Producto != null)
                     {
@@ -130,8 +135,8 @@ namespace TechSolutions.Controllers
 
                         table.AddCell(new Cell().Add(new Paragraph(item.Producto.Nombre)));
                         table.AddCell(new Cell().Add(new Paragraph(item.Cantidad.ToString())).SetTextAlignment(TextAlignment.CENTER));
-                        table.AddCell(new Cell().Add(new Paragraph(Convert.ToString("$ "+item.PrecioUnitario))).SetTextAlignment(TextAlignment.RIGHT));
-                        table.AddCell(new Cell().Add(new Paragraph(Convert.ToString("$ "+subtotal))).SetTextAlignment(TextAlignment.RIGHT));
+                        table.AddCell(new Cell().Add(new Paragraph(Convert.ToString("$ " + item.PrecioUnitario))).SetTextAlignment(TextAlignment.RIGHT));
+                        table.AddCell(new Cell().Add(new Paragraph(Convert.ToString("$ " + subtotal))).SetTextAlignment(TextAlignment.RIGHT));
                     }
                     else
                     {
@@ -149,15 +154,8 @@ namespace TechSolutions.Controllers
                 // Espacio antes de los totales
                 document.Add(new Paragraph("\n"));
 
-                // Calcular impuestos (por ejemplo, IVA 21%)
-                //decimal iva = total * 0.21m;
-                //decimal totalConIva = total + iva;
-
                 // Mostrar los totales
                 Paragraph totals = new Paragraph()
-                    .Add($"Subtotal: $ {total}\n")
-                    /*.Add($"IVA (21%): $ {iva}\n")*/
-                    //.Add($"Total: $ {totalConIva}\n")
                     .Add($"Total: $ {total}\n")
                     .SetTextAlignment(TextAlignment.RIGHT)
                     .SetFontSize(12)
@@ -170,8 +168,8 @@ namespace TechSolutions.Controllers
 
                 // Información adicional o términos y condiciones
                 Paragraph footer = new Paragraph()
-                    .Add("Gracias por su compra.\n")
-                    .Add("Esta factura es un comprobante legal de su transacción.\n")
+                    .Add("Gracias por su atención.\n")
+                    .Add("Esta nota de crédito es un comprobante legal de su transacción.\n")
                     .Add("Por favor, conserve este documento para sus registros.\n")
                     .SetTextAlignment(TextAlignment.CENTER)
                     .SetFontSize(10);
@@ -183,66 +181,9 @@ namespace TechSolutions.Controllers
 
                 // Devolver el archivo PDF como descargable
                 byte[] file = ms.ToArray();
-                return File(file, "application/pdf", $"Factura_{numeroFactura}.pdf");
+                return File(file, "application/pdf", $"NotaCredito_{numeroNotaCredito}.pdf");
             }
         }
-        [HttpGet]
-        public ActionResult ComprasUsuario(int idUsuario)
-        {
-            var facturas = _facturaRepository.GetAll()
-            .Where(f => f.IdUsuario == idUsuario)
-            .OrderByDescending(f => f.Fecha) 
-            .ToList();
-
-            var calificacionesUsuario = _calificacionRepository.GetCalificacionesByUsuario(idUsuario);
-
-            var model = new MisComprasViewModel
-            {
-                Facturas = facturas,
-                CalificacionesUsuario = calificacionesUsuario
-            };
-
-            if (!facturas.Any())
-            {
-                return RedirectToAction("SinCompras");
-            }
-
-            return View(model);
-        }
-
-        public ActionResult SinCompras()
-        {
-            return View();
-        }
-
-        public ActionResult Detalle(int id) //id es del pedido
-        {
-            var factura = _facturaRepository.GetFacturaPorPedidoId(id);
-            if (factura == null)
-            {
-                return HttpNotFound();
-            }
-            return View(factura); 
-        }
-
-        public ActionResult Index()
-        {
-            var facturas = _facturaRepository.GetAll();
-            return View(facturas);
-        }
-
-        public ActionResult Details(int id)
-        {
-            var factura = _facturaRepository.GetById(id);
-            if (factura == null)
-            {
-                return HttpNotFound("Factura no encontrada");
-            }
-            return View(factura); 
-
-        }
-
-
 
     }
 }

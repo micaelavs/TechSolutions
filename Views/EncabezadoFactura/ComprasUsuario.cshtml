@@ -97,8 +97,15 @@
                 </div>
 
                 <p><strong>Total de la Factura:</strong> $@factura.Monto</p>
-
-                <!-- Mostrar el botón solo si el estado del pedido es "Entregado" -->
+                <a href="@Url.Action("GenerarFactura", "EncabezadoFactura", new { numeroFactura = factura.Numero })" class="btn btn-success custom-btn">Descargar Factura</a>
+                <br />
+                <br />
+                @if (factura.Pedido.Estado == EstadoPedido.Devuelto || factura.Pedido.Estado == EstadoPedido.Parcialmente_devuelto)
+                {
+                    <div class="text-left">
+                        <a href="@Url.Action("GenerarNotaCredito", "NotaDeCredito", new { idFactura = factura.Id })" class="btn btn-success custom-btn">Descargar Nota de Crédito</a>
+                    </div>
+                }
                 @if (factura.Pedido.Estado == EstadoPedido.Entregado)
                 {
                     <div class="text-center">

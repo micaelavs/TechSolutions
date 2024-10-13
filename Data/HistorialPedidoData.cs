@@ -23,8 +23,9 @@ namespace TechSolutions.Data
         public HistorialPedido GetById(int id)
         {
             var db = new ApiDbContext();
-            return db.HistorialPedidos.Find(id);
-
+            return db.HistorialPedidos
+                 .Include(h => h.Pedido) 
+                 .SingleOrDefault(h => h.Id == id);
         }
 
         public void Insert(HistorialPedido entity)
@@ -46,7 +47,10 @@ namespace TechSolutions.Data
         public IEnumerable<HistorialPedido> List()
         {
             var db = new ApiDbContext();
-            var historialPedidos = db.HistorialPedidos.ToList();
+            var historialPedidos = db.HistorialPedidos
+            .Include(h => h.Pedido)  // Incluye la entidad Pedido
+            .ToList();
+
             return historialPedidos;
 
 

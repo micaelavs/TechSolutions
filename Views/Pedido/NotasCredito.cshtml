@@ -98,5 +98,9 @@
     <br>
     <div class="text-center">
         @Html.ActionLink("Listado de Pedidos", "Index", null, new { @class = "btn btn-primary" })
+        @foreach (var nota in Model)
+        {
+            <a href="@Url.Action("GenerarNotaCredito", "NotaDeCredito", new { numeroNotaCredito = nota.Numero })" class="btn btn-success custom-btn">Descargar Nota de Crédito N° @nota.Numero</a>
+        }
     </div>
 </div>

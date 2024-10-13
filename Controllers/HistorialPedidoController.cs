@@ -3,22 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TechSolutions.Data;
 
 namespace TechSolutions.Controllers
 {
     public class HistorialPedidoController : Controller
     {
-        // GET: HistorialPedido2
+        private readonly HistorialPedidoData _historialPedidoData;
+
+        public HistorialPedidoController()
+        {
+            _historialPedidoData = new HistorialPedidoData();
+        }
         public ActionResult Index()
         {
-            return View();
+            var historialPedidos = _historialPedidoData.List();
+            return View(historialPedidos);
         }
 
-        // GET: HistorialPedido2/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+       /*public ActionResult Details(int id)
+       {
+            var historialPedido = _historialPedidoData.GetById(id);
+            if (historialPedido == null)
+            {
+                return HttpNotFound();
+            }
+            return View(historialPedido);
+       }*/
 
         // GET: HistorialPedido2/Create
         public ActionResult Create()

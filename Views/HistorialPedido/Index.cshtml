@@ -1,0 +1,102 @@
+﻿@model IEnumerable<TechSolutions.Models.HistorialPedido>
+
+@{
+    ViewBag.Title = "Historial de Pedidos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    body {
+        background-color: #93C47D;
+    }
+
+    .btn-action {
+        margin: 2px 5px;
+    }
+
+    .action-column {
+        width: 180px;
+    }
+
+    .btn-custom {
+        background-color: #28a745; /* Color personalizado */
+        color: white;
+    }
+
+        .btn-custom:hover {
+            background-color: #218838; /* Color al pasar el ratón */
+            color: white;
+        }
+</style>
+
+<div class="container">
+    <br>
+    <h2>Historial de Pedidos</h2>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div id="successMessage" class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div id="errorMessage" class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Id Log</th>
+                            <th>Numero Pedido</th>
+                            <th>Estado</th>
+                            <th>Monto Total Pedido</th>
+                            <th>Fecha de Operación</th>
+                            <!--<th class="action-column">Acciones</th>-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Pedido.Numero)</td>
+                                <td>@Html.DisplayFor(modelItem => item.EstadoPedido)</td>
+                                <td>$ @Html.DisplayFor(modelItem => item.Pedido.MontoTotal)</td>
+                                <td>@Html.DisplayFor(modelItem => item.FechaOperacion)</td>
+                                <!--<td>
+                                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm btn-action" title="Ver Detalle">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                </td>-->
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var $successMessage = $('#successMessage');
+
+        if ($successMessage.length) {
+            setTimeout(function () {
+                $successMessage.fadeOut(500);
+            }, 3000);
+        }
+
+        var $errorMessage = $('#errorMessage');
+
+        if ($errorMessage.length) {
+            setTimeout(function () {
+                $errorMessage.fadeOut(500);
+            }, 3000);
+        }
+    });
+</script>

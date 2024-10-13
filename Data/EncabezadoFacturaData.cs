@@ -23,7 +23,10 @@ namespace TechSolutions.Data
         public EncabezadoFactura GetById(int id)
         {
             var db = new ApiDbContext();
-            return db.EncabezadosFacturas.Find(id);
+            return db.EncabezadosFacturas
+            .Include(f => f.Usuario)  
+            .Include(f => f.DetallesFacturas.Select(d => d.Producto)) 
+            .FirstOrDefault(f => f.Id == id);
 
         }
         public EncabezadoFactura GetByNumero(int numeroFactura)

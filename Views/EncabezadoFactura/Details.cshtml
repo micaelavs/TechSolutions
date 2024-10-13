@@ -1,8 +1,10 @@
-﻿@{
-    ViewBag.Title = "Detalles de la Devolución";
+﻿@model TechSolutions.Models.EncabezadoFactura
+
+@{
+    ViewBag.Title = "Detalles de Factura";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model TechSolutions.Models.SolicitudDevolucion
+
 <style>
     body {
         background-color: #93C47D;
@@ -36,28 +38,28 @@
 
 <div class="container">
     <br>
-    <h2>Detalles de la solicitud de Devolución</h2>
+    <h2>Detalles de Factura</h2>
 
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="details-container">
-                <h4>Devolución Número: @Html.DisplayFor(Model => Model.NumeroDevolucion)</h4>
+                <h4>Factura Número: @Model.Numero</h4>
                 <hr />
                 <dl class="dl-horizontal">
                     <dt>Usuario</dt>
-                    <dd>@Html.DisplayFor(Model => Model.Usuario.Email)</dd>
-
-                    <dt>Fecha de Operación</dt>
-                    <dd>@Html.DisplayFor(Model => Model.FechaOperacion)</dd>
+                    <dd>@Model.Usuario.Email</dd>
 
                     <dt>Monto Total</dt>
-                    <dd>$@Html.DisplayFor(Model => Model.Monto)</dd>
+                    <dd>$@Model.Monto</dd>
 
-                    <dt>Estado de la Solicitud</dt>
-                    <dd>@Html.DisplayFor(Model => Model.EstadoSolicitud)</dd>
+                    <dt>Fecha</dt>
+                    <dd>@Model.Fecha.ToString("dd/MM/yyyy")</dd>
+
+                    <dt>Tipo Factura</dt>
+                    <dd>@Model.TipoFactura</dd>
                 </dl>
 
-                <h4>Productos a devolver</h4>
+                <h4>Detalles de Factura</h4>
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
@@ -68,7 +70,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var detalle in Model.DetallesDevoluciones)
+                        @foreach (var detalle in Model.DetallesFacturas)
                         {
                             <tr>
                                 <td>@detalle.Producto.Nombre</td>
@@ -85,6 +87,7 @@
 
     <br>
     <div class="text-center">
-        @Html.ActionLink("Listado de Pedidos", "Index", null, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-primary" })
+        <a href="@Url.Action("GenerarFactura", "EncabezadoFactura", new { numeroFactura = Model.Numero })" class="btn btn-success custom-btn">Descargar Factura</a>
     </div>
 </div>

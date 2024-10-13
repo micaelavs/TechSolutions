@@ -96,6 +96,7 @@
 
     <br>
     <div class="text-center">
-        @Html.ActionLink("Volver a Pedidos", "Index", "Pedido", null, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Listado de Pedidos", "Index", "Pedido", null, new { @class = "btn btn-primary" })
+        <a href="@Url.Action("GenerarFactura", "EncabezadoFactura", new { numeroFactura = Model.Numero })" class="btn btn-success custom-btn">Descargar Factura</a>
     </div>
 </div>
