@@ -1,4 +1,5 @@
-﻿@model IEnumerable<TechSolutions.Models.Usuario>
+﻿@model PagedList.IPagedList<TechSolutions.Models.Usuario>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Listado de Usuarios";
@@ -6,20 +7,13 @@
 }
 
 <style>
-    /* Estilo para el fondo de la página */
     body {
         background-color: #93C47D;
     }
 
-    /* Estilo para el botón "Nuevo Usuario" */
-    .new-user-link {
-        text-align: right;
-        margin: 20px 0;
-    }
-
-    /* Opcional: Espaciado entre los botones */
-    .btn-action {
-        margin: 2px 5px;
+    .action-column {
+        width: 200px; /* Ajusta este valor según sea necesario */
+        white-space: nowrap; /* Evita que los botones se dividan en varias líneas */
     }
 </style>
 
@@ -28,27 +22,35 @@
     <h2>Listado de Usuarios</h2>
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success" id="successMessage">
+        <div id="successMessage" class="alert alert-success">
             @TempData["SuccessMessage"]
         </div>
     }
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger" id="errorMessage">
+        <div id="errorMessage" class="alert alert-danger">
             @TempData["ErrorMessage"]
         </div>
     }
+
+    <div class="row">
+        <div class="col-12">
+            <input type="text" id="search" class="form-control" placeholder="Buscar usuarios...">
+        </div>
+    </div>
+    <br>
+
     <div class="row">
         <div class="col-12">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover">
+                <table id="userTable" class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>@Html.DisplayNameFor(model => model.Email)</th>
-                            <th>@Html.DisplayNameFor(model => model.Rol)</th>
-                            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
-                            <th>@Html.DisplayNameFor(model => model.Apellido)</th>
-                            <th>@Html.DisplayNameFor(model => model.Activo)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Email)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Rol)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Nombre)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Apellido)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Activo)</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -64,19 +66,19 @@
                                 <td>
                                     @if (item.Activo)
                                     {
-                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-secondary btn-sm btn-action">
+                                        <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-secondary btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm btn-action">
+                                        <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm">
                                             <i class="fas fa-info-circle"></i>
                                         </a>
-                                        <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm btn-action">
+                                        <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     }
                                     else
                                     {
-                                        <a href="@Url.Action("Reactivar", new { id = item.Id })" class="btn btn-warning btn-sm btn-action">
+                                        <a href="@Url.Action("Reactivar", new { id = item.Id })" class="btn btn-warning btn-sm">
                                             <i class="fas fa-sync-alt"></i> Reactivar
                                         </a>
                                     }
@@ -88,6 +90,38 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    @if (Model.HasPreviousPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    }
+                    @for (int i = 1; i <= Model.PageCount; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+                    @if (Model.HasNextPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12 text-end">
             <a href="@Url.Action("Create", "Usuario")" class="btn btn-primary">
@@ -114,5 +148,12 @@
                 $errorMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
             }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
         }
+
+        $('#search').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('#userTable tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
     });
 </script>

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<TechSolutions.Models.CategoriaProducto>
+﻿@model PagedList.IPagedList<TechSolutions.Models.CategoriaProducto>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Listado de Categorías";
@@ -6,20 +7,13 @@
 }
 
 <style>
-    /* Estilo para el fondo de la página */
     body {
         background-color: #93C47D;
     }
 
-    /* Estilo para el botón "Nueva Categoría" */
-    .new-category-link {
-        text-align: right;
-        margin: 20px 0;
-    }
-
-    /* Opcional: Espaciado entre los botones */
-    .btn-action {
-        margin: 2px 5px;
+    .action-column {
+        width: 200px; /* Ajusta este valor según sea necesario */
+        white-space: nowrap; /* Evita que los botones se dividan en varias líneas */
     }
 </style>
 
@@ -32,22 +26,27 @@
             @TempData["SuccessMessage"]
         </div>
     }
-    <!-- Mensaje de error -->
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger" id="errorMessage">
+        <div id="errorMessage" class="alert alert-danger">
             @TempData["ErrorMessage"]
         </div>
     }
     <div class="row">
         <div class="col-12">
+            <input type="text" id="search" class="form-control" placeholder="Buscar categorías...">
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-12">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover">
+                <table id="categoryTable" class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
-                            <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
-                            <th>Acciones</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Nombre)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Descripcion)</th>
+                            <th class="action-column">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,7 +55,7 @@
                             <tr>
                                 <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
-                                <td>
+                                <td class="action-column">
                                     <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-secondary btn-sm btn-action">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -74,6 +73,38 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    @if (Model.HasPreviousPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    }
+                    @for (int i = 1; i <= Model.PageCount; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+                    @if (Model.HasNextPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12 text-end">
             <a href="@Url.Action("Create", "CategoriaProducto")" class="btn btn-primary">
@@ -83,18 +114,30 @@
     </div>
     <br />
 </div>
-<!-- jQuery library -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
     $(document).ready(function () {
-        // Si el mensaje de error está presente, lo ocultamos después de 5 segundos (5000 ms)
-        if ($('#errorMessage').length) {
+        var $successMessage = $('#successMessage');
+
+        if ($successMessage.length) {
             setTimeout(function () {
-                $('#errorMessage').fadeOut('slow', function () {
-                    $(this).remove(); // Eliminar el elemento del DOM después de desvanecerlo
-                });
-            }, 5000); // Cambia este valor para ajustar el tiempo de visibilidad del mensaje
+                $successMessage.fadeOut(500);
+            }, 3000);
         }
+
+        var $errorMessage = $('#errorMessage');
+
+        if ($errorMessage.length) {
+            setTimeout(function () {
+                $errorMessage.fadeOut(500);
+            }, 3000);
+        }
+
+        $('#search').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('#categoryTable tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
     });
 </script>

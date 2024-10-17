@@ -1,4 +1,6 @@
-﻿using System;
+﻿using iText.Kernel.Geom;
+using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -6,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using TechSolutions.Data;
 using TechSolutions.Models;
 using TechSolutions.Servicios;
@@ -28,9 +31,12 @@ namespace TechSolutions.Controllers
             _facturaRepository = new EncabezadoFacturaData();
         }
         // GET: Usuario
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int pageSize = 10)
         {
-            return View(_usuarioRepository.List());
+            
+            var usuarios = _usuarioRepository.List().ToList();
+            var pagedList = usuarios.ToPagedList(page, pageSize);
+            return View(pagedList);
         }
 
         // GET: Usuario/Details/5

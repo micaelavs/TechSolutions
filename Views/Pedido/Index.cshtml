@@ -1,4 +1,5 @@
-﻿@model IEnumerable<TechSolutions.Models.Pedido>
+﻿@model PagedList.IPagedList<TechSolutions.Models.Pedido>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Administración de Pedidos";
@@ -49,10 +50,18 @@
             @TempData["ErrorMessage"]
         </div>
     }
+
+    <!-- Campo de búsqueda -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <input type="text" id="search" class="form-control" placeholder="Buscar pedidos...">
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover">
+                <table id="pedidoTable" class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <th>Número Pedido</th>
@@ -87,10 +96,9 @@
                                           item.Estado == TechSolutions.SharedKernel.EstadoPedido.Devuelto)
                                     {
                                         <a href="@Url.Action("DetallesDevolucion", new { id = item.Id })" class="btn btn-info btn-sm btn-action" title="Ver Detalles Devolución">
-                                            <i class="fas fa-reply"></i> <!-- Cambiado a ícono de solicitud de devolución -->
+                                            <i class="fas fa-reply"></i>
                                         </a>
                                     }
-                                    <!-- Nuevo botón para ver notas de crédito -->
                                     @if (item.Estado == TechSolutions.SharedKernel.EstadoPedido.Parcialmente_devuelto ||
                                           item.Estado == TechSolutions.SharedKernel.EstadoPedido.Devuelto)
                                     {
@@ -106,13 +114,37 @@
             </div>
         </div>
     </div>
-    <!--<div class="row">
-        <div class="col-12 text-end">
-            <a href="@Url.Action("Create", "Pedido")" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Nuevo Pedido
-            </a>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    @if (Model.HasPreviousPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    }
+                    @for (int i = 1; i <= Model.PageCount; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+                    @if (Model.HasNextPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
         </div>
-    </div>-->
+    </div>
 </div>
 
 <script>
@@ -132,5 +164,13 @@
                 $errorMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
             }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
         }
+
+        // Buscador en vivo
+        $('#search').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('#pedidoTable tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
     });
 </script>

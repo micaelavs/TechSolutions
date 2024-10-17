@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using iText.Kernel.Geom;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -8,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.UI;
 using TechSolutions.Data;
 using TechSolutions.Models;
 using TechSolutions.Servicios;
@@ -565,10 +568,11 @@ namespace TechSolutions.Controllers
         {
             return View();
         }
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int pageSize = 10)
         {
-            var pedidos = _pedidoRepository.List();
-            return View(pedidos);
+            var pedidos = _pedidoRepository.List().ToList();
+            var pagedList = pedidos.ToPagedList(page, pageSize);
+            return View(pagedList);
         }
 
         [HttpGet]

@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using TechSolutions.Data;
 using TechSolutions.Models;
+using PagedList;
 
 namespace TechSolutions.Controllers
 {
@@ -31,11 +32,17 @@ namespace TechSolutions.Controllers
             _detallePedidoRepository = new DetallePedidoData();
         }
         // GET este es listado del abm
-        public ActionResult Index()
+        //biblioteca PagedList para dividir esos datos en páginas
+        //se utiliza el metodo ToPagedList page, es el num actual de la pagina, y pageSize cuantos datos vas a mostrar
+        /*
+         devolves el objeto pagedList a la vista. Este objeto incluye información sobre los elementos de la página actual y 
+         metadatos sobre la paginación, como el número total de páginas y si hay páginas anteriores o siguientes.
+         */
+        public ActionResult Index(int page = 1, int pageSize = 10)
         {
-            var productos = _productoRepository.List();
-            //var productosActivos = productos.Where(p => p.Activo).ToList();
-            return View(productos);
+            var productos = _productoRepository.List().ToList();
+            var pagedList = productos.ToPagedList(page, pageSize);
+            return View(pagedList);
         }
 
         // GET: Productoes/Details/5

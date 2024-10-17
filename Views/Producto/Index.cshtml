@@ -1,4 +1,5 @@
-﻿@model IEnumerable<TechSolutions.Models.Producto>
+﻿@model PagedList.IPagedList<TechSolutions.Models.Producto>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Listado de Productos";
@@ -6,24 +7,12 @@
 }
 
 <style>
-    /* Estilo para el fondo de la página */
     body {
         background-color: #93C47D;
     }
 
-    /* Estilo para el botón "Nuevo Producto" */
-    .new-product-link {
-        text-align: right;
-        margin: 20px 0;
-    }
-
-    /* Opcional: Espaciado entre los botones */
-    .btn-action {
-        margin: 2px 5px;
-    }
-    /* Ancho fijo para la columna de acciones */
     .action-column {
-        width: 250px; /* Ajusta el valor según sea necesario */
+        width: 200px; /* Ajusta este valor según sea necesario */
         white-space: nowrap; /* Evita que los botones se dividan en varias líneas */
     }
 </style>
@@ -45,16 +34,22 @@
     }
     <div class="row">
         <div class="col-12">
+            <input type="text" id="search" class="form-control" placeholder="Buscar productos...">
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-12">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover">
+                <table id="productTable" class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Nombre)</th>
                             <th>Categoría</th>
-                            <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
-                            <th>@Html.DisplayNameFor(model => model.Precio)</th>
-                            <th>@Html.DisplayNameFor(model => model.Stock)</th>
-                            <th>@Html.DisplayNameFor(model => model.Foto)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Descripcion)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Precio)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Stock)</th>
+                            <th>@Html.DisplayNameFor(model => model.First().Foto)</th>
                             <th class="action-column">Acciones</th>
                         </tr>
                     </thead>
@@ -72,7 +67,7 @@
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </td>
-                                <td>
+                                <td class="action-column">
                                     <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-secondary btn-sm btn-action">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -93,6 +88,38 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    @if (Model.HasPreviousPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    }
+                    @for (int i = 1; i <= Model.PageCount; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+                    @if (Model.HasNextPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12 text-end">
             <a href="@Url.Action("Create", "Producto")" class="btn btn-primary">
@@ -102,7 +129,8 @@
     </div>
     <br />
 </div>
-<!--para visualizar las imagens -->
+
+<!-- Modal para visualizar imágenes -->
 <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -118,6 +146,7 @@
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function () {
         var $successMessage = $('#successMessage');
@@ -135,11 +164,17 @@
                 $errorMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
             }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
         }
+
+        $('#search').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('#productTable tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
     });
+
     function showImage(imageUrl) {
-        // Asigna la URL de la imagen al src del elemento img del modal
         document.getElementById('imagePreview').src = imageUrl;
-        // Muestra el modal
         var myModal = new bootstrap.Modal(document.getElementById('imageModal'));
         myModal.show();
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -24,11 +25,14 @@ namespace TechSolutions.Controllers
             _productoData = new Producto();
         }
 
-        // GET
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int pageSize = 10)
         {
-            return View(_categoriaProductoData.List());
-           
+            var categorias = _categoriaProductoData.List().ToList();
+
+            var pagedList = categorias.ToPagedList(page, pageSize);
+
+            return View(pagedList);
+
         }
 
         // GET: CategoriaProducto/Details/5
