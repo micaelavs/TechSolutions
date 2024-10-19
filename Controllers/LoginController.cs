@@ -75,5 +75,18 @@ namespace TechSolutions.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public JsonResult CheckSession()
+        {
+            // Devuelve un JSON que indica si la sesión está activa o no
+            return Json(new { isValid = Session["UserId"] != null }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Logout()
+        {
+
+            Session.Clear();
+            Session.Abandon();
+            return RedirectToAction("Index");
+        }
+
     }
 }

@@ -19,6 +19,7 @@ using System.IO;
 using iText.Kernel.Pdf.Canvas.Draw;
 using TechSolutions.Models;
 using TechSolutions.Interfaces;
+using PagedList;
 
 namespace TechSolutions.Controllers
 {
@@ -225,10 +226,11 @@ namespace TechSolutions.Controllers
             return View(factura); 
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int pageSize = 10)
         {
-            var facturas = _facturaRepository.GetAll();
-            return View(facturas);
+            var facturas = _facturaRepository.GetAll().ToList();
+            var pagedList = facturas.ToPagedList(page, pageSize);
+            return View(pagedList);
         }
 
         public ActionResult Details(int id)
@@ -241,6 +243,169 @@ namespace TechSolutions.Controllers
             return View(factura); 
 
         }
+
+        /******para los reportes****/
+        public ActionResult VentasPorMes()
+        {
+            // Obtener las ventas agrupadas por mes
+            var ventasPorMes = _facturaRepository.GetAll()
+                .GroupBy(f => new { f.Fecha.Year, f.Fecha.Month })
+                .Select(g => new VentaPorMesDTO
+                {
+                    Mes = new DateTime(g.Key.Year, g.Key.Month, 1).ToString("MMMM yyyy"),
+                    Total = g.Sum(f => (decimal)f.Monto)
+                })
+                .ToList();
+
+            // Meses del año
+            var allMonths = Enumerable.Range(1, 12)
+                .Select(m => new DateTime(DateTime.Now.Year, m, 1))
+                .Select(d => d.ToString("MMMM yyyy")) // Formato de mes
+                .ToList();
+
+            // Combinar resultados
+            var resultadosFinales = new List<VentaPorMesDTO>();
+            var totalPorMes = new Dictionary<string, decimal>();
+
+            foreach (var month in allMonths)
+            {
+                var venta = ventasPorMes.FirstOrDefault(v => v.Mes == month);
+                totalPorMes[month] = venta != null ? venta.Total : 0; // Asigna el total o 0
+            }
+
+            // Crear el modelo para la vista
+            foreach (var month in allMonths)
+            {
+                resultadosFinales.Add(new VentaPorMesDTO
+                {
+                    Mes = month,
+                    Total = totalPorMes[month]
+                });
+            }
+
+            return View(resultadosFinales);
+        }
+
+
+        public ActionResult VentasPorMesIndex()
+        {
+            var ventasPorMes = _facturaRepository.GetAll()
+        .GroupBy(f => new { f.Fecha.Year, f.Fecha.Month })
+        .Select(g => new VentaPorMesDTO
+        {
+            Mes = new DateTime(g.Key.Year, g.Key.Month, 1).ToString("MMMM yyyy"),
+            Total = (decimal)g.Sum(f => (double)f.Monto)
+        })
+        .ToList();
+
+            // Meses del año
+            var allMonths = Enumerable.Range(1, 12)
+                .Select(m => new DateTime(DateTime.Now.Year, m, 1))
+                .ToList();
+
+            // Combinar resultados
+            var resultadosFinales = new List<VentaPorMesDTO>();
+
+            foreach (var month in allMonths)
+            {
+                var mesFormateado = month.ToString("MMMM yyyy"); // Aquí se usa correctamente
+                var venta = ventasPorMes.FirstOrDefault(v => v.Mes == mesFormateado);
+                resultadosFinales.Add(new VentaPorMesDTO
+                {
+                    Mes = mesFormateado,
+                    Total = venta != null ? venta.Total : 0 // Usar el total real si existe
+                });
+            }
+
+            return View(resultadosFinales);
+        }
+
+        public ActionResult VentasPorCategoria()
+        {
+            var ventasPorCategoria = _facturaRepository.GetAll()
+                .SelectMany(f => f.DetallesFacturas, (factura, detalle) => new
+                {
+                    CategoriaNombre = detalle.Producto.CategoriaProducto.Nombre,
+                    Monto = detalle.PrecioUnitario * detalle.Cantidad
+                })
+                .GroupBy(x => x.CategoriaNombre)
+                .Select(g => new
+                {
+                    CategoriaNombre = g.Key,
+                    Total = g.Sum(x => x.Monto)
+                })
+                .ToList();
+
+            return Json(ventasPorCategoria, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult VentasPorCategoriaIndex()
+        {
+            var ventasPorCategoria = _facturaRepository.GetAll()
+                .SelectMany(f => f.DetallesFacturas, (factura, detalle) => new
+                {
+                    CategoriaNombre = detalle.Producto.CategoriaProducto.Nombre,
+                    Monto = (decimal)detalle.PrecioUnitario * detalle.Cantidad // Asegúrate de que PrecioUnitario sea decimal
+                })
+                .GroupBy(x => x.CategoriaNombre)
+                .Select(g => new VentaPorCategoriaDTO
+                {
+                    CategoriaNombre = g.Key,
+                    Total = g.Sum(x => (decimal)x.Monto) // Forzar a decimal aquí
+                })
+                .ToList();
+
+            return View(ventasPorCategoria);
+        }
+
+        public ActionResult VentasPorProducto()
+        {
+            var ventasPorProducto = _facturaRepository.GetAll()
+                .SelectMany(f => f.DetallesFacturas, (factura, detalle) => new
+                {
+                    ProductoNombre = detalle.Producto.Nombre,
+                    Monto = detalle.PrecioUnitario * detalle.Cantidad
+                })
+                .GroupBy(x => x.ProductoNombre)
+                .Select(g => new
+                {
+                    ProductoNombre = g.Key,
+                    Total = g.Sum(x => x.Monto)
+                })
+                .ToList();
+
+            var resultadosFinales = new List<dynamic>();
+            foreach (var producto in ventasPorProducto)
+            {
+                resultadosFinales.Add(new
+                {
+                    ProductoNombre = producto.ProductoNombre,
+                    Total = producto.Total
+                });
+            }
+
+            return Json(resultadosFinales, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult VentasPorProductoIndex()
+        {
+            var ventasPorProducto = _facturaRepository.GetAll()
+                .SelectMany(f => f.DetallesFacturas, (factura, detalle) => new VentaPorProductoDTO
+                {
+                    ProductoNombre = detalle.Producto.Nombre,
+                    Total = (decimal)detalle.PrecioUnitario * (decimal)detalle.Cantidad // Asegúrate de la conversión
+                })
+                .GroupBy(x => x.ProductoNombre)
+                .Select(g => new VentaPorProductoDTO
+                {
+                    ProductoNombre = g.Key,
+                    Total = g.Sum(x => x.Total)
+                })
+                .ToList();
+
+            return View(ventasPorProducto);
+        }
+
 
 
 

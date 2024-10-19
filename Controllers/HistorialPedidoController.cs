@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,21 +16,22 @@ namespace TechSolutions.Controllers
         {
             _historialPedidoData = new HistorialPedidoData();
         }
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int pageSize = 10)
         {
-            var historialPedidos = _historialPedidoData.List();
-            return View(historialPedidos);
+            var historialPedidos = _historialPedidoData.List().ToList();
+            var pagedList = historialPedidos.ToPagedList(page, pageSize);
+            return View(pagedList);
         }
 
-       /*public ActionResult Details(int id)
-       {
-            var historialPedido = _historialPedidoData.GetById(id);
-            if (historialPedido == null)
-            {
-                return HttpNotFound();
-            }
-            return View(historialPedido);
-       }*/
+        /*public ActionResult Details(int id)
+        {
+             var historialPedido = _historialPedidoData.GetById(id);
+             if (historialPedido == null)
+             {
+                 return HttpNotFound();
+             }
+             return View(historialPedido);
+        }*/
 
         // GET: HistorialPedido2/Create
         public ActionResult Create()

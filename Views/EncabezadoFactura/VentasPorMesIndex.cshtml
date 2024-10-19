@@ -1,0 +1,79 @@
+﻿@using TechSolutions.Models
+@model IEnumerable<VentaPorMesDTO>
+
+@{
+    ViewBag.Title = "Ventas por Mes";
+}
+<br />
+<h2>Ventas por Mes</h2>
+
+<!-- Contenedor para el gráfico -->
+<canvas id="ventasPorMesChart" width="400" height="200"></canvas>
+<br />
+<br />
+
+<!-- Botón para exportar a Excel -->
+<a href="javascript:void(0);" class="btn btn-success" onclick="exportToExcel()">Exportar a Excel</a>
+<br />
+<br />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Mes</th>
+            <th>Total Vendido</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Mes</td>
+                <td>$@item.Total</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
+    <script>
+        const ctx = document.getElementById('ventasPorMesChart').getContext('2d');
+        const labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.Mes)));
+        const data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.Total)));
+
+        const ventasPorMesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Vendido',
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        function exportToExcel() {
+            const data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Ventas por Mes");
+
+            // Generar el archivo y descargarlo
+            XLSX.writeFile(workbook, 'VentasPorMes.xlsx');
+        }
+    </script>
+}

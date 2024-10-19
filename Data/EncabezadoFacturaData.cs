@@ -43,7 +43,7 @@ namespace TechSolutions.Data
         {
             var db = new ApiDbContext();
             return db.EncabezadosFacturas
-                .Include(f => f.DetallesFacturas.Select(d => d.Producto))  
+                .Include(f => f.DetallesFacturas.Select(d => d.Producto.CategoriaProducto))
                 .Include(f => f.Usuario)                                   
                 .Include(f => f.Pedido)                                    
                 .ToList();

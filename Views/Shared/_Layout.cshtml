@@ -15,24 +15,24 @@
             background-color: #206329; /* Verde oscuro personalizado */
         }
 
-        .navbar-custom .navbar-brand, .navbar-custom .nav-link {
-            color: white;
-            text-align: center; /* Asegura que el texto esté centrado */
-        }
+            .navbar-custom .navbar-brand, .navbar-custom .nav-link {
+                color: white;
+                text-align: center; /* Asegura que el texto esté centrado */
+            }
 
-        .navbar-custom .nav-link {
-            margin-left: 15px;
-            margin-right: 15px;
-            text-transform: uppercase; /* Mayúsculas para un look más moderno */
-        }
+            .navbar-custom .nav-link {
+                margin-left: 15px;
+                margin-right: 15px;
+                text-transform: uppercase; /* Mayúsculas para un look más moderno */
+            }
 
-        .navbar-custom .navbar-toggler {
-            border-color: white;
-        }
+            .navbar-custom .navbar-toggler {
+                border-color: white;
+            }
 
-        .navbar-custom .navbar-toggler-icon {
-            color: white;
-        }
+            .navbar-custom .navbar-toggler-icon {
+                color: white;
+            }
 
         /* Centrando los elementos dentro del navbar usando flexbox */
         .navbar-collapse {
@@ -44,24 +44,27 @@
         .user-info {
             display: flex;
             align-items: center;
-            justify-content: center; /* Asegura que esté centrado */
-            background-color: #34495e; /* Fondo azul oscuro */
+            justify-content: center;
+            background-color: #34495e;
             color: white;
-            font-size: 1.1rem;
-            padding: 8px 15px;
-            border-radius: 25px; /* Borde redondeado */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para resaltar */
+            font-size: 0.9rem; /* Tamaño de fuente reducido */
+            padding: 5px 10px; /* Padding reducido */
+            border-radius: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-height: 40px; /* Limitar altura máxima */
+            overflow: hidden; /* Ocultar el contenido que se salga */
         }
 
         .user-info i {
-            margin-right: 10px;
-            font-size: 1.5rem;
+            margin-right: 5px; /* Margen reducido entre el icono y el texto */
+            font-size: 1.2rem; /* Tamaño del icono reducido */
         }
 
         .user-info p {
-            margin: 0;
+            margin: 0; /* Mantener el margen en 0 */
             font-weight: bold;
         }
+
         .footer-custom {
             background-color: #206329;
             color: white;
@@ -73,15 +76,15 @@
             left: 0;
         }
 
-        .footer-custom a {
-            color: white; /* Color inicial del enlace */
-            text-decoration: none; /* Quitar subrayado */
-        }
+            .footer-custom a {
+                color: white; /* Color inicial del enlace */
+                text-decoration: none; /* Quitar subrayado */
+            }
 
-        .footer-custom a:hover {
-            color: #4a90e2; /* Azul claro al pasar el mouse */
-            text-decoration: underline; /* Opcional: añade subrayado al pasar el mouse */
-        }
+                .footer-custom a:hover {
+                    color: #4a90e2; /* Azul claro al pasar el mouse */
+                    text-decoration: underline; /* Opcional: añade subrayado al pasar el mouse */
+                }
 
         .body-content {
             margin-bottom: 50px;
@@ -133,11 +136,11 @@
                             <li>@Html.ActionLink("Mis Compras", "ComprasUsuario", "EncabezadoFactura", new { idUsuario = Session["UserId"] }, new { @class = "nav-link" })</li>
                         }
 
-                            <li>
-                                <a href="@Url.Action("Logout", "Usuario", new { area = "" })" class="nav-link" title="Cerrar sesión">
-                                    <i class="fas fa-power-off" style="font-size: 1.7rem; margin-top:10px;"></i> <!-- Ajusta el tamaño aquí -->
-                                </a>
-                            </li>
+                        <li>
+                            <a href="@Url.Action("Logout", "Login", new { area = "" })" class="nav-link" title="Cerrar sesión">
+                                <i class="fas fa-power-off" style="font-size: 1.7rem; margin-top:10px;"></i> <!-- Ajusta el tamaño aquí -->
+                            </a>
+                        </li>
                     }
                 </ul>
 
@@ -167,5 +170,20 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            // Establecer un intervalo para verificar la sesión cada minuto (60000 ms)
+            setInterval(function () {
+                $.get('/Login/CheckSession', function (data) {
+                    if (!data.isValid) {
+                        // Redirigir a la página de inicio de sesión si la sesión ha expirado
+                        window.location.href = '/Login';
+                    }
+                });
+            }, 60000); // cada minuto
+        });
+    </script>
 </body>
 </html>
+
+
