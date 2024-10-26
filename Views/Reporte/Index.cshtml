@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Reportes";
+}
+
+<style>
+    body {
+        background-color: #dff0d8; /* Fondo verde claro */
+    }
+
+    .btn-group {
+        margin-top: 20px;
+    }
+
+    .btn {
+        margin: 5px;
+        font-weight: bold;
+    }
+
+    h2 {
+        text-align: left;
+    }
+</style>
+<br />
+<h2>Reportes</h2>
+
+<div class="btn-group" role="group" aria-label="Basic example">
+    <a href="@Url.Action("VentasPorMesIndex", "EncabezadoFactura")" class="btn btn-primary">Ventas por Mes</a>
+    <a href="@Url.Action("VentasPorCategoriaIndex", "EncabezadoFactura")" class="btn btn-info">Ventas por Categoría</a>
+    <a href="@Url.Action("VentasPorProductoIndex", "EncabezadoFactura")" class="btn btn-success">Ventas por Producto</a>
+    <a href="@Url.Action("ClientesPorMesIndex", "EncabezadoFactura")" class="btn btn-warning">Total vendido por Cliente</a>
+    <a href="@Url.Action("ProductosPorClientePorMesIndex", "EncabezadoFactura")" class="btn btn-danger">Total vendido por Cliente por Producto</a>
+    <a href="@Url.Action("ProductosEnStockCriticoIndex", "Producto")" class="btn btn-secondary">Productos en Stock Crítico</a>
+</div>

@@ -20,6 +20,7 @@ using iText.Kernel.Pdf.Canvas.Draw;
 using TechSolutions.Models;
 using TechSolutions.Interfaces;
 using PagedList;
+using TechSolutions.SharedKernel;
 
 namespace TechSolutions.Controllers
 {
@@ -27,11 +28,13 @@ namespace TechSolutions.Controllers
     {
         private readonly EncabezadoFacturaData _facturaRepository;
         private readonly CalificacionProductoData _calificacionRepository;
+        private readonly UsuarioData _usuarioRepository;
 
         public EncabezadoFacturaController()
         {
             _facturaRepository = new EncabezadoFacturaData();
             _calificacionRepository = new CalificacionProductoData();
+            _usuarioRepository = new UsuarioData();
         }
         [HttpGet]
         public ActionResult GenerarFactura(int numeroFactura)
@@ -405,6 +408,114 @@ namespace TechSolutions.Controllers
 
             return View(ventasPorProducto);
         }
+
+        public ActionResult ClientesPorMesIndex()
+        {
+            // Obtener todos los clientes (usuarios con rol Cliente)
+            var todosLosClientes = _usuarioRepository.List()
+                .Where(u => u.Rol == Rol.Cliente && u.Activo)
+                .ToList();
+
+            // Obtener todas las ventas agrupadas por cliente
+            var ventasPorCliente = _facturaRepository.GetAll()
+                .SelectMany(f => f.DetallesFacturas, (factura, detalle) => new
+                {
+                    ClienteId = factura.Usuario.Id, // Asumiendo que cada factura tiene un UsuarioId
+                    Monto = detalle.PrecioUnitario * detalle.Cantidad
+                })
+                .GroupBy(x => x.ClienteId)
+                .Select(g => new
+                {
+                    ClienteId = g.Key,
+                    Total = g.Sum(x => x.Monto)
+                })
+                .ToList();
+
+            // Obtener los nombres de los clientes
+            var clientes = todosLosClientes.ToDictionary(c => c.Id, c => c.Email); // Asumimos que quieres mostrar el email
+
+            // Resultados finales
+            var resultadosFinales = new List<ClienteReporteDTO>();
+            foreach (var cliente in ventasPorCliente)
+            {
+                resultadosFinales.Add(new ClienteReporteDTO
+                {
+                    ClienteId = cliente.ClienteId,
+                    ClienteNombre = clientes[cliente.ClienteId], // Asumiendo que estás usando el email como nombre
+                    Total = (decimal)cliente.Total
+                });
+            }
+
+            return View(resultadosFinales);
+        }
+
+        public ActionResult ProductosPorClientePorMesIndex()
+        {
+            var todosLosClientes = _usuarioRepository.List()
+                .Where(u => u.Rol == Rol.Cliente && u.Activo)
+                .ToList();
+
+            var ventasPorCliente = _facturaRepository.GetAll()
+                .SelectMany(f => f.DetallesFacturas, (factura, detalle) => new
+                {
+                    ClienteId = factura.Usuario.Id,
+                    ClienteNombre = todosLosClientes.FirstOrDefault(u => u.Id == factura.Usuario.Id)?.Email,
+                    ProductoNombre = detalle.Producto.Nombre,
+                    Monto = detalle.PrecioUnitario * detalle.Cantidad,
+                    Mes = new DateTime(factura.Fecha.Year, factura.Fecha.Month, 1).ToString("MMMM yyyy")
+                })
+                .GroupBy(x => new { x.ClienteId, x.ClienteNombre, x.Mes })
+                .Select(g => new
+                {
+                    ClienteId = g.Key.ClienteId,
+                    ClienteNombre = g.Key.ClienteNombre,
+                    Mes = g.Key.Mes,
+                    TotalVendido = g.Sum(x => x.Monto),
+                    Productos = g.GroupBy(x => x.ProductoNombre)
+                                 .Select(pg => new
+                                 {
+                                     ProductoNombre = pg.Key,
+                                     Total = pg.Sum(x => x.Monto)
+                                 }).ToList()
+                })
+                .ToList();
+
+            var resultadosFinales = new List<ClienteProductosReporteDTO>();
+            var ventasGrafico = new List<object>(); // Para almacenar datos del gráfico
+
+            foreach (var cliente in ventasPorCliente)
+            {
+                resultadosFinales.Add(new ClienteProductosReporteDTO
+                {
+                    ClienteId = cliente.ClienteId,
+                    ClienteNombre = cliente.ClienteNombre,
+                    Mes = cliente.Mes,
+                    Productos = cliente.Productos.Select(p => new ProductoReporteDTO
+                    {
+                        ProductoNombre = p.ProductoNombre,
+                        Total = (decimal)p.Total
+                    }).ToList()
+                });
+
+                // Agregar datos al gráfico
+                ventasGrafico.Add(new
+                {
+                    Cliente = cliente.ClienteNombre,
+                    Mes = cliente.Mes,
+                    TotalVendido = cliente.TotalVendido
+                });
+            }
+
+            ViewBag.VentasGrafico = ventasGrafico; // Guardamos los datos para el gráfico
+
+            return View(resultadosFinales);
+        }
+
+
+
+
+
+
 
 
 

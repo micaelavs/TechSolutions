@@ -127,11 +127,15 @@
             <a href="@Url.Action("Create", "Usuario")" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Nuevo Usuario
             </a>
+            <a href="javascript:void(0);" class="btn btn-success" id="exportToExcel">
+                <i class="fas fa-file-excel"></i> Descargar a Excel
+            </a>
         </div>
     </div>
     <br />
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 <script>
     $(document).ready(function () {
         var $successMessage = $('#successMessage');
@@ -154,6 +158,45 @@
             $('#userTable tbody tr').filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
+        });
+
+        $('#exportToExcel').click(function () {
+            const tableData = [];
+            const headers = [];
+
+            // Agregar encabezados
+            $('#userTable thead tr th').each(function () {
+                // Omitir la columna de "Acciones" en el Excel
+                if ($(this).index() !== 5) {
+                    headers.push($(this).text());
+                }
+            });
+            tableData.push(headers);
+
+            // Agregar filas visibles
+            $('#userTable tbody tr:visible').each(function () {
+                const rowData = [];
+                $(this).find('td').each(function () {
+                    if ($(this).index() === 4) {
+                        // Cambiar lógica para determinar "Activo" según el texto en la columna de acciones
+                        const accionesTd = $(this).closest('tr').find('td').eq(5);
+                        const isReactivable = accionesTd.find('a:contains("Reactivar")').length > 0;
+                        rowData.push(isReactivable ? "No" : "Sí");
+                    } else if ($(this).index() !== 5) {
+                        // Omitir la columna de "Acciones"
+                        rowData.push($(this).text());
+                    }
+                });
+                tableData.push(rowData);
+            });
+
+            // Crear un libro de trabajo y una hoja
+            const worksheet = XLSX.utils.aoa_to_sheet(tableData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Usuarios');
+
+            // Generar el archivo y descargarlo
+            XLSX.writeFile(workbook, 'ListadoUsuarios.xlsx');
         });
     });
 </script>

@@ -1,15 +1,14 @@
 ﻿@using TechSolutions.Models
-@model IEnumerable<VentaPorCategoriaDTO>
+@model IEnumerable<ProductoReporteStockDTO>
 
 @{
-    ViewBag.Title = "Ventas por Categoría";
+    ViewBag.Title = "Productos en Stock Crítico";
 }
-
 <br />
-<h2>Ventas por Categoría</h2>
+<h2>Productos en Stock Crítico</h2>
 
-<canvas id="ventasPorCategoriaChart" width="400" height="200"></canvas>
-<br />
+<!-- Gráfico de Stock Crítico -->
+<canvas id="stockCriticoChart" width="400" height="200"></canvas>
 <br />
 
 <!-- Botón para exportar a Excel -->
@@ -20,40 +19,43 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Producto</th>
+            <th>Stock Actual</th>
             <th>Categoría</th>
-            <th>Total Vendido</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var producto in Model)
         {
             <tr>
-                <td>@item.CategoriaNombre</td>
-                <td>$@item.Total</td>
+                <td>@producto.ProductoNombre</td>
+                <td>@producto.Stock</td>
+                <td>@producto.Categoria</td>
             </tr>
         }
     </tbody>
 </table>
-<br />
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 
     <script>
-        const ctx = document.getElementById('ventasPorCategoriaChart').getContext('2d');
-        const labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.CategoriaNombre)));
-        const data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.Total)));
+        const ctx = document.getElementById('stockCriticoChart').getContext('2d');
 
-        const ventasPorCategoriaChart = new Chart(ctx, {
+        // Datos para el gráfico
+        const labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.ProductoNombre)));
+        const data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.Stock)));
+
+        const stockCriticoChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Total Vendido',
+                    label: 'Stock Actual',
                     data: data,
-                    backgroundColor: 'rgba(255, 206, 86, 0.2)', // Color de fondo amarillo vivo
-                    borderColor: 'rgba(255, 206, 86, 1)', // Color del borde amarillo oscuro
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1
                 }]
             },
@@ -70,10 +72,10 @@
             const data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
             const worksheet = XLSX.utils.json_to_sheet(data);
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Ventas por Categoría");
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Productos en Stock Crítico");
 
             // Generar el archivo y descargarlo
-            XLSX.writeFile(workbook, 'VentasPorCategoria.xlsx');
+            XLSX.writeFile(workbook, 'ProductosEnStockCritico.xlsx');
         }
     </script>
 }

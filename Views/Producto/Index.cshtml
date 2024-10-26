@@ -28,7 +28,7 @@
     }
     @if (TempData["ErrorMessage"] != null)
     {
-        <div id="successMessage" class="alert alert-danger">
+        <div id="errorMessage" class="alert alert-danger">
             @TempData["ErrorMessage"]
         </div>
     }
@@ -125,6 +125,9 @@
             <a href="@Url.Action("Create", "Producto")" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Nuevo Producto
             </a>
+            <a href="javascript:void(0);" class="btn btn-success" id="exportToExcel" style="margin-left: 10px;">
+                <i class="fas fa-file-excel"></i> Descargar a Excel
+            </a>
         </div>
     </div>
     <br />
@@ -147,17 +150,17 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 <script>
     $(document).ready(function () {
         var $successMessage = $('#successMessage');
+        var $errorMessage = $('#errorMessage');
 
         if ($successMessage.length) {
             setTimeout(function () {
                 $successMessage.fadeOut(500); // Desvanece el mensaje en 500 ms
             }, 3000); // Espera 3000 ms (3 segundos) antes de comenzar a desvanecer
         }
-
-        var $errorMessage = $('#ErrorMessage');
 
         if ($errorMessage.length) {
             setTimeout(function () {
@@ -170,6 +173,34 @@
             $('#productTable tbody tr').filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
+        });
+
+        $('#exportToExcel').click(function () {
+            const tableData = [];
+            const headers = ["Nombre", "Categoría", "Descripción", "Precio", "Stock"];
+
+            // Agregar encabezados
+            tableData.push(headers);
+
+            // Agregar filas visibles
+            $('#productTable tbody tr:visible').each(function () {
+                const rowData = [];
+                $(this).find('td').each(function (index) {
+                    // Excluir las columnas "Foto" y "Acciones"
+                    if (index < 5) { // Solo los primeros 5 índices
+                        rowData.push($(this).text());
+                    }
+                });
+                tableData.push(rowData);
+            });
+
+            // Crear un libro de trabajo y una hoja
+            const worksheet = XLSX.utils.aoa_to_sheet(tableData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Productos');
+
+            // Generar el archivo y descargarlo
+            XLSX.writeFile(workbook, 'ListadoProductos.xlsx');
         });
     });
 

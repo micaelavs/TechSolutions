@@ -15,30 +15,32 @@
             background-color: #206329; /* Verde oscuro personalizado */
         }
 
-            .navbar-custom .navbar-brand, .navbar-custom .nav-link {
-                color: white;
-                text-align: center; /* Asegura que el texto esté centrado */
-            }
+        .navbar-custom .navbar-brand, .navbar-custom .nav-link {
+            color: white;
+            text-align: center; /* Asegura que el texto esté centrado */
+        }
 
-            .navbar-custom .nav-link {
-                margin-left: 15px;
-                margin-right: 15px;
-                text-transform: uppercase; /* Mayúsculas para un look más moderno */
-            }
+        .navbar-custom .nav-link {
+            margin-left: 5px; /* Reducir margen izquierdo */
+            margin-right: 5px; /* Reducir margen derecho */
+            text-transform: uppercase; /* Mayúsculas para un look más moderno */
+            font-size: 0.9rem; /* Ajustar tamaño de fuente */
+        }
 
-            .navbar-custom .navbar-toggler {
-                border-color: white;
-            }
+        .navbar-custom .navbar-toggler {
+            border-color: white;
+        }
 
-            .navbar-custom .navbar-toggler-icon {
-                color: white;
-            }
+        .navbar-custom .navbar-toggler-icon {
+            color: white;
+        }
 
         /* Centrando los elementos dentro del navbar usando flexbox */
         .navbar-collapse {
             display: flex;
-            justify-content: space-between; /* Para distribuir los elementos */
+            justify-content: flex-end; /* Alinear a la derecha */
             align-items: center; /* Centra verticalmente */
+            flex-wrap: wrap; /* Permitir que el menú se envuelva */
         }
 
         .user-info {
@@ -53,6 +55,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             max-height: 40px; /* Limitar altura máxima */
             overflow: hidden; /* Ocultar el contenido que se salga */
+            margin-right: 10px; /* Espacio a la derecha */
         }
 
         .user-info i {
@@ -76,15 +79,15 @@
             left: 0;
         }
 
-            .footer-custom a {
-                color: white; /* Color inicial del enlace */
-                text-decoration: none; /* Quitar subrayado */
-            }
+        .footer-custom a {
+            color: white; /* Color inicial del enlace */
+            text-decoration: none; /* Quitar subrayado */
+        }
 
-                .footer-custom a:hover {
-                    color: #4a90e2; /* Azul claro al pasar el mouse */
-                    text-decoration: underline; /* Opcional: añade subrayado al pasar el mouse */
-                }
+        .footer-custom a:hover {
+            color: #4a90e2; /* Azul claro al pasar el mouse */
+            text-decoration: underline; /* Opcional: añade subrayado al pasar el mouse */
+        }
 
         .body-content {
             margin-bottom: 50px;
@@ -101,8 +104,16 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-center">
-                <ul class="navbar-nav flex-grow-1 justify-content-center">
+            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-end">
+                @if (Session["UserId"] != null)
+                {
+                    <div class="user-info me-3">
+                        <i class="fas fa-user-circle"></i>
+                        <p>@Session["Email"] - @Enum.Parse(typeof(Rol), Session["Rol"].ToString())</p>
+                    </div>
+                }
+
+                <ul class="navbar-nav flex-grow-1 justify-content-end">
                     <!-- Centramos el contenido del menú -->
                     <li>@Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Nosotros", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
@@ -126,6 +137,7 @@
                             <li>@Html.ActionLink("Pedidos", "Index", "Pedido", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Facturas", "Index", "EncabezadoFactura", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Log Pedidos", "Index", "HistorialPedido", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Reportes", "Index", "Reporte", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Mi perfil", "MiPerfil", "Usuario", new { id = Session["UserId"] }, new { @class = "nav-link" })</li>
                         }
                         else if (rolUsuario == Rol.Cliente)
@@ -138,19 +150,11 @@
 
                         <li>
                             <a href="@Url.Action("Logout", "Login", new { area = "" })" class="nav-link" title="Cerrar sesión">
-                                <i class="fas fa-power-off" style="font-size: 1.7rem; margin-top:10px;"></i> <!-- Ajusta el tamaño aquí -->
+                                <i class="fas fa-power-off" style="font-size: 1.7rem; margin-top:10px;"></i>
                             </a>
                         </li>
                     }
                 </ul>
-
-                @if (Session["UserId"] != null)
-                {
-                    <div class="user-info">
-                        <i class="fas fa-user-circle"></i>
-                        <p>@Session["Email"] - @Enum.Parse(typeof(Rol), Session["Rol"].ToString())</p>
-                    </div>
-                }
             </div>
         </div>
     </nav>
@@ -185,5 +189,3 @@
     </script>
 </body>
 </html>
-
-

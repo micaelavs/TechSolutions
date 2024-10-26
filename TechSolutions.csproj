@@ -227,6 +227,7 @@
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\RecuperoController.cs" />
     <Compile Include="Controllers\RegistroController.cs" />
+    <Compile Include="Controllers\ReporteController.cs" />
     <Compile Include="Controllers\SolicitudDevolucionController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Data\ApiDbContext.cs" />
@@ -254,6 +255,8 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CalificacionProducto.cs" />
+    <Compile Include="Models\ClienteProductosReporteDTO.cs" />
+    <Compile Include="Models\ClienteReporteDTO.cs" />
     <Compile Include="Models\DetalleDevolucion.cs" />
     <Compile Include="Models\DetalleNotaCredito.cs" />
     <Compile Include="Models\DetallePedido.cs" />
@@ -268,6 +271,8 @@
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\Producto.cs" />
     <Compile Include="Models\CategoriaProducto.cs" />
+    <Compile Include="Models\ProductoReporteDTO.cs" />
+    <Compile Include="Models\ProductoReporteStockDTO.cs" />
     <Compile Include="Models\SolicitudDevolucion.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\UsuarioEditViewModel.cs" />
@@ -420,6 +425,10 @@
     <Content Include="Views\EncabezadoFactura\VentasPorMesIndex.cshtml" />
     <Content Include="Views\EncabezadoFactura\VentasPorProductoIndex.cshtml" />
     <Content Include="Views\EncabezadoFactura\VentasPorCategoriaIndex.cshtml" />
+    <Content Include="Views\Reporte\Index.cshtml" />
+    <Content Include="Views\EncabezadoFactura\ClientesPorMesIndex.cshtml" />
+    <Content Include="Views\EncabezadoFactura\ProductosPorClientePorMesIndex.cshtml" />
+    <Content Include="Views\Producto\ProductosEnStockCriticoIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

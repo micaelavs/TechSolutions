@@ -367,6 +367,27 @@ namespace TechSolutions.Controllers
             return View(producto);
         }
 
+        /*para reporte*/
+        public ActionResult ProductosEnStockCriticoIndex()
+        {
+            // Definir el nivel crítico
+            int stockCritico = 3;
+
+            // Obtener los productos en stock crítico
+            var productosCriticos = _productoRepository.List()
+                .Where(p => p.Stock < stockCritico)
+                .Select(p => new ProductoReporteStockDTO
+                {
+                    ProductoNombre = p.Nombre,
+                    Stock = p.Stock,
+                    Categoria = p.CategoriaProducto.Nombre // Asumiendo que tienes una propiedad para la categoría
+                })
+                .ToList();
+
+            ViewBag.StockCritico = productosCriticos; // Para usar en la vista
+
+            return View(productosCriticos);
+        }
 
 
 

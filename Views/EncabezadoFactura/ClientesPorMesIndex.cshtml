@@ -1,14 +1,14 @@
 ﻿@using TechSolutions.Models
-@model IEnumerable<VentaPorCategoriaDTO>
+@model IEnumerable<ClienteReporteDTO>
 
 @{
-    ViewBag.Title = "Ventas por Categoría";
+    ViewBag.Title = "Ventas por Cliente";
 }
 
 <br />
-<h2>Ventas por Categoría</h2>
+<h2>Ventas por Cliente</h2>
 
-<canvas id="ventasPorCategoriaChart" width="400" height="200"></canvas>
+<canvas id="ventasPorClienteChart" width="400" height="200"></canvas>
 <br />
 <br />
 
@@ -20,7 +20,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Categoría</th>
+            <th>Cliente</th>
             <th>Total Vendido</th>
         </tr>
     </thead>
@@ -28,7 +28,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.CategoriaNombre</td>
+                <td>@item.ClienteNombre</td>
                 <td>$@item.Total</td>
             </tr>
         }
@@ -41,19 +41,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 
     <script>
-        const ctx = document.getElementById('ventasPorCategoriaChart').getContext('2d');
-        const labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.CategoriaNombre)));
+        const ctx = document.getElementById('ventasPorClienteChart').getContext('2d');
+        const labels = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.ClienteNombre)));
         const data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.Total)));
 
-        const ventasPorCategoriaChart = new Chart(ctx, {
+        const ventasPorClienteChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
                     label: 'Total Vendido',
                     data: data,
-                    backgroundColor: 'rgba(255, 206, 86, 0.2)', // Color de fondo amarillo vivo
-                    borderColor: 'rgba(255, 206, 86, 1)', // Color del borde amarillo oscuro
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)', // Color naranja vibrante
+                    borderColor: 'rgba(255, 159, 64, 1)', // Color borde naranja
                     borderWidth: 1
                 }]
             },
@@ -70,10 +70,10 @@
             const data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
             const worksheet = XLSX.utils.json_to_sheet(data);
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Ventas por Categoría");
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Ventas por Cliente");
 
             // Generar el archivo y descargarlo
-            XLSX.writeFile(workbook, 'VentasPorCategoria.xlsx');
+            XLSX.writeFile(workbook, 'VentasPorCliente.xlsx');
         }
     </script>
 }

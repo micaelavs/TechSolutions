@@ -110,11 +110,15 @@
             <a href="@Url.Action("Create", "CategoriaProducto")" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Nueva Categoría
             </a>
+            <a href="javascript:void(0);" class="btn btn-success" id="exportToExcel" style="margin-left: 10px;">
+                <i class="fas fa-file-excel"></i> Descargar a Excel
+            </a>
         </div>
     </div>
     <br />
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 <script>
     $(document).ready(function () {
         var $successMessage = $('#successMessage');
@@ -138,6 +142,34 @@
             $('#categoryTable tbody tr').filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
+        });
+
+        $('#exportToExcel').click(function () {
+            const tableData = [];
+            const headers = ["Nombre", "Descripción"];
+
+            // Agregar encabezados
+            tableData.push(headers);
+
+            // Agregar filas visibles
+            $('#categoryTable tbody tr:visible').each(function () {
+                const rowData = [];
+                $(this).find('td').each(function (index) {
+                    // Excluir la columna "Acciones" (índice 2)
+                    if (index < 2) { // Solo los primeros 2 índices
+                        rowData.push($(this).text());
+                    }
+                });
+                tableData.push(rowData);
+            });
+
+            // Crear un libro de trabajo y una hoja
+            const worksheet = XLSX.utils.aoa_to_sheet(tableData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Categorías');
+
+            // Generar el archivo y descargarlo
+            XLSX.writeFile(workbook, 'ListadoCategorias.xlsx');
         });
     });
 </script>

@@ -1,0 +1,105 @@
+﻿@using TechSolutions.Models
+@model IEnumerable<ClienteProductosReporteDTO>
+
+@{
+    ViewBag.Title = "Total Vendido por Cliente por Producto";
+}
+
+<br />
+<h2>Total Vendido por Cliente por Producto</h2>
+
+<canvas id="productosPorClienteChart" width="400" height="200"></canvas>
+<br />
+<br />
+
+<!-- Botón para exportar a Excel -->
+<a href="javascript:void(0);" class="btn btn-success" onclick="exportToExcel()"><i class="fas fa-file-excel"></i> Descargar a Excel</a>
+<br />
+<br />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Mes</th>
+            <th>Producto</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cliente in Model)
+        {
+            if (cliente.Productos != null && cliente.Productos.Any())
+            {
+                foreach (var producto in cliente.Productos)
+                {
+                    <tr>
+                        <td>@cliente.ClienteNombre</td>
+                        <td>@cliente.Mes</td>
+                        <td>@producto.ProductoNombre</td>
+                        <td>$@producto.Total</td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+<br />
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
+    <script>
+        const ctx = document.getElementById('productosPorClienteChart').getContext('2d');
+
+        // Obtener datos desde ViewBag
+        const ventasGrafico = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.VentasGrafico));
+
+        // Preparar labels y data para el gráfico
+        const labels = [...new Set(ventasGrafico.map(v => v.Cliente + " - " + v.Mes))];
+        const data = labels.map(label => {
+            const total = ventasGrafico
+                .filter(v => (v.Cliente + " - " + v.Mes) === label)
+                .reduce((sum, v) => sum + v.TotalVendido, 0);
+            return total;
+        });
+
+        const productosPorClienteChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Vendido',
+                    data: data,
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)', // Color violeta claro
+                    borderColor: 'rgba(153, 102, 255, 1)', // Color borde violeta
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        function exportToExcel() {
+            const data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectMany(cliente => cliente.Productos.Select(p => new {
+                Cliente = cliente.ClienteNombre,
+                Mes = cliente.Mes,
+                Producto = p.ProductoNombre,
+                Total = p.Total
+            }))));
+
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Productos por Cliente");
+
+            // Generar el archivo y descargarlo
+            XLSX.writeFile(workbook, 'ProductosPorCliente.xlsx');
+        }
+    </script>
+}
