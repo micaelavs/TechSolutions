@@ -113,48 +113,49 @@
                     </div>
                 }
 
-                <ul class="navbar-nav flex-grow-1 justify-content-end">
-                    <!-- Centramos el contenido del menú -->
-                    <li>@Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Nosotros", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+            <ul class="navbar-nav flex-grow-1 justify-content-end">
+                <!-- Centramos el contenido del menú -->
+                <li>@Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                <li>@Html.ActionLink("Nosotros", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                <li>@Html.ActionLink("Contacto", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
 
-                    @if (Session["UserId"] == null)
+                @if (Session["UserId"] == null)
+                {
+                    <li>@Html.ActionLink("Registro", "Create", "Registro", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Ingreso", "Index", "Login", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Recuperar cuenta", "Index", "Recupero", new { area = "" }, new { @class = "nav-link" })</li>
+                }
+                else
+                {
+                    var rolUsuario = (Rol)Enum.Parse(typeof(Rol), Session["Rol"].ToString());
+
+                    if (rolUsuario == Rol.Administrador)
                     {
-                        <li>@Html.ActionLink("Registro", "Create", "Registro", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li>@Html.ActionLink("Ingreso", "Index", "Login", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li>@Html.ActionLink("Recuperar cuenta", "Index", "Recupero", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Usuarios", "Index", "Usuario", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Productos", "Index", "Producto", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Categorías", "Index", "CategoriaProducto", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Pedidos", "Index", "Pedido", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Facturas", "Index", "EncabezadoFactura", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Log Pedidos", "Index", "HistorialPedido", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Devoluciones", "Index", "SolicitudDevolucion", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Reportes", "Index", "Reporte", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Mi perfil", "MiPerfil", "Usuario", new { id = Session["UserId"] }, new { @class = "nav-link" })</li>
                     }
-                    else
+                    else if (rolUsuario == Rol.Cliente)
                     {
-                        var rolUsuario = (Rol)Enum.Parse(typeof(Rol), Session["Rol"].ToString());
-
-                        if (rolUsuario == Rol.Administrador)
-                        {
-                            <li>@Html.ActionLink("Usuarios", "Index", "Usuario", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Productos", "Index", "Producto", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Categorías", "Index", "CategoriaProducto", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Pedidos", "Index", "Pedido", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Facturas", "Index", "EncabezadoFactura", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Log Pedidos", "Index", "HistorialPedido", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Reportes", "Index", "Reporte", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Mi perfil", "MiPerfil", "Usuario", new { id = Session["UserId"] }, new { @class = "nav-link" })</li>
-                        }
-                        else if (rolUsuario == Rol.Cliente)
-                        {
-                            <li>@Html.ActionLink("Ver Carrito", "Carrito", "Pedido", new { id = Session["UserId"] }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Mi perfil", "MiPerfil", "Usuario", new { id = Session["UserId"] }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Listado de Productos", "Listado", "Producto", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Mis Compras", "ComprasUsuario", "EncabezadoFactura", new { idUsuario = Session["UserId"] }, new { @class = "nav-link" })</li>
-                        }
-
-                        <li>
-                            <a href="@Url.Action("Logout", "Login", new { area = "" })" class="nav-link" title="Cerrar sesión">
-                                <i class="fas fa-power-off" style="font-size: 1.7rem; margin-top:10px;"></i>
-                            </a>
-                        </li>
+                        <li>@Html.ActionLink("Ver Carrito", "Carrito", "Pedido", new { id = Session["UserId"] }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Mi perfil", "MiPerfil", "Usuario", new { id = Session["UserId"] }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Listado de Productos", "Listado", "Producto", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Mis Compras", "ComprasUsuario", "EncabezadoFactura", new { idUsuario = Session["UserId"] }, new { @class = "nav-link" })</li>
                     }
-                </ul>
+
+                    <li>
+                        <a href="@Url.Action("Logout", "Login", new { area = "" })" class="nav-link" title="Cerrar sesión">
+                            <i class="fas fa-power-off" style="font-size: 1.7rem; margin-top:10px;"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
             </div>
         </div>
     </nav>

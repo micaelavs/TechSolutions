@@ -32,6 +32,7 @@ namespace TechSolutions.Controllers
         private readonly DetalleDevolucionData _detalleDevolucionRepository;
         private readonly NotaDeCreditoData _notaDeCreditoRepository;
         private readonly DetalleNotaCreditoData _detalleNotaCreditoRepository;
+        private readonly UsuarioData _usuarioRepository;
 
         public PedidoController()
         {
@@ -46,6 +47,7 @@ namespace TechSolutions.Controllers
             _detalleDevolucionRepository = new DetalleDevolucionData();
             _notaDeCreditoRepository = new NotaDeCreditoData();
             _detalleNotaCreditoRepository = new DetalleNotaCreditoData();
+            _usuarioRepository = new UsuarioData();
         }
        
         public ActionResult Details(int id)
@@ -84,6 +86,7 @@ namespace TechSolutions.Controllers
         // Acción para cargar la vista de pago con una lista de productos
         //vista previa de pagar 1 tipo de producto
         [HttpGet]
+        [ValidateInput(false)]
         public ActionResult Pagar(int Id, int Cantidad) 
         {
             PagoViewModel pago = new PagoViewModel();
@@ -317,6 +320,7 @@ namespace TechSolutions.Controllers
         //vista previa de carrito
         [HttpPost]
         //[ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult PagarCarrito(string carrito)
         {
             var listaDeObjetos = JsonConvert.DeserializeObject<List<dynamic>>(carrito);
@@ -629,6 +633,7 @@ namespace TechSolutions.Controllers
                 // Obtener el pedido actualizado
                 var pedidoResult = _pedidoRepository.GetById(pedido.Id);
 
+                //efectivamente devolvio o todos los productos o algunos (o todos los del pedido o alguno del pedido)
                 if (pedidoResult.Estado == EstadoPedido.Parcialmente_devuelto || pedidoResult.Estado == EstadoPedido.Devuelto)
                 {
                     var solicitudDevolucion = _solicitudDevolucionRepository.GetSolicitudByPedidoId(pedido.Id);
@@ -668,7 +673,11 @@ namespace TechSolutions.Controllers
 
                         solicitudDevolucion.EstadoSolicitud = EstadoSolicitud.Cerrada;
                         _solicitudDevolucionRepository.Update(solicitudDevolucion);
+                        //hay que buscar el mail del comprador
+                        var usuarioCliente = _usuarioRepository.GetById(solicitudDevolucion.IdIUsuario);
 
+                        //enviar mail de producto efectivamente devuelto
+                        EnviarCorreoConfirmacionDevolucion(solicitudDevolucion,usuarioCliente.Email);
                         successMessage = "Estado de Pedido actualizado exitosamente y se ha generado la nota de crédito"; // Mensaje para el caso donde se genera la nota
                     }
                 }
@@ -681,6 +690,35 @@ namespace TechSolutions.Controllers
             TempData["SuccessMessage"] = successMessage; // Asignar el mensaje al TempData
 
             return RedirectToAction("Index");
+        }
+
+        private void EnviarCorreoConfirmacionDevolucion(SolicitudDevolucion solicitudDevolucion, string emailUsuario)
+        {
+            var factura = _encabezadoFacturaRepository.GetById(solicitudDevolucion.IdFactura);
+            //para obtener la solic y los detalles de dev incluidos
+            var solicDev = _solicitudDevolucionRepository.GetById(solicitudDevolucion.Id);
+            var emailBody = new StringBuilder();
+            emailBody.AppendLine("<h1>Confirmación de Devolución</h1>");
+            emailBody.AppendLine("<p>Tu devolución ha sido procesada con éxito. Agradecemos tu compromiso. Aquí te enviamos el resumen:</p>");
+            emailBody.AppendLine($"<p>Número de Devolución: {solicDev.NumeroDevolucion}</p>");
+            emailBody.AppendLine($"<p>Número de Factura: {factura.Numero}</p>");
+
+            emailBody.AppendLine("<ul>");
+
+            foreach (var detalle in solicDev.DetallesDevoluciones)
+            {
+                var producto = _productoRepository.GetById(detalle.IdProducto);
+                emailBody.AppendLine($"<li>Producto ID: {producto.Nombre} - Cantidad: {detalle.Cantidad} - Precio Unitario: {detalle.PrecioUnitario}</li>");
+            }
+
+            emailBody.AppendLine("</ul>");
+            emailBody.AppendLine($"<p>Total de la Nota de Crédito: {solicDev.Monto}</p>");
+            emailBody.AppendLine("<p>Podrás descargar tu nota de crédito en el sistema ingresando con tu email y contraseña</p>");
+
+            emailBody.AppendLine("<p>Gracias por confiar en Tech Solutions!</p>");
+
+            var emailService = new EmailService();
+            emailService.SendEmail(emailUsuario, "Confirmación de Devolución", emailBody.ToString());
         }
 
 
@@ -823,21 +861,58 @@ namespace TechSolutions.Controllers
 
                     _historialPedidoRepository.Insert(historialPedido);
 
-                    // Confirmar la transacción
                     transaction.Commit();
+
+                    EnviarCorreoConfirmacionSolicitudDevolucion(productosADevolver, solicitudDevolucion, (string)Session["Email"]);
 
                     TempData["SuccessMessage"] = "Devolución procesada con éxito.";
                     return RedirectToAction("ComprasUsuario", "EncabezadoFactura", new { model.IdUsuario });
                 }
                 catch (Exception ex)
                 {
-                    // Rollback si ocurre un error
                     transaction.Rollback();
                     TempData["ErrorMessage"] = "Error al procesar la devolución: " + ex.Message;
                     return RedirectToAction("ComprasUsuario", "EncabezadoFactura", new { model.IdUsuario });
                 }
             }
         }
+        private void EnviarCorreoConfirmacionSolicitudDevolucion(List<Producto> productosADevolver, SolicitudDevolucion solicitudDevolucion, string emailUsuario)
+        {
+            var factura = _encabezadoFacturaRepository.GetById(solicitudDevolucion.IdFactura);
+            //obtengo todos los datos incluidos los detalles de dev
+            var solicdev = _solicitudDevolucionRepository.GetById(solicitudDevolucion.Id);
+
+            var emailBody = new StringBuilder();
+            emailBody.AppendLine("<h1>Confirmación de Solicitud de Devolución</h1>");
+            emailBody.AppendLine("<p>Gracias por iniciar el proceso de devolución. Aquí te enviamos el resumen:</p>");
+            emailBody.AppendLine($"<p>Solicitud de Devolución: {solicdev.NumeroDevolucion}</p>");
+            emailBody.AppendLine($"<p>Número de Factura: {factura.Numero}</p>");
+            emailBody.AppendLine("<p>Recuerda devolver tus productos en la sucursal Avenida Córdoba 877, Capital Federal,CABA, Buenos Aires, AC4511l.</p>");
+            emailBody.AppendLine("<ul>");
+
+            // Obtener detalles de la solicitud de devolución
+            foreach (var producto in productosADevolver)
+            {
+                var detalleDevolucion = solicdev.DetallesDevoluciones
+                    .FirstOrDefault(d => d.IdProducto == producto.Id);
+                
+                //no se estan viendo los detalles den el mail
+                if (detalleDevolucion != null)
+                {
+                    emailBody.AppendLine($"<li>Producto: {producto.Nombre} - Cantidad: {detalleDevolucion.Cantidad} - Precio Unitario: {detalleDevolucion.PrecioUnitario}</li>");
+                
+                }
+            }
+
+            emailBody.AppendLine("</ul>");
+            emailBody.AppendLine($"<p>Total a devolver: {solicdev.Monto}</p>");
+            emailBody.AppendLine($"<p>Fecha de la solicitud: {solicdev.FechaOperacion.ToString("dd/MM/yyyy")}</p>");
+            emailBody.AppendLine("<p>Gracias por confiar en Tech Solutions!</p>");
+
+            var emailService = new EmailService();
+            emailService.SendEmail(emailUsuario, "Confirmación de solicitud de devolución", emailBody.ToString());
+        }
+
         public ActionResult NotasCredito(int id) //id es del pedido
         {
             var pedido = _pedidoRepository.GetById(id);
@@ -864,6 +939,7 @@ namespace TechSolutions.Controllers
             Random random = new Random();
             return random.Next(100000, 999999); // Genera un número entre 100000 y 999999
         }
+
 
     }   
 }

@@ -1,0 +1,102 @@
+﻿@model TechSolutions.Models.SolicitudDevolucion
+
+@{
+    ViewBag.Title = "Editar Solicitud de Devolución";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="login-container">
+            <h2>Editar Solicitud de Devolución</h2>
+            <hr class="custom-hr" />
+
+            @using (Html.BeginForm("Edit", "SolicitudDevolucion", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="form-horizontal">
+                    <div class="form-group row justify-content-center">
+                        @Html.LabelFor(model => model.Usuario.Email, "Email del usuario", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                        <div class="col-md-6">
+                            @Html.EditorFor(model => model.Usuario.Email, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group row justify-content-center">
+                        @Html.LabelFor(model => model.NumeroDevolucion, "Número de Devolución", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                        <div class="col-md-6">
+                            @Html.EditorFor(model => model.NumeroDevolucion, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group row justify-content-center">
+                        @Html.LabelFor(model => model.Monto, "Monto Total", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                        <div class="col-md-6">
+                            @Html.EditorFor(model => model.Monto, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group row justify-content-center">
+                        @Html.LabelFor(model => model.EstadoSolicitud, "Estado (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
+                        <div class="col-md-6">
+                            @Html.DropDownListFor(model => model.EstadoSolicitud,
+                                new SelectList(ViewBag.Estados, "Value", "Text", (int)Model.EstadoSolicitud),
+                                htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.EstadoSolicitud, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group row justify-content-center">
+                        <div class="col-md-12 text-center">
+                            <input type="submit" value="Guardar" class="btn btn-primary btn-block custom-btn" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<style>
+    body {
+        background-color: #93C47D;
+    }
+
+    .login-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .custom-hr {
+        border: none;
+        border-top: 3px solid #085394;
+        width: 100%;
+        margin: 20px 0;
+    }
+
+    .form-control,
+    .btn-block {
+        text-align: center;
+    }
+
+    .custom-btn {
+        width: 50%;
+        font-size: 18px;
+    }
+</style>

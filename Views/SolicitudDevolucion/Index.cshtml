@@ -1,0 +1,158 @@
+﻿@model PagedList.IPagedList<TechSolutions.Models.SolicitudDevolucion>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Administración de Solicitudes de Devolución";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    body {
+        background-color: #93C47D;
+    }
+
+    .new-solicitud-link {
+        text-align: right;
+        margin: 20px 0;
+    }
+
+    .btn-action {
+        margin: 2px 5px;
+    }
+
+    .action-column {
+        width: 180px;
+    }
+
+    .btn-custom {
+        background-color: #28a745; /* Color personalizado */
+        color: white;
+    }
+
+        .btn-custom:hover {
+            background-color: #218838; /* Color al pasar el ratón */
+            color: white;
+        }
+</style>
+
+<div class="container">
+    <br>
+    <h2>Administración de Solicitudes de Devolución</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div id="successMessage" class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div id="errorMessage" class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <!-- Campo de búsqueda -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <input type="text" id="search" class="form-control" placeholder="Buscar solicitudes de devolución...">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table id="solicitudTable" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Número Devolución</th>
+                            <th>Usuario</th>
+                            <th>Fecha Operación</th>
+                            <th>Estado</th>
+                            <th class="action-column">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.NumeroDevolucion)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Usuario.Email)</td>
+                                <td>@Html.DisplayFor(modelItem => item.FechaOperacion)</td>
+                                <td>@Html.DisplayFor(modelItem => item.EstadoSolicitud)</td>
+                                <td>
+                                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm btn-action" title="Ver Detalle Solicitud">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-secondary btn-sm btn-action" title="Editar Solicitud">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <!-- Agrega más acciones según sea necesario -->
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    @if (Model.HasPreviousPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    }
+                    @for (int i = 1; i <= Model.PageCount; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+                    @if (Model.HasNextPage)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var $successMessage = $('#successMessage');
+
+        if ($successMessage.length) {
+            setTimeout(function () {
+                $successMessage.fadeOut(500);
+            }, 3000);
+        }
+
+        var $errorMessage = $('#errorMessage');
+
+        if ($errorMessage.length) {
+            setTimeout(function () {
+                $errorMessage.fadeOut(500);
+            }, 3000);
+        }
+
+        // Buscador en vivo
+        $('#search').on('keyup', function () {
+            var value = $(this).val().toLowerCase();
+            $('#solicitudTable tbody tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+    });
+</script>

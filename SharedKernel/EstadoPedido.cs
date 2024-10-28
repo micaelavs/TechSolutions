@@ -17,7 +17,8 @@ namespace TechSolutions.SharedKernel
         Entregado = 6,
         En_proceso_devolucion = 7,
         Devuelto = 8,
-        Parcialmente_devuelto = 9
+        Parcialmente_devuelto = 9,
+        Sin_devolucion = 10
     }
 }
 

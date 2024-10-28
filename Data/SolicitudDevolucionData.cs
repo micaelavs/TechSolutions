@@ -24,7 +24,10 @@ namespace TechSolutions.Data
         {
             var db = new ApiDbContext();
             return db.SolicitudesDevoluciones
-           .Include(sd => sd.DetallesDevoluciones) // Incluye los detalles de la devolución
+           .Include(p => p.Usuario)
+           .Include(sd => sd.DetallesDevoluciones.Select(d => d.Producto))
+           .Include(sd => sd.Pedido) // Incluye el pedido
+           .Include(sd => sd.EncabezadoFactura)
            .FirstOrDefault(sd => sd.Id == id); // Filtra por ID
 
         }
