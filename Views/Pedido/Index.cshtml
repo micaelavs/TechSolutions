@@ -33,17 +33,23 @@
             background-color: #218838; /* Color al pasar el ratón */
             color: white;
         }
+
+    .action-column {
+        width: 200px; /* Ajusta según sea necesario */
+    }
 </style>
 
 <div class="container">
     <br>
     <h2>Administración de Pedidos</h2>
+
     @if (TempData["SuccessMessage"] != null)
     {
         <div id="successMessage" class="alert alert-success">
             @TempData["SuccessMessage"]
         </div>
     }
+
     @if (TempData["ErrorMessage"] != null)
     {
         <div id="errorMessage" class="alert alert-danger">
@@ -57,7 +63,6 @@
             <input type="text" id="search" class="form-control" placeholder="Buscar pedidos...">
         </div>
     </div>
-
     <div class="row">
         <div class="col-12">
             <div class="table-responsive">
@@ -145,8 +150,21 @@
             </nav>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12 text-end">
+            <a href="@Url.Action("Create", "Pedido")" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Nuevo Pedido
+            </a>
+            <a href="javascript:void(0);" class="btn btn-success" id="exportToExcel" style="margin-left: 10px;">
+                <i class="fas fa-file-excel"></i> Descargar a Excel
+            </a>
+        </div>
+    </div>
+    <br />
+
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 <script>
     $(document).ready(function () {
         var $successMessage = $('#successMessage');
@@ -171,6 +189,32 @@
             $('#pedidoTable tbody tr').filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
+        });
+
+        // Exportar a Excel
+        $('#exportToExcel').click(function () {
+            const tableData = [];
+            const headers = ["Número Pedido", "Usuario", "Monto Total", "Fecha Operación", "Estado"];
+
+            // Agregar encabezados
+            tableData.push(headers);
+
+            // Agregar filas visibles
+            $('#pedidoTable tbody tr:visible').each(function () {
+                const rowData = [];
+                $(this).find('td').each(function (index) {
+                    rowData.push($(this).text());
+                });
+                tableData.push(rowData);
+            });
+
+            // Crear un libro de trabajo y una hoja
+            const worksheet = XLSX.utils.aoa_to_sheet(tableData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Pedidos');
+
+            // Generar el archivo y descargarlo
+            XLSX.writeFile(workbook, 'ListadoPedidos.xlsx');
         });
     });
 </script>

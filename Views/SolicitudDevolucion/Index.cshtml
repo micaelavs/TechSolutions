@@ -87,7 +87,6 @@
                                     <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-secondary btn-sm btn-action" title="Editar Solicitud">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <!-- Agrega más acciones según sea necesario -->
                                 </td>
                             </tr>
                         }
@@ -127,8 +126,18 @@
             </nav>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12 text-end">
+            <a href="javascript:void(0);" class="btn btn-success" id="exportToExcel">
+                <i class="fas fa-file-excel"></i> Descargar a Excel
+            </a>
+        </div>
+    </div>
+    <br />
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 <script>
     $(document).ready(function () {
         var $successMessage = $('#successMessage');
@@ -153,6 +162,32 @@
             $('#solicitudTable tbody tr').filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
+        });
+
+        // Exportar a Excel
+        $('#exportToExcel').click(function () {
+            const tableData = [];
+            const headers = ["Número Devolución", "Usuario", "Fecha Operación", "Estado"];
+
+            // Agregar encabezados
+            tableData.push(headers);
+
+            // Agregar filas visibles
+            $('#solicitudTable tbody tr:visible').each(function () {
+                const rowData = [];
+                $(this).find('td').each(function () {
+                    rowData.push($(this).text());
+                });
+                tableData.push(rowData);
+            });
+
+            // Crear un libro de trabajo y una hoja
+            const worksheet = XLSX.utils.aoa_to_sheet(tableData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'SolicitudesDevolucion');
+
+            // Generar el archivo y descargarlo
+            XLSX.writeFile(workbook, 'SolicitudesDevolucion.xlsx');
         });
     });
 </script>
