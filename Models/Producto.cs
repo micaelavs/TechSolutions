@@ -24,6 +24,7 @@ namespace TechSolutions.Models
         [Required]
         public string Descripcion { get; set; }
         [Required]
+        //[Range(0.01, double.MaxValue, ErrorMessage = "El precio debe ser mayor que cero.")]
         public float Precio { get; set; }
     
         public CategoriaProducto CategoriaProducto { get; set; }

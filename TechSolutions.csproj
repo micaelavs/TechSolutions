@@ -254,6 +254,10 @@
     <Compile Include="Migrations\202410080128497_InitialCreate.Designer.cs">
       <DependentUpon>202410080128497_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202411070240009_CambioADecimalPrecio222.cs" />
+    <Compile Include="Migrations\202411070240009_CambioADecimalPrecio222.Designer.cs">
+      <DependentUpon>202411070240009_CambioADecimalPrecio222.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CalificacionProducto.cs" />
     <Compile Include="Models\ClienteProductosReporteDTO.cs" />
@@ -444,6 +448,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202410080128497_InitialCreate.resx">
       <DependentUpon>202410080128497_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202411070240009_CambioADecimalPrecio222.resx">
+      <DependentUpon>202411070240009_CambioADecimalPrecio222.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -37,7 +37,8 @@
             <div class="form-group row justify-content-center">
                 @Html.LabelFor(model => model.Precio, "Precio (*)", htmlAttributes: new { @class = "control-label col-md-3 text-right" })
                 <div class="col-md-6">
-                    @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control" } }) 
+                    <!--<input id="Precio" name="Precio" type="text" value="@Model.Precio" class="form-control" /> -->
                     @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -101,6 +102,26 @@
                 reader.readAsDataURL(input.files[0]);
             }
         });
+
+        /*$('form').submit(function () {
+            var precio = $('#Precio').val();  // Obtiene el valor del campo Precio
+            console.log("Precio antes de reemplazar: " + precio); // Verifica el valor original
+            if (isNaN(precio) || precio === '') {
+                console.log(precio);
+                alert('Por favor, ingresa un precio válido.');
+                return false;  // Previene que el formulario se envíe si el precio no es válido
+            }
+            // Si contiene una coma, la sustituimos por un punto
+            if (precio.indexOf('.') !== -1) {
+                $('#Precio').val(precio.replace('.', ','));
+            }
+            if (isNaN(precio) || precio === '') {
+                alert('Por favor, ingresa un precio válido.');
+                return false;  // Previene que el formulario se envíe si el precio no es válido
+            }
+
+            console.log("Precio después de reemplazar: " + $('#Precio').val()); // Verifica el valor después de reemplazar
+        });*/
     });
 </script>
 

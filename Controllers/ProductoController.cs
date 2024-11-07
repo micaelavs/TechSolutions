@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using TechSolutions.Data;
 using TechSolutions.Models;
 using PagedList;
+using System.Diagnostics;
 
 namespace TechSolutions.Controllers
 {
@@ -58,8 +59,9 @@ namespace TechSolutions.Controllers
 
         public ActionResult Create()
         {
+            var producto = new Producto();
             ViewBag.IdCategoriaProducto = new SelectList(_categoriaProductoData.List(), "Id", "Nombre");
-            return View();
+            return View(producto);
         }
 
         [HttpPost]
@@ -68,9 +70,26 @@ namespace TechSolutions.Controllers
         {
             if (ModelState.IsValid)
             {
+                /*foreach (var modelError in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Debug.WriteLine(modelError.ErrorMessage);
+                }*/
+                /*if (!string.IsNullOrEmpty(producto.Precio.ToString()))
+                {
+                    // Asegurarse de que Precio sea un número válido
+                    try
+                    {
+                        // Convertir el precio a float explícitamente si es necesario
+                        producto.Precio = Convert.ToSingle(producto.Precio);
+                    }
+                    catch (FormatException)
+                    {
+                        ModelState.AddModelError("Precio", "El precio debe ser un número válido.");
+                    }
+                }*/
 
-                if(Foto != null && Foto.ContentLength > 0)
-{
+                if (Foto != null && Foto.ContentLength > 0)
+                {
                     string fileExtension = Path.GetExtension(Foto.FileName);
                     string uniqueFileName = $"{Path.GetFileNameWithoutExtension(Foto.FileName)}_{DateTime.Now:yyyyMMddHHmmss}{fileExtension}";
                     string uploadsPath = Server.MapPath("~/Uploads/");
@@ -135,9 +154,21 @@ namespace TechSolutions.Controllers
                 {
                     return HttpNotFound();
                 }
-
-                // Verificar si se ha proporcionado un archivo de foto
-                if (foto != null && foto.ContentLength > 0)
+                /*if (!string.IsNullOrEmpty(producto.Precio.ToString()))
+                {
+                    // Asegurarse de que Precio sea un número válido
+                    try
+                    {
+                        // Convertir el precio a float explícitamente si es necesario
+                        producto.Precio = Convert.ToSingle(producto.Precio);
+                    }
+                    catch (FormatException)
+                    {
+                        ModelState.AddModelError("Precio", "El precio debe ser un número válido.");
+                    }
+                }*/
+            // Verificar si se ha proporcionado un archivo de foto
+            if (foto != null && foto.ContentLength > 0)
                 {
                     // Guardar la imagen en el servidor
                     var fileName = Path.GetFileName(foto.FileName);

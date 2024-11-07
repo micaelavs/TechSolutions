@@ -65,10 +65,11 @@ namespace TechSolutions.Controllers
             if (usuario.Rol == Rol.Cliente)
             {
                 return RedirectToAction("Listado", "Producto");
+                //podria redirigir a Mi perfil para qeu coincida con el escenario
             }
             else if (usuario.Rol == Rol.Administrador)
             {
-                return RedirectToAction("Index", "Pedido");
+                return RedirectToAction("Index", "Pedido");     
             }
 
             //Redirigir a una página predeterminada si el rol no coincide con los esperados
