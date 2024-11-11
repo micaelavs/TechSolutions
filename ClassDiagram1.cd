@@ -42,11 +42,11 @@
       <FileName>Controllers\CategoriaProductoController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TechSolutions.Controllers.DetalleDevoluionController" Collapsed="true">
+  <Class Name="TechSolutions.Controllers.DetalleDevolucionController" Collapsed="true">
     <Position X="11.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
-      <FileName>Controllers\DetalleDevoluionController.cs</FileName>
+      <FileName>Controllers\DetalleDevolucionController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TechSolutions.Controllers.DetalleFacturaController" Collapsed="true">
@@ -138,13 +138,6 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAABAAAAAAAAAAAQAAAAAAACAAEAAAAAAAA=</HashCode>
       <FileName>Controllers\SolicitudDevolucionController.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="TechSolutions.Controllers.SolictudDevolucionController" Collapsed="true">
-    <Position X="3" Y="7.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAEAAAAAAAA=</HashCode>
-      <FileName>Controllers\SolicitudxdfsdfDevolucionController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TechSolutions.Controllers.UsuarioController" Collapsed="true">

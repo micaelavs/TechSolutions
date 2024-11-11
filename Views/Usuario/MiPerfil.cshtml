@@ -69,7 +69,7 @@
             <br />
             <div class="form-group row justify-content-center">
                 <div class="col-md-12 d-flex justify-content-center">
-                    <a href="@Url.Action("Listado", "Producto")" class="btn btn-danger mx-2">Cancelar</a>
+                    <a href="javascript:void(0);" id="cancelarBtn" class="btn btn-danger mx-2">Cancelar</a>
                     <input type="submit" value="Guardar" class="btn btn-success mx-2" />
                 </div>
             </div>
@@ -81,6 +81,13 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+            $(document).ready(function () {
+                // Accede a la URL de redirección pasada desde el controlador
+                var redirectUrl = '@ViewBag.RedirectUrl'; 
+                $('#cancelarBtn').attr('href', redirectUrl);
+            });
+    </script>
 }
 
 <style>

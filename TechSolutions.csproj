@@ -215,7 +215,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CalificacionProductoController.cs" />
     <Compile Include="Controllers\CategoriaProductoController.cs" />
-    <Compile Include="Controllers\DetalleDevoluionController.cs" />
+    <Compile Include="Controllers\DetalleDevolucionController.cs" />
     <Compile Include="Controllers\DetalleFacturaController.cs" />
     <Compile Include="Controllers\DetallePedidoController.cs" />
     <Compile Include="Controllers\EncabezadoFacturaController.cs" />
@@ -229,7 +229,6 @@
     <Compile Include="Controllers\RegistroController.cs" />
     <Compile Include="Controllers\ReporteController.cs" />
     <Compile Include="Controllers\SolicitudDevolucionController.cs" />
-    <Compile Include="Controllers\SolicitudxdfsdfDevolucionController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Data\ApiDbContext.cs" />
     <Compile Include="Data\CalificacionProductoData.cs" />

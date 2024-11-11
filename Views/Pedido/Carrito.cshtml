@@ -95,7 +95,7 @@
                         <span id="cantidad-${index}">${producto.cantidad}</span>
                         <button class="btn btn-sm btn-success" onclick="actualizarCantidad(${index}, 1)">+</button>
                     </td>
-                    <td>$${(producto.precio * producto.cantidad).toFixed(2)}</td>
+                    <td>$${producto.precio * producto.cantidad}</td>
                     <td>
                         <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${index})">Eliminar</button>
                     </td>

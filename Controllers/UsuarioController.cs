@@ -338,6 +338,19 @@ namespace TechSolutions.Controllers
                 //no pongo la pass porque es opcional
             };
 
+            //para que redirija a una vista u otra si presiona cancelar
+            string redirectUrl = string.Empty;
+
+            if (usuario.Rol == SharedKernel.Rol.Cliente)
+            {
+                redirectUrl = Url.Action("Listado", "Producto");
+            }
+            else
+            {
+                redirectUrl = Url.Action("Index", "Pedido");
+            }
+
+            ViewBag.RedirectUrl = redirectUrl;
             return View(usuarioViewModel);
         }
 
@@ -433,7 +446,19 @@ namespace TechSolutions.Controllers
                 _usuarioRepository.Update(usuarioActual);
 
                 TempData["SuccessMessage"] = "El usuario se ha actualizado correctamente.";
-                return RedirectToAction("Listado","Producto");
+               
+                if (usuarioActual.Rol == SharedKernel.Rol.Cliente)
+                {
+                    
+                    return RedirectToAction("Listado", "Producto");
+                    
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Pedido");
+                }
+               
+
             }
 
             // Si el modelo no es válido, devuelve la vista con los errores

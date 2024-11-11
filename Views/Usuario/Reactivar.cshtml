@@ -1,19 +1,125 @@
 ﻿@model TechSolutions.Models.Usuario
 
-<h2>Reactivar Usuario</h2>
+@{
+    ViewBag.Title = "Reactivar Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-<div>
-    <h4>¿Estás seguro de que deseas reactivar a @Model.Nombre @Model.Apellido?</h4>
-    <div>
-        <strong>Email:</strong> @Model.Email<br />
-        <strong>Estado:</strong> @(Model.Activo ? "Activo" : "Inactivo")
-    </div>
-    <br />
-
-    @using (Html.BeginForm("Reactivar", "Usuario", new { id = Model.Id }, FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        <input type="submit" value="Reactivar" class="btn btn-success" />
-        @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-danger" })
+<style>
+    /* Estilo para el fondo de la página */
+    body {
+        background-color: #93C47D; /* Fondo suave */
     }
+
+    /* Estilo para el contenedor de reactivación */
+    .reactivate-container {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+        /* Título */
+        .reactivate-container h2 {
+            text-align: center;
+            color: #333;
+        }
+
+    /* Estilo para los detalles */
+    .user-details {
+        margin-bottom: 20px;
+    }
+
+        .user-details strong {
+            font-weight: bold;
+            color: #444;
+        }
+
+        .user-details span {
+            color: #555;
+        }
+
+    /* Estilo para el mensaje de confirmación */
+    .confirmation-message {
+        font-size: 18px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Estilo para los botones */
+    .form-actions input[type="submit"] {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 7px 30px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .form-actions a {
+        margin-left: 10px;
+        color: white;
+        text-decoration: none;
+    }
+
+        .form-actions a:hover {
+            text-decoration: underline;
+        }
+
+    /* Alinear los botones al centro */
+    .action-buttons {
+        display: flex;
+        justify-content: center; /* Centrar los botones */
+        gap: 20px; /* Espacio entre los botones */
+        margin-top: 20px;
+    }
+
+        .action-buttons a,
+        .action-buttons input {
+            width: auto; /* Quitar el 100% de ancho */
+            text-align: center;
+        }
+</style>
+
+<div class="container">
+    <br>
+    <h2>Reactivar Usuario</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="reactivate-container">
+                <h4>¿Estás seguro de que deseas reactivar a <strong>@Model.Nombre @Model.Apellido</strong>?</h4>
+                <p>Presione <strong>Reactivar</strong> para confirmar o <strong>Cancelar</strong> para volver al listado.</p>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>@Html.DisplayNameFor(model => model.Email)</dt>
+                    <dd>@Html.DisplayFor(model => model.Email)</dd>
+
+                    <dt>@Html.DisplayNameFor(model => model.Rol)</dt>
+                    <dd>@Html.DisplayFor(model => model.Rol)</dd>
+
+                    <dt>@Html.DisplayNameFor(model => model.Activo)</dt>
+                    <dd>@Html.DisplayFor(model => model.Activo)</dd>
+
+                    <dt>@Html.DisplayNameFor(model => model.Nombre)</dt>
+                    <dd>@Html.DisplayFor(model => model.Nombre)</dd>
+
+                    <dt>@Html.DisplayNameFor(model => model.Apellido)</dt>
+                    <dd>@Html.DisplayFor(model => model.Apellido)</dd>
+                </dl>
+
+                @using (Html.BeginForm("Reactivar", "Usuario", new { id = Model.Id }, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-actions">
+                        <!-- Botón Reactivar -->
+                        <input type="submit" value="Reactivar" class="btn btn-success" />
+                        <!-- Botón Cancelar -->
+                        @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>

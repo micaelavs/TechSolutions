@@ -1,116 +1,101 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="TechSolutions.Controllers.CalificacionProductoController">
-    <Position X="26.75" Y="5.5" Width="2.5" />
+    <Position X="19.75" Y="6.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
       <FileName>Controllers\CalificacionProductoController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TechSolutions.Controllers.CategoriaProductoController">
-    <Position X="22" Y="3.5" Width="2.25" />
+    <Position X="17.75" Y="1.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAACRAACAAAAAAAAAAAEAAEACAAEAAAAAAAA=</HashCode>
       <FileName>Controllers\CategoriaProductoController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TechSolutions.Controllers.DetalleDevoluionController" Collapsed="true">
-    <Position X="28.5" Y="4.5" Width="2.25" />
+  <Class Name="TechSolutions.Controllers.DetalleDevolucionController">
+    <Position X="24.75" Y="3.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
-      <FileName>Controllers\DetalleDevoluionController.cs</FileName>
+      <FileName>Controllers\DetalleDevolucionController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TechSolutions.Controllers.DetalleFacturaController">
-    <Position X="31" Y="4.5" Width="2" />
+    <Position X="30.75" Y="2" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
       <FileName>Controllers\DetalleFacturaController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TechSolutions.Controllers.DetallePedidoController">
-    <Position X="22" Y="5.5" Width="2" />
+    <Position X="15.25" Y="2" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
       <FileName>Controllers\DetallePedidoController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TechSolutions.Controllers.EncabezadoFacturaController">
-    <Position X="28.5" Y="3" Width="2.25" />
-    <InheritanceLine Type="System.Web.Mvc.Controller" FixedToPoint="true">
-      <Path>
-        <Point X="27.25" Y="2.441" />
-        <Point X="27.25" Y="2.625" />
-        <Point X="29.625" Y="2.625" />
-        <Point X="29.625" Y="3" />
-      </Path>
-    </InheritanceLine>
+    <Position X="28.25" Y="6" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <HashCode>AAECgACAAAABACABAAAAAQQBAAIAAAAAAAmAAAgAIAA=</HashCode>
       <FileName>Controllers\EncabezadoFacturaController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TechSolutions.Controllers.HistorialPedidoController">
-    <Position X="24.5" Y="5.5" Width="2" />
+    <Position X="17.5" Y="5.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAEAAEACAAEAEAAAAAA=</HashCode>
       <FileName>Controllers\HistorialPedidoController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TechSolutions.Controllers.PedidoController">
-    <Position X="26.5" Y="3.5" Width="1.5" />
+    <Position X="22.5" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <HashCode>ECCMABABoQAFAEACAgAAAQIQAEoAAEACQAEBABAAEAA=</HashCode>
       <FileName>Controllers\PedidoController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TechSolutions.Controllers.ProductoController">
-    <Position X="31.25" Y="3" Width="1.75" />
-    <InheritanceLine Type="System.Web.Mvc.Controller" FixedToPoint="true">
-      <Path>
-        <Point X="27.25" Y="2.441" />
-        <Point X="27.25" Y="2.625" />
-        <Point X="33.375" Y="2.625" />
-        <Point X="33.375" Y="3.616" />
-        <Point X="33" Y="3.616" />
-      </Path>
-    </InheritanceLine>
+    <Position X="33" Y="1.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAACBAACAAAAAAAAAAAEAAEACAAEAAAAAAAA=</HashCode>
+      <HashCode>AAAMgAAACACRAACAAgAIAAAAAAFAAEACAAEAAAAAAAg=</HashCode>
       <FileName>Controllers\ProductoController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="TechSolutions.Controllers.SolictudDevolucionController">
-    <Position X="23.75" Y="1.25" Width="2.25" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
-      <FileName>Controllers\SolicitudDevolucionController.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="TechSolutions.Controllers.UsuarioController">
-    <Position X="24.75" Y="3.5" Width="1.5" />
+    <Position X="20.25" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAACAAAAAAQAAAAEAAEACAAEAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAQAAAABAACAAAAAAQAAAAEAAEACAAkAAAgAAAA=</HashCode>
       <FileName>Controllers\UsuarioController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TechSolutions.Data.ApiDbContext">
-    <Position X="9" Y="5.25" Width="2.75" />
+    <Position X="49.75" Y="6.5" Width="2.5" />
+    <InheritanceLine Type="System.Data.Entity.DbContext" ManuallyRouted="true">
+      <Path>
+        <Point X="53.625" Y="5.94" />
+        <Point X="53.625" Y="6.674" />
+        <Point X="53.01" Y="6.674" />
+        <Point X="53.01" Y="8.592" />
+        <Point X="52.25" Y="8.592" />
+      </Path>
+    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>IAAAAAEAAAAAAQAAQAAACAACEAEAEAAACAEAAAAAAgA=</HashCode>
+      <HashCode>IAAAAAEAAAAAAQAAQAAACAACEAEAEAAACAEAAAACQgA=</HashCode>
       <FileName>Data\ApiDbContext.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TechSolutions.Data.CalificacionProductoData" BaseTypeListCollapsed="true">
-    <Position X="15.75" Y="2.75" Width="2" />
+    <Position X="45.5" Y="8.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <HashCode>AAQAAEAAAAIAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
       <FileName>Data\CalificacionProductoData.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="TechSolutions.Data.CategoriaProductoData" BaseTypeListCollapsed="true">
-    <Position X="16.25" Y="5" Width="2" />
+    <Position X="49.5" Y="3.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
       <FileName>Data\CategoriaProductoData.cs</FileName>
@@ -118,7 +103,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="TechSolutions.Data.DetalleDevolucionData" BaseTypeListCollapsed="true">
-    <Position X="12" Y="7.25" Width="2" />
+    <Position X="41" Y="3" Width="2" />
     <TypeIdentifier>
       <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
       <FileName>Data\DetalleDevolucionData.cs</FileName>
@@ -126,88 +111,136 @@
     <Lollipop Position="0.175" />
   </Class>
   <Class Name="TechSolutions.Data.DetallePedidoData" BaseTypeListCollapsed="true">
-    <Position X="12" Y="5" Width="1.75" />
+    <Position X="39" Y="3" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <HashCode>BAQAAMAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
       <FileName>Data\DetallePedidoData.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="TechSolutions.Data.HistorialPedidoData" BaseTypeListCollapsed="true">
-    <Position X="13.75" Y="2.75" Width="1.75" />
+    <Position X="45.5" Y="2" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <HashCode>AAQAAMAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
       <FileName>Data\HistorialPedidoData.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="TechSolutions.Data.PedidoData" BaseTypeListCollapsed="true">
-    <Position X="12" Y="2.75" Width="1.5" />
+    <Position X="39.75" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <HashCode>AAQAAMAAAAAAAAAAAAIAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
       <FileName>Data\PedidoData.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="TechSolutions.Data.ProductoData" BaseTypeListCollapsed="true">
-    <Position X="14.25" Y="7.25" Width="1.5" />
+    <Position X="41.5" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <HashCode>AARAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAACAAAAAAII=</HashCode>
       <FileName>Data\ProductoData.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="TechSolutions.Data.SolicitudDevolucionData" BaseTypeListCollapsed="true">
-    <Position X="12" Y="0.5" Width="2" />
+    <Position X="43.25" Y="8.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <HashCode>AAQAAMAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAMI=</HashCode>
       <FileName>Data\SolicitudDevolucionData.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="TechSolutions.Data.UsuarioData" BaseTypeListCollapsed="true">
-    <Position X="16" Y="7.25" Width="1.5" />
+    <Position X="47.75" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAII=</HashCode>
+      <HashCode>AAQAAEAAAAAAAgAAAAQAAAAAAAEAAEAAAAAAAAAAAII=</HashCode>
       <FileName>Data\UsuarioData.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="TechSolutions.Servicios.EmailService" Collapsed="true">
-    <Position X="34.25" Y="1" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAEgAAEAAAAAAAAAAAAAg=</HashCode>
-      <FileName>Servicios\EmailService.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="System.Data.Entity.DbContext">
-    <Position X="7.5" Y="0.75" Width="2.75" />
+    <Position X="52.25" Y="1.5" Width="2.75" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="TechSolutions.Data.DetalleFacturaData" BaseTypeListCollapsed="true">
-    <Position X="16.5" Y="0.5" Width="1.75" />
+    <Position X="47.5" Y="3" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <HashCode>AAQAAMAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
       <FileName>Data\DetalleFacturaData.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="TechSolutions.Data.EncabezadoFacturaData" BaseTypeListCollapsed="true">
-    <Position X="14" Y="5" Width="2" />
+    <Position X="43.25" Y="2.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <HashCode>AAQQAMAAAAAAAAQAAAAAAAAAAAEAAAAAAgAAAAAAAII=</HashCode>
       <FileName>Data\EncabezadoFacturaData.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="System.Web.Mvc.Controller" Collapsed="true">
-    <Position X="26.5" Y="1.75" Width="1.5" />
+    <Position X="22.5" Y="1.75" Width="1.5" />
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
+  <Class Name="System.Object">
+    <Position X="45.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="TechSolutions.Data.DetalleNotaCreditoData">
+    <Position X="42.75" Y="5.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQAAMAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>Data\DetalleNotaCreditoData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TechSolutions.Data.NotaDeCreditoData">
+    <Position X="47.25" Y="5.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAMAAAAAAAAQAAAAAAAAAAAEAAAACAAAAAAAAAII=</HashCode>
+      <FileName>Data\NotaDeCreditoData.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TechSolutions.Controllers.LoginController">
+    <Position X="24.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAACAAAAAAIAAAAAAAAAAAEQAAAAAAA=</HashCode>
+      <FileName>Controllers\LoginController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.NotaDeCreditoController">
+    <Position X="26" Y="5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Controllers\NotaDeCreditoController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.RecuperoController">
+    <Position X="28.25" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAACAAAIAAAAAAAAAQAAAAkAGAAAAAA=</HashCode>
+      <FileName>Controllers\RecuperoController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.RegistroController">
+    <Position X="30.5" Y="3.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAAAAAAAAAEAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\RegistroController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TechSolutions.Controllers.ReporteController">
+    <Position X="31" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\ReporteController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Interface Name="TechSolutions.Interfaces.IRepository&lt;TEntity&gt;">
-    <Position X="14.5" Y="0.5" Width="1.75" />
+    <Position X="49.75" Y="1" Width="2" />
     <TypeIdentifier>
       <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
       <FileName>Interfaces\IRepository.cs</FileName>

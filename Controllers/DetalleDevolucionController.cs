@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace TechSolutions.Controllers
 {
-    public class DetalleDevoluionController: Controller
+    public class DetalleDevolucionController: Controller
     {
         public ActionResult Index()
         {
