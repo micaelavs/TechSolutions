@@ -2,14 +2,23 @@
     ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_Layout.cshtml"; // Asegúrate de que esta ruta coincida con tu layout
 }
-
+<br />
 <div class="row">
-    <div class="col-md-6">
-        <h2>La tienda donde encontrarás los mejores precios</h2>
-        <p>La tienda online donde encontrarás los mejores productos tecnológicos a precios 
-        increíbles del mercado. Aquí encontrarás entre desktop, laptos, tablets, discos, teléfonos, 
-        distintos dispositivos electrónicos de distinta índole y mucho más...</p>
+    <div class="extra-info col-md-6">
+        <h2 class="">La tienda donde encontrarás los mejores precios</h2>
+        <p class="">
+            La tienda online donde encontrarás los mejores productos tecnológicos a precios
+            increíbles del mercado. Aquí encontrarás entre desktops, laptops, tablets, discos, teléfonos,
+            distintos dispositivos electrónicos de distinta índole y mucho más...
+        </p>
+
+        <!-- Video embebido con estilo para hacerlo más grande -->
+        <div class="video-container">
+            <iframe id="backgroundVideo" src="https://www.youtube.com/embed/oR0qAL_2lwc?autoplay=1&controls=0&loop=1&playlist=oR0qAL_2lwc&mute=1&modestbranding=1&showinfo=0&rel=0"
+                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
     </div>
+
     <div class="col-md-6">
         <div class="login-container">
             <h1>Bienvenido!</h1>
@@ -55,10 +64,25 @@
                 <br />
                 <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
             </form>
-
+            <br />
+            <br />
+            <!-- Texto adicional debajo del formulario -->
+            <div class="extra-info">
+                <h3>Productos reacondicionados de alta calidad</h3>
+                <p>
+                    En nuestra tienda, nos enorgullece ofrecer productos electrónicos reacondicionados por expertos. Todos nuestros dispositivos y elementos, como laptops, desktops, teléfonos y tablets, han pasado por un proceso riguroso de restauración para asegurar su perfecto funcionamiento. Además, ofrecemos una **garantía de 6 meses** en todos nuestros productos reacondicionados, lo que significa que puedes comprar con total confianza y seguridad.
+                </p>
+                <p>
+                    Cada uno de nuestros productos es revisado y probado para garantizar que cumpla con los más altos estándares de calidad. Además, ofrecemos soporte al cliente y un servicio postventa para resolver cualquier duda o problema que puedas tener. Si buscas productos de alta calidad a precios más accesibles, ¡estás en el lugar correcto!
+                </p>
+                <p>
+                    No solo te ayudamos a ahorrar, sino que también estamos comprometidos con la sostenibilidad, dando una segunda vida a dispositivos electrónicos y contribuyendo a la reducción de residuos. Compra con nosotros y obtén tecnología de calidad, responsable y accesible.
+                </p>
+            </div>
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function () {
         var successMessage = $('#successMessage');
@@ -74,16 +98,38 @@
                 errorMessage.fadeOut('slow');
             }, 5000); // 5000 milisegundos = 5 segundos
         }
-        //como el logout redirige al login aca borro el carito
+        //como el logout redirige al login aca borro el carrito
         localStorage.removeItem('carrito');
         console.log('Carrito limpiado en el logout.');
     });
 </script>
+
 <style>
     body {
         background-color: #93C47D; /* Fondo verde para todo el cuerpo */
     }
 
+    /* Estilo para el contenedor del video */
+    .video-container {
+        position: relative;
+        width: 100%;
+        height: 890px; /* Ajusté la altura del video para que no se vea tan largo */
+        padding-top: 56.25%; /* Relación de aspecto 16:9 */
+        overflow: hidden;
+        margin-bottom: 20px; /* Separación entre el video y el texto */
+    }
+
+    /* Estilos para el iframe del video */
+    #backgroundVideo {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Asegura que el video cubra todo el área sin distorsionarse */
+    }
+
+    /* Estilos para la columna de la derecha (login-container) */
     .login-container {
         background-color: #f7f7f7; /* Fondo blanco para el login */
         padding: 20px;
@@ -97,36 +143,50 @@
         margin: 0 auto; /* Centrar la caja de login */
     }
 
+    /* Estilo para los textos destacados */
+    .highlighted-text {
+        font-weight: bold;
+        color: #085394;
+    }
+
+    /* Estilos adicionales para la sección de productos reacondicionados */
+    .extra-info {
+        background-color: #f7f7f7; /* Fondo gris claro */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        font-family: Arial, sans-serif;
+        /*margin-top: 30px;*/
+    }
+
+        /* Títulos de la sección extra */
+        .extra-info h3 {
+            font-size: 1.5rem;
+            color: #085394;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        /* Párrafos de la sección extra */
+        .extra-info p {
+            font-size: 1.1rem;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+    /* Estilo para los botones */
+    .custom-btn {
+        width: 70%; /* Ajustamos el ancho del botón */
+        margin: 0 auto; /* Centra el botón */
+        font-size: 14px;
+    }
+
+    /* Estilo para el separador */
     .custom-hr {
         border: none;
         border-top: 3px solid #085394; /* Personaliza el color y el grosor */
         width: 80%; /* Ajusta el ancho del hr */
         margin: 20px 0; /* Espacio alrededor del hr */
     }
-
-    .login-form {
-        width: 100%;
-        max-width: 400px; /* Limitar el ancho máximo del formulario */
-    }
-
-        .login-form .form-group {
-            width: 100%;
-        }
-
-    .form-control,
-    .btn-block {
-        width: 100%; /* Asegura que los campos y el botón ocupen el 100% del ancho del formulario */
-        text-align: center; /* Centrar el texto dentro del input y el botón */
-    }
-
-    .mb-4 {
-        margin-bottom: 1.5rem;
-    }
-
-    .custom-btn {
-        width: 70%; /* Hacer que el botón ocupe el 100% del ancho */
-        margin: 0 auto; /* Centra el botón */
-        font-size: 14px;
-    }
-
 </style>

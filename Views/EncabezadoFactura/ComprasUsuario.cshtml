@@ -7,7 +7,14 @@
 }
 
 <div class="container">
-    <h2>Mis Compras</h2>
+    <br />
+    <h2>
+        Mis Compras
+        <button class="btn btn-danger btn-sm float-end" data-bs-toggle="modal" data-bs-target="#politicasModal">
+            Políticas de Devolución
+        </button>
+    </h2>
+
     @if (TempData["ErrorMessage"] != null)
     {
         <div id="errorMessage" class="alert alert-danger">
@@ -117,6 +124,29 @@
         </div>
         <br />
     }
+</div>
+
+<!-- Modal para las Políticas de Devolución -->
+<div class="modal fade" id="politicasModal" tabindex="-1" aria-labelledby="politicasModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="politicasModalLabel">Políticas de Devolución</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Políticas de Devolución:</strong></p>
+                <p>Una vez creada la solicitud de devolución, el o los productos deben ser devueltos a partir del día en que se crea la misma y contando 30 días hábiles. Estos deben ser entregados 
+                en la sucursal indicada en el correo electrónico o
+                en la factura de compra. Si los productos no son devueltos a los 30 días, la solicitud se cierra y quedarán sin posibilidad de 
+                ser devueltos en una posterior ocasión.</p>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>

@@ -36,9 +36,10 @@
     }
 
         .product-item img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
+            width: 200px; /* Ancho fijo para todas las imágenes */
+            height: 200px; /* Altura fija para que las imágenes tengan el mismo tamaño */
+            object-fit: cover; /* Recorta y ajusta la imagen para que cubra el área sin deformarse */
+            border-radius: 5px; /* Bordes redondeados */
         }
 
     .search-bar {
